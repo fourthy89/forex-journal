@@ -1245,8 +1245,12 @@ function makeChart(canvasId, type, labels, datasets, opts={}) {
   ovCharts[canvasId] = new Chart(canvas, {
     type, data: { labels, datasets },
     options: { responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { labels: { color: '#7c8494', font: { size: 10 } } }, ...opts.plugins },
-      scales: opts.scales || { x: { ticks: { color: '#4a5060', font: { size: 10 }, maxRotation: 30 }, grid: { color: 'rgba(255,255,255,0.04)' } }, y: { ticks: { color: '#4a5060', font: { size: 10 } }, grid: { color: 'rgba(255,255,255,0.04)' } } }
+      plugins: { legend: { labels: { color: '#7c8494', font: { size: 10 }, boxWidth: 10 } }, ...opts.plugins },
+      scales: opts.scales || {
+        x: { ticks: { color: '#4a5060', font: { size: 10 }, maxRotation: 30 }, grid: { color: 'rgba(255,255,255,0.04)' } },
+        y: { ticks: { color: '#4a5060', font: { size: 10 } }, grid: { color: 'rgba(255,255,255,0.04)' } }
+      },
+      datasets: type === 'bar' ? { bar: { maxBarThickness: 40 } } : {}
     }
   });
 }
