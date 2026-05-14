@@ -262,32 +262,12 @@ tr:hover td{background:rgba(255,255,255,.02)}
           </div>
         </div>
 
-        <div class="fg full">
-          <label>Entry ราคา (หลายไม้)</label>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px">
-            <div class="fg">
-              <label>จำนวนไม้</label>
-              <div style="display:flex;gap:6px;align-items:center">
-                <button type="button" onclick="changeEntries(-1)" style="padding:7px 12px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);cursor:pointer;font-size:16px">−</button>
-                <span id="entry-count-display" style="font-size:14px;font-family:'IBM Plex Mono',monospace;color:var(--text);min-width:24px;text-align:center">1</span>
-                <button type="button" onclick="changeEntries(1)" style="padding:7px 12px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);cursor:pointer;font-size:16px">+</button>
-              </div>
-            </div>
-            <div class="fg">
-              <label>Lot ต่อไม้</label>
-              <input type="number" id="f-lot-per" placeholder="0.01" step="any" oninput="updateLotCalc()"/>
-            </div>
-          </div>
-          <div class="entry-rows-wrap" id="entry-rows-wrap">
-            <div class="entry-row">
-              <span class="entry-row-num">1</span>
-              <input type="number" class="entry-price-input" placeholder="0.00000" step="any" oninput="updateAvgEntry();autoCalc()"/>
-              <span style="font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace" class="entry-lot-display">0.01</span>
-            </div>
-          </div>
-          <div class="avg-entry-display" id="avg-entry-display">Avg Entry: — &nbsp;|&nbsp; Total Lot: —</div>
-        </div>
+        <div class="fg"><label>Entry Price</label><input type="number" id="f-en" placeholder="0.00000" step="any" oninput="autoCalc()"/></div>
         <div class="fg"><label>Exit Price</label><input type="number" id="f-ex" placeholder="0.00000" step="any"/></div>
+        <div class="fg"><label>จำนวนไม้</label><input type="number" id="f-entries" placeholder="เช่น 6" min="1" step="1" oninput="updateLotCalc()"/></div>
+        <div class="fg"><label>Lot ต่อไม้</label><input type="number" id="f-lot-per" placeholder="0.01" step="any" oninput="updateLotCalc()"/>
+          <div id="avg-entry-display" style="font-size:11px;color:var(--text2);font-family:'IBM Plex Mono',monospace;margin-top:4px"></div>
+        </div>
         <div class="fg"><label>จุด (กรอกเอง)</label><input type="number" id="f-pips" placeholder="เช่น 110" step="any"/></div>
         <div class="fg"><label>Stop Loss</label><input type="number" id="f-sl" placeholder="0.00000" step="any" oninput="autoCalc()"/></div>
         <div class="fg"><label>Take Profit</label><input type="number" id="f-tp" placeholder="0.00000" step="any" oninput="autoCalc()"/></div>
@@ -505,10 +485,11 @@ tr:hover td{background:rgba(255,255,255,.02)}
       </div>
 
       <div class="fg"><label>กลยุทธ์</label><select id="m-str"></select></div>
-      <div class="fg"><label>Entry Zone (เช่น 4700-4705)</label><input type="text" id="m-zone" placeholder="เช่น 4700-4705"/></div>
-      <div class="fg"><label>Stop Loss</label><input type="number" id="m-sl" placeholder="0.00000" step="any"/></div>
-      <div class="fg"><label>Take Profit</label><input type="number" id="m-tp" placeholder="0.00000" step="any"/></div>
+      <div class="fg"><label>Entry Zone (เช่น 4700-4705)</label><input type="text" id="m-zone" placeholder="เช่น 4700-4705" oninput="calcMissedRR()"/></div>
+      <div class="fg"><label>Stop Loss</label><input type="number" id="m-sl" placeholder="0.00000" step="any" oninput="calcMissedRR()"/></div>
+      <div class="fg"><label>Take Profit</label><input type="number" id="m-tp" placeholder="0.00000" step="any" oninput="calcMissedRR()"/></div>
       <div class="fg"><label>จุดที่คาดว่าได้</label><input type="number" id="m-pips" placeholder="เช่น 110" step="any"/></div>
+      <div class="fg"><label>R:R</label><input type="text" id="m-rr" placeholder="เช่น 1:2.5" oninput="calcMissedRR()"/></div>
       <div class="fg"><label>เหตุผลที่พลาด</label><input type="text" id="m-reason" placeholder="เช่น เข้าไม่ทัน, ลังเล, ไม่อยู่หน้าจอ"/></div>
       <div class="fg full"><label>หมายเหตุ</label><textarea id="m-note" placeholder="รายละเอียดแผน, สิ่งที่เรียนรู้..."></textarea></div>
       <div class="fg full">
@@ -595,7 +576,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <button onclick="detailNext()">ถัดไป →</button>
       </div>
     </div>
-    <div style="margin-top:20px">
+    <div style="margin-top:20px" id="detail-edit-wrap">
       <button class="save-btn" onclick="openEditFromDetail()" style="background:var(--bg3);border:1px solid var(--border2);color:var(--text2)">✎ แก้ไข</button>
     </div>
   </div>
@@ -710,7 +691,7 @@ async function loadAll() {
       settings.strategies = s.strategies ? JSON.parse(s.strategies) : settings.strategies;
     }
     accounts = aRows || [];
-    missedTrades = mRows || [];
+    missedTrades = (mRows || []).map(r => ({ ...r, images: r.images ? JSON.parse(r.images) : [] }));
     setS('ok', `connected · ${trades.length} trades`);
     applySettings();
     // populate stats filters
@@ -737,7 +718,8 @@ async function loadAll() {
 // ---- Multi-Entry ----
 let entryCount = 1;
 
-function changeEntries(dir) {
+function changeEntries(dir) { /* deprecated */ }
+function _unused_changeEntries(dir) {
   const newCount = Math.max(1, Math.min(10, entryCount + dir));
   entryCount = newCount;
   document.getElementById('entry-count-display').textContent = newCount;
@@ -765,18 +747,12 @@ function changeEntries(dir) {
 
 function updateLotCalc() {
   const lotPer = parseFloat(document.getElementById('f-lot-per').value) || 0;
-  document.querySelectorAll('.entry-lot-display').forEach(el => el.textContent = lotPer.toFixed(2));
-  updateAvgEntry();
-}
-
-function updateAvgEntry() {
-  const prices = Array.from(document.querySelectorAll('.entry-price-input')).map(el => parseFloat(el.value)).filter(v => !isNaN(v) && v > 0);
-  const lotPer = parseFloat(document.getElementById('f-lot-per').value) || 0;
-  const totalLot = (lotPer * entryCount).toFixed(2);
-  const avg = prices.length ? (prices.reduce((a, b) => a + b, 0) / prices.length).toFixed(5) : '—';
-  document.getElementById('avg-entry-display').textContent = `Avg Entry: ${avg}  |  Total Lot: ${totalLot} (${entryCount} ไม้ × ${lotPer} lot)`;
-  // sync f-en กับ avg entry สำหรับ autoCalc
-  if (prices.length) { const avgNum = prices.reduce((a,b)=>a+b,0)/prices.length; document.getElementById && (window._avgEntry = avgNum); }
+  const entries = parseInt(document.getElementById('f-entries').value) || 1;
+  const totalLot = (lotPer * entries).toFixed(2);
+  const display = document.getElementById('avg-entry-display');
+  if (display && lotPer && entries) {
+    display.textContent = `Total Lot: ${totalLot} (${entries} ไม้ × ${lotPer} lot)`;
+  } else if (display) { display.textContent = ''; }
 }
 
 // ---- Missed Trade ----
@@ -789,6 +765,33 @@ function handleMissedImgs(input) {
     reader.readAsDataURL(file);
   });
   input.value = '';
+}
+
+function openMissedDetailView(id) {
+  const m = missedTrades.find(x => x.id === id); if (!m) return;
+  try {
+    const imgs = Array.isArray(m.images) ? m.images : JSON.parse(m.images || '[]');
+    if (!imgs.length) return;
+    // ใช้ detail modal เดิม
+    detailId = id;
+    detailImgs = imgs; detailIdx = 0;
+    document.getElementById('detail-title').textContent = `${m.symbol} · ${m.date} · Missed Trade`;
+    document.getElementById('detail-grid').innerHTML = [
+      ['คู่เงิน',m.symbol],['วันที่',m.date],['ทิศทาง',m.side||'—'],['กลยุทธ์',m.strategy||'—'],
+      ['Entry Zone',m.zone||'—'],['SL',m.sl||'—'],['TP',m.tp||'—'],['จุด',m.pips||'—'],['R:R',m.rr||'—'],
+    ].map(([l,v])=>`<div class="detail-item"><div class="detail-label">${l}</div><div class="detail-val">${v}</div></div>`).join('');
+    const noteEl = document.getElementById('detail-note-wrap');
+    const reasonNote = [m.reason && 'เหตุผล: '+m.reason, m.note].filter(Boolean).join('\n');
+    if (reasonNote) { document.getElementById('detail-note').textContent = reasonNote; noteEl.style.display=''; } else { noteEl.style.display='none'; }
+    const imgWrap = document.getElementById('detail-img-wrap');
+    document.getElementById('detail-strip').innerHTML = imgs.map((img,i)=>{
+      const src=img.url||img.data||'';
+      return src?`<img class="detail-strip-thumb${i===0?' active':''}" src="${src}" onclick="setDetailImg(${i})">`:''
+    }).join('');
+    setDetailImg(0); imgWrap.style.display='';
+    const editWrap2 = document.getElementById('detail-edit-wrap'); if(editWrap2) editWrap2.style.display='none';
+    document.getElementById('detail-modal').classList.add('open');
+  } catch(e) { console.error(e); }
 }
 
 function renderMissedPreviews() {
@@ -820,14 +823,31 @@ function openMissedModal(id) {
     document.getElementById('m-tp').value = m.tp || '';
     document.getElementById('m-pips').value = m.pips || '';
     document.getElementById('m-reason').value = m.reason || '';
+    document.getElementById('m-rr').value = m.rr || '';
     document.getElementById('m-note').value = m.note || '';
   } else {
-    ['m-date','m-zone','m-sl','m-tp','m-pips','m-reason','m-note'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+    ['m-date','m-zone','m-sl','m-tp','m-pips','m-reason','m-rr','m-note'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
     document.getElementById('m-date').value = new Date().toISOString().split('T')[0];
     setMissedSide('BUY');
   }
   missedPending = []; renderMissedPreviews();
   document.getElementById('missed-modal').classList.add('open');
+}
+
+function calcMissedRR() {
+  const zone = document.getElementById('m-zone').value || '';
+  const sl = parseFloat(document.getElementById('m-sl').value) || 0;
+  const tp = parseFloat(document.getElementById('m-tp').value) || 0;
+  // ใช้ค่ากลางของ zone เป็น entry
+  let entry = 0;
+  if (zone.includes('-')) {
+    const parts = zone.split('-').map(v => parseFloat(v.trim())).filter(v => !isNaN(v));
+    if (parts.length === 2) entry = (parts[0] + parts[1]) / 2;
+  } else { entry = parseFloat(zone) || 0; }
+  if (entry && sl && tp) {
+    const risk = Math.abs(entry - sl), reward = Math.abs(tp - entry);
+    if (risk > 0) document.getElementById('m-rr').value = '1:' + (reward / risk).toFixed(2);
+  }
 }
 
 function setMissedSide(s) {
@@ -849,6 +869,7 @@ async function saveMissed() {
     tp: document.getElementById('m-tp').value,
     pips: document.getElementById('m-pips').value,
     reason: document.getElementById('m-reason').value,
+    rr: document.getElementById('m-rr').value,
     note: document.getElementById('m-note').value,
   };
   if (!row.date || !row.symbol) { toast('กรุณากรอกวันที่และคู่เงิน'); return; }
@@ -859,14 +880,15 @@ async function saveMissed() {
     else mImgs.push({name:p.name,data:p.data});
   }
   row.images = JSON.stringify(mImgs);
+  const rowWithArrayImgs = { ...row, images: mImgs };
   try {
     if (missedEditId) {
       await sbUpdate('missed_trades', missedEditId, row);
       const idx = missedTrades.findIndex(x => x.id === missedEditId);
-      if (idx >= 0) missedTrades[idx] = row;
+      if (idx >= 0) missedTrades[idx] = rowWithArrayImgs;
     } else {
       await sbInsert('missed_trades', row);
-      missedTrades.unshift(row);
+      missedTrades.unshift(rowWithArrayImgs);
     }
     document.getElementById('missed-modal').classList.remove('open');
     missedPending = []; renderMissedPreviews();
@@ -889,10 +911,11 @@ function renderMissed() {
     <td class="mono" style="font-size:11px;color:var(--text2)">${m.sl||'—'}</td>
     <td class="mono" style="font-size:11px;color:var(--text2)">${m.tp||'—'}</td>
     <td class="mono" style="font-size:11px">${m.pips||'—'}</td>
-    <td style="font-size:11px;color:var(--text2);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${m.reason||''}">${m.reason||'—'}</td>
-    <td>${(() => { try { const imgs = JSON.parse(m.images||'[]'); if(!imgs.length) return '—'; const src=imgs[0].url||imgs[0].data||''; return src?`<img src="${src}" style="width:36px;height:28px;object-fit:cover;border-radius:4px;border:1px solid var(--border2);cursor:pointer" onclick="openMissedDetail(${m.id})">`:'-'; } catch{return '—';} })()}</td>
+    <td class="mono" style="font-size:11px;color:var(--text2)">${m.rr||'—'}</td>
+    <td style="font-size:11px;color:var(--text2);max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${m.reason||''}">${m.reason||'—'}</td>
+    <td>${(() => { try { const imgs = Array.isArray(m.images) ? m.images : JSON.parse(m.images||'[]'); if(!imgs.length) return '—'; const src=imgs[0].url||imgs[0].data||''; return src?`<img src="${src}" style="width:36px;height:28px;object-fit:cover;border-radius:4px;border:1px solid var(--border2);cursor:pointer" onclick="openMissedDetailView(${m.id})">`:'-'; } catch{return '—';} })()}</td>
     <td style="white-space:nowrap">
-      <button class="tbl-btn edit" onclick="openMissedModal(${m.id})">✎</button>
+      <button class="tbl-btn edit" onclick="openMissedModal(${m.id})" title="แก้ไข">✎</button>
       <button class="tbl-btn del" data-del-missed="${m.id}" onclick="delMissed(${m.id})">✕</button>
     </td>
   </tr>`).join('');
@@ -1219,9 +1242,7 @@ function setSide(s) {
   document.getElementById('btn-sell').classList.toggle('on', s === 'SELL');
 }
 function autoCalc() {
-  const entryInputs = document.querySelectorAll('.entry-price-input');
-  const prices = Array.from(entryInputs).map(el => parseFloat(el.value)).filter(v => !isNaN(v) && v > 0);
-  const en = prices.length ? prices.reduce((a,b)=>a+b,0)/prices.length : 0;
+  const en = parseFloat(document.getElementById('f-en').value) || 0;
   const sl = parseFloat(document.getElementById('f-sl').value) || 0;
   const tp = parseFloat(document.getElementById('f-tp').value) || 0;
   if (en && sl && tp) {
@@ -1275,8 +1296,8 @@ async function addTrade() {
     id: Date.now(),
     date, symbol: sym, side: tradeSide,
 
-    entry: avgEntryVal, entry_prices: JSON.stringify(entryPrices), exit: document.getElementById('f-ex').value,
-    lot: totalLotVal, lot_per: lotPerEntry, entries: entryCount, pips: document.getElementById('f-pips').value || null,
+    entry: avgEntryVal, exit: document.getElementById('f-ex').value,
+    lot: totalLotVal, lot_per: lotPerEntry, entries: entriesNum, pips: document.getElementById('f-pips').value || null,
     sl: document.getElementById('f-sl').value, tp: document.getElementById('f-tp').value,
     rr: document.getElementById('f-rr').value,
     strategy: document.getElementById('f-str').value,
@@ -1290,12 +1311,8 @@ async function addTrade() {
     toast('บันทึกแล้ว!');
     setS('ok', `connected · ${trades.length} trades`);
   } catch { toast('บันทึกไม่ได้ — ลอง sync ใหม่'); }
-  ['f-ex','f-lot-per','f-sl','f-tp','f-rr','f-pips','f-note','f-pnl'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
-  // reset multi-entry
-  entryCount = 1;
-  document.getElementById('entry-count-display').textContent = '1';
-  document.getElementById('entry-rows-wrap').innerHTML = '<div class="entry-row"><span class="entry-row-num">1</span><input type="number" class="entry-price-input" placeholder="0.00000" step="any" oninput="updateAvgEntry();autoCalc()"/><span style="font-size:11px;color:var(--text3);font-family:\'IBM Plex Mono\',monospace" class="entry-lot-display">0.01</span></div>';
-  document.getElementById('avg-entry-display').textContent = 'Avg Entry: — | Total Lot: —';
+  ['f-en','f-ex','f-lot-per','f-entries','f-sl','f-tp','f-rr','f-pips','f-note','f-pnl'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  const dispEl = document.getElementById('avg-entry-display'); if (dispEl) dispEl.textContent = '';
   document.getElementById('f-str').value = '';
   pending = []; renderPreviews();
   btn.disabled = false; btn.textContent = 'บันทึก Trade';
@@ -1397,6 +1414,7 @@ function openDetail(id) {
     }).join('');
     setDetailImg(0); imgWrap.style.display = '';
   } else { imgWrap.style.display = 'none'; detailImgs = []; }
+  const editWrap = document.getElementById('detail-edit-wrap'); if(editWrap) editWrap.style.display='';
   document.getElementById('detail-modal').classList.add('open');
 }
 function setDetailImg(idx) {
