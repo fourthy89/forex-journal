@@ -261,9 +261,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
             <button class="side-btn sell" id="btn-sell" onclick="setSide('SELL')">↓ Sell</button>
           </div>
         </div>
-        <div class="fg"><label>Timeframe</label>
-          <select id="f-tf"><option>M1</option><option>M3</option><option>M5</option><option>M15</option><option>M30</option><option selected>H1</option><option>H4</option><option>D1</option><option>W1</option></select>
-        </div>
+
         <div class="fg full">
           <label>Entry ราคา (หลายไม้)</label>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px">
@@ -373,7 +371,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div class="table-wrap">
         <table>
           <thead><tr>
-            <th>วันที่</th><th>Pair</th><th>Side</th><th>TF</th><th>กลยุทธ์</th>
+            <th>วันที่</th><th>Pair</th><th>Side</th><th>กลยุทธ์</th>
             <th>Entry Zone</th><th>SL</th><th>TP</th><th>จุด</th><th>หมายเหตุ</th><th></th>
           </tr></thead>
           <tbody id="missed-tbody"></tbody>
@@ -455,7 +453,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
             <th style="cursor:pointer;user-select:none" onclick="sortAccount('amount_thb')">จำนวน (฿) <span id="sort-amount_thb">↕</span></th>
             <th>฿/$ ฝาก</th>
             <th>฿/$ ถอน</th>
-            <th>หมายเหตุ</th><th></th>
+            <th>เหตุผล</th><th>รูป</th><th></th>
           </tr></thead>
           <tbody id="acc-tbody"></tbody>
         </table>
@@ -505,9 +503,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <button class="side-btn sell" id="m-btn-sell" onclick="setMissedSide('SELL')">↓ Sell</button>
         </div>
       </div>
-      <div class="fg"><label>Timeframe</label>
-        <select id="m-tf"><option>M1</option><option>M3</option><option>M5</option><option>M15</option><option>M30</option><option selected>H1</option><option>H4</option><option>D1</option><option>W1</option></select>
-      </div>
+
       <div class="fg"><label>กลยุทธ์</label><select id="m-str"></select></div>
       <div class="fg"><label>Entry Zone (เช่น 4700-4705)</label><input type="text" id="m-zone" placeholder="เช่น 4700-4705"/></div>
       <div class="fg"><label>Stop Loss</label><input type="number" id="m-sl" placeholder="0.00000" step="any"/></div>
@@ -515,6 +511,15 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div class="fg"><label>จุดที่คาดว่าได้</label><input type="number" id="m-pips" placeholder="เช่น 110" step="any"/></div>
       <div class="fg"><label>เหตุผลที่พลาด</label><input type="text" id="m-reason" placeholder="เช่น เข้าไม่ทัน, ลังเล, ไม่อยู่หน้าจอ"/></div>
       <div class="fg full"><label>หมายเหตุ</label><textarea id="m-note" placeholder="รายละเอียดแผน, สิ่งที่เรียนรู้..."></textarea></div>
+      <div class="fg full">
+        <label>รูป Chart</label>
+        <div class="upload-area" onclick="document.getElementById('m-img-in').click()">
+          <div style="font-size:24px;margin-bottom:6px">↑</div>
+          คลิกเพื่อเลือกรูป หรือลากวาง
+        </div>
+        <input type="file" id="m-img-in" accept="image/*" multiple style="display:none" onchange="handleMissedImgs(this)"/>
+        <div class="preview-row" id="m-preview-row"></div>
+      </div>
       <div class="fg full"><button class="save-btn" onclick="saveMissed()">บันทึกแผน</button></div>
     </div>
   </div>
@@ -775,7 +780,25 @@ function updateAvgEntry() {
 }
 
 // ---- Missed Trade ----
-let missedTrades = [], missedSide = 'BUY', missedEditId = null;
+let missedTrades = [], missedSide = 'BUY', missedEditId = null, missedPending = [];
+
+function handleMissedImgs(input) {
+  Array.from(input.files).forEach(file => {
+    const reader = new FileReader();
+    reader.onload = e => { missedPending.push({ id: Date.now() + Math.random(), name: file.name, data: e.target.result, file: file }); renderMissedPreviews(); };
+    reader.readAsDataURL(file);
+  });
+  input.value = '';
+}
+
+function renderMissedPreviews() {
+  const row = document.getElementById('m-preview-row');
+  if (!row) return;
+  row.innerHTML = missedPending.map(img =>
+    `<div class="thumb"><img src="${img.data}" alt="preview"><button class="thumb-rm" onclick="removeMissedImg(${img.id})">✕</button></div>`).join('');
+}
+
+function removeMissedImg(id) { missedPending = missedPending.filter(i => i.id !== id); renderMissedPreviews(); }
 
 function openMissedModal(id) {
   missedEditId = id || null;
@@ -803,6 +826,7 @@ function openMissedModal(id) {
     document.getElementById('m-date').value = new Date().toISOString().split('T')[0];
     setMissedSide('BUY');
   }
+  missedPending = []; renderMissedPreviews();
   document.getElementById('missed-modal').classList.add('open');
 }
 
@@ -818,7 +842,7 @@ async function saveMissed() {
     date: document.getElementById('m-date').value,
     symbol: document.getElementById('m-sym').value,
     side: missedSide,
-    tf: document.getElementById('m-tf').value,
+
     strategy: document.getElementById('m-str').value,
     zone: document.getElementById('m-zone').value,
     sl: document.getElementById('m-sl').value,
@@ -828,6 +852,13 @@ async function saveMissed() {
     note: document.getElementById('m-note').value,
   };
   if (!row.date || !row.symbol) { toast('กรุณากรอกวันที่และคู่เงิน'); return; }
+  // upload รูป
+  let mImgs = [];
+  for (const p of missedPending) {
+    if (p.file) { const url = await uploadToStorage(p.file, 'missed_'+row.id); if (url) mImgs.push({name:p.name,url}); else mImgs.push({name:p.name,data:p.data}); }
+    else mImgs.push({name:p.name,data:p.data});
+  }
+  row.images = JSON.stringify(mImgs);
   try {
     if (missedEditId) {
       await sbUpdate('missed_trades', missedEditId, row);
@@ -838,6 +869,7 @@ async function saveMissed() {
       missedTrades.unshift(row);
     }
     document.getElementById('missed-modal').classList.remove('open');
+    missedPending = []; renderMissedPreviews();
     renderMissed();
     toast(missedEditId ? 'แก้ไขแล้ว!' : 'บันทึกแผนแล้ว!');
   } catch(e) { toast('บันทึกไม่ได้: ' + e.message); }
@@ -852,13 +884,13 @@ function renderMissed() {
     <td class="mono" style="font-size:11px">${m.date}</td>
     <td style="font-weight:500">${m.symbol}</td>
     <td><span class="badge badge-${(m.side||'buy').toLowerCase()}">${m.side||'—'}</span></td>
-    <td class="mono" style="font-size:11px;color:var(--text2)">${m.tf||'—'}</td>
     <td style="font-size:11px;color:var(--text2)">${m.strategy||'—'}</td>
     <td class="mono" style="font-size:11px">${m.zone||'—'}</td>
     <td class="mono" style="font-size:11px;color:var(--text2)">${m.sl||'—'}</td>
     <td class="mono" style="font-size:11px;color:var(--text2)">${m.tp||'—'}</td>
     <td class="mono" style="font-size:11px">${m.pips||'—'}</td>
-    <td style="font-size:11px;color:var(--text2);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${m.reason||''}">${m.reason||'—'}</td>
+    <td style="font-size:11px;color:var(--text2);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${m.reason||''}">${m.reason||'—'}</td>
+    <td>${(() => { try { const imgs = JSON.parse(m.images||'[]'); if(!imgs.length) return '—'; const src=imgs[0].url||imgs[0].data||''; return src?`<img src="${src}" style="width:36px;height:28px;object-fit:cover;border-radius:4px;border:1px solid var(--border2);cursor:pointer" onclick="openMissedDetail(${m.id})">`:'-'; } catch{return '—';} })()}</td>
     <td style="white-space:nowrap">
       <button class="tbl-btn edit" onclick="openMissedModal(${m.id})">✎</button>
       <button class="tbl-btn del" data-del-missed="${m.id}" onclick="delMissed(${m.id})">✕</button>
@@ -1242,7 +1274,7 @@ async function addTrade() {
   const newTrade = {
     id: Date.now(),
     date, symbol: sym, side: tradeSide,
-    tf: document.getElementById('f-tf').value,
+
     entry: avgEntryVal, entry_prices: JSON.stringify(entryPrices), exit: document.getElementById('f-ex').value,
     lot: totalLotVal, lot_per: lotPerEntry, entries: entryCount, pips: document.getElementById('f-pips').value || null,
     sl: document.getElementById('f-sl').value, tp: document.getElementById('f-tp').value,
