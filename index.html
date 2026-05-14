@@ -109,6 +109,15 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .emotion-btn{padding:6px 14px;border-radius:20px;border:1px solid var(--border2);background:transparent;cursor:pointer;font-size:12px;color:var(--text2);transition:all .15s}
 .emotion-btn:hover{border-color:var(--accent);color:var(--accent)}
 .emotion-btn.selected{background:var(--accent-bg);color:var(--accent);border-color:var(--accent)}
+.entry-row{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;margin-bottom:8px}
+.entry-row-num{font-size:11px;color:var(--text3);font-family:"IBM Plex Mono",monospace;width:20px;text-align:right}
+.entry-rows-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;margin-top:6px}
+.add-entry-btn{padding:6px 12px;background:transparent;border:1px dashed var(--border2);border-radius:var(--radius);color:var(--text2);font-size:12px;cursor:pointer;width:100%;margin-top:8px;transition:all .15s}
+.add-entry-btn:hover{border-color:var(--accent);color:var(--accent)}
+.rm-entry-btn{background:none;border:none;cursor:pointer;color:var(--text3);font-size:14px;padding:2px 4px;border-radius:4px}
+.rm-entry-btn:hover{color:var(--red)}
+.avg-entry-display{font-size:11px;color:var(--text2);font-family:"IBM Plex Mono",monospace;margin-top:6px;padding:6px 10px;background:var(--bg2);border-radius:var(--radius);border:1px solid var(--border)}
+.missed-badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:500;font-family:"IBM Plex Mono",monospace;background:rgba(245,166,35,0.1);color:#f5a623;border:1px solid rgba(245,166,35,0.3)}
 .empty-state{text-align:center;padding:48px 16px;color:var(--text3);font-size:13px}
 .chart-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;margin-top:16px;height:240px;position:relative}
 .settings-block{max-width:580px;margin-bottom:28px}
@@ -182,6 +191,10 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
         <span>สถิติ</span>
       </div>
+      <div class="nav-item" onclick="showPage('missed')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        <span>Missed Trade</span>
+      </div>
       <div class="nav-item" onclick="showPage('account')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
         <span>บัญชี</span>
@@ -251,9 +264,32 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <div class="fg"><label>Timeframe</label>
           <select id="f-tf"><option>M1</option><option>M3</option><option>M5</option><option>M15</option><option>M30</option><option selected>H1</option><option>H4</option><option>D1</option><option>W1</option></select>
         </div>
-        <div class="fg"><label>Entry Price</label><input type="number" id="f-en" placeholder="0.00000" step="any" oninput="autoCalc()"/></div>
+        <div class="fg full">
+          <label>Entry ราคา (หลายไม้)</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px">
+            <div class="fg">
+              <label>จำนวนไม้</label>
+              <div style="display:flex;gap:6px;align-items:center">
+                <button type="button" onclick="changeEntries(-1)" style="padding:7px 12px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);cursor:pointer;font-size:16px">−</button>
+                <span id="entry-count-display" style="font-size:14px;font-family:'IBM Plex Mono',monospace;color:var(--text);min-width:24px;text-align:center">1</span>
+                <button type="button" onclick="changeEntries(1)" style="padding:7px 12px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);cursor:pointer;font-size:16px">+</button>
+              </div>
+            </div>
+            <div class="fg">
+              <label>Lot ต่อไม้</label>
+              <input type="number" id="f-lot-per" placeholder="0.01" step="any" oninput="updateLotCalc()"/>
+            </div>
+          </div>
+          <div class="entry-rows-wrap" id="entry-rows-wrap">
+            <div class="entry-row">
+              <span class="entry-row-num">1</span>
+              <input type="number" class="entry-price-input" placeholder="0.00000" step="any" oninput="updateAvgEntry();autoCalc()"/>
+              <span style="font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace" class="entry-lot-display">0.01</span>
+            </div>
+          </div>
+          <div class="avg-entry-display" id="avg-entry-display">Avg Entry: — &nbsp;|&nbsp; Total Lot: —</div>
+        </div>
         <div class="fg"><label>Exit Price</label><input type="number" id="f-ex" placeholder="0.00000" step="any"/></div>
-        <div class="fg"><label>Lot Size</label><input type="number" id="f-lot" placeholder="0.01" step="any"/></div>
         <div class="fg"><label>จุด (กรอกเอง)</label><input type="number" id="f-pips" placeholder="เช่น 110" step="any"/></div>
         <div class="fg"><label>Stop Loss</label><input type="number" id="f-sl" placeholder="0.00000" step="any" oninput="autoCalc()"/></div>
         <div class="fg"><label>Take Profit</label><input type="number" id="f-tp" placeholder="0.00000" step="any" oninput="autoCalc()"/></div>
@@ -327,6 +363,23 @@ tr:hover td{background:rgba(255,255,255,.02)}
       </div>
       <div class="chart-wrap"><canvas id="chart"></canvas></div>
       <div id="sempty" class="empty-state" style="display:none">ยังไม่มีข้อมูลสถิติ</div>
+    </div>
+
+    <div id="page-missed" class="page">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px">
+        <div class="page-title" style="margin-bottom:0">Missed Trade</div>
+        <button onclick="openMissedModal()" style="padding:8px 16px;background:var(--accent);border:none;border-radius:var(--radius);color:#fff;font-size:13px;cursor:pointer">+ เพิ่มแผน</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>วันที่</th><th>Pair</th><th>Side</th><th>TF</th><th>กลยุทธ์</th>
+            <th>Entry Zone</th><th>SL</th><th>TP</th><th>จุด</th><th>หมายเหตุ</th><th></th>
+          </tr></thead>
+          <tbody id="missed-tbody"></tbody>
+        </table>
+        <div id="missed-empty" class="empty-state" style="display:none">ยังไม่มีMissed Trade</div>
+      </div>
     </div>
 
     <div id="page-account" class="page">
@@ -431,6 +484,40 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <button class="save-btn" onclick="saveSettings()">บันทึกการตั้งค่า</button>
     </div>
   </main>
+</div>
+
+<!-- Missed Trade Modal -->
+<div class="modal-bg" id="missed-modal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal-box" style="max-width:520px">
+    <div class="modal-hdr">
+      <span class="modal-title" id="missed-modal-title">เพิ่มMissed Trade</span>
+      <button class="modal-close" onclick="document.getElementById('missed-modal').classList.remove('open')">✕</button>
+    </div>
+    <div style="background:rgba(245,166,35,0.06);border:1px solid rgba(245,166,35,0.2);border-radius:var(--radius);padding:10px 14px;margin-bottom:16px;font-size:12px;color:#f5a623">
+      แผนที่เห็นแต่เข้าไม่ทัน — ไม่มีกำไร/ขาดทุน บันทึกไว้เพื่อเรียนรู้
+    </div>
+    <div class="form-grid">
+      <div class="fg"><label>วันที่</label><input type="date" id="m-date"/></div>
+      <div class="fg"><label>คู่เงิน</label><select id="m-sym"></select></div>
+      <div class="fg"><label>ทิศทาง</label>
+        <div class="side-row">
+          <button class="side-btn buy" id="m-btn-buy" onclick="setMissedSide('BUY')">↑ Buy</button>
+          <button class="side-btn sell" id="m-btn-sell" onclick="setMissedSide('SELL')">↓ Sell</button>
+        </div>
+      </div>
+      <div class="fg"><label>Timeframe</label>
+        <select id="m-tf"><option>M1</option><option>M3</option><option>M5</option><option>M15</option><option>M30</option><option selected>H1</option><option>H4</option><option>D1</option><option>W1</option></select>
+      </div>
+      <div class="fg"><label>กลยุทธ์</label><select id="m-str"></select></div>
+      <div class="fg"><label>Entry Zone (เช่น 4700-4705)</label><input type="text" id="m-zone" placeholder="เช่น 4700-4705"/></div>
+      <div class="fg"><label>Stop Loss</label><input type="number" id="m-sl" placeholder="0.00000" step="any"/></div>
+      <div class="fg"><label>Take Profit</label><input type="number" id="m-tp" placeholder="0.00000" step="any"/></div>
+      <div class="fg"><label>จุดที่คาดว่าได้</label><input type="number" id="m-pips" placeholder="เช่น 110" step="any"/></div>
+      <div class="fg"><label>เหตุผลที่พลาด</label><input type="text" id="m-reason" placeholder="เช่น เข้าไม่ทัน, ลังเล, ไม่อยู่หน้าจอ"/></div>
+      <div class="fg full"><label>หมายเหตุ</label><textarea id="m-note" placeholder="รายละเอียดแผน, สิ่งที่เรียนรู้..."></textarea></div>
+      <div class="fg full"><button class="save-btn" onclick="saveMissed()">บันทึกแผน</button></div>
+    </div>
+  </div>
 </div>
 
 <!-- Account Modal -->
@@ -605,10 +692,11 @@ let accounts = [];
 async function loadAll() {
   setS('spin', 'loading...');
   try {
-    const [tRows, sRows, aRows] = await Promise.all([
+    const [tRows, sRows, aRows, mRows] = await Promise.all([
       sbGet('trades', 'order=id.desc'),
       sbGet('settings', 'id=eq.1'),
-      sbGet('accounts', 'order=date.desc')
+      sbGet('accounts', 'order=date.desc'),
+      sbGet('missed_trades', 'order=id.desc')
     ]);
     trades = (tRows || []).map(r => ({ ...r, images: r.images ? JSON.parse(r.images) : [] }));
     if (sRows && sRows.length) {
@@ -617,6 +705,7 @@ async function loadAll() {
       settings.strategies = s.strategies ? JSON.parse(s.strategies) : settings.strategies;
     }
     accounts = aRows || [];
+    missedTrades = mRows || [];
     setS('ok', `connected · ${trades.length} trades`);
     applySettings();
     // populate stats filters
@@ -631,11 +720,173 @@ async function loadAll() {
     if (activePage === 'overview') renderOverview();
     if (activePage === 'table') renderTable();
     if (activePage === 'stats') renderStats();
+    if (activePage === 'missed') renderMissed();
     if (activePage === 'account') renderAccount();
     if (activePage === 'settings') { renderPairTags(); renderStrategyTags(); }
   } catch (e) {
     setS('err', 'connection error');
     toast('เชื่อมต่อ Supabase ไม่ได้');
+  }
+}
+
+// ---- Multi-Entry ----
+let entryCount = 1;
+
+function changeEntries(dir) {
+  const newCount = Math.max(1, Math.min(10, entryCount + dir));
+  entryCount = newCount;
+  document.getElementById('entry-count-display').textContent = newCount;
+  const wrap = document.getElementById('entry-rows-wrap');
+  const lotPer = parseFloat(document.getElementById('f-lot-per').value) || 0.01;
+  // เพิ่ม/ลบ rows
+  const current = wrap.querySelectorAll('.entry-row').length;
+  if (newCount > current) {
+    for (let i = current + 1; i <= newCount; i++) {
+      const row = document.createElement('div');
+      row.className = 'entry-row';
+      row.innerHTML = `<span class="entry-row-num">${i}</span>
+        <input type="number" class="entry-price-input" placeholder="0.00000" step="any" oninput="updateAvgEntry();autoCalc()"/>
+        <span style="font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace" class="entry-lot-display">${lotPer.toFixed(2)}</span>`;
+      wrap.appendChild(row);
+    }
+  } else {
+    const rows = wrap.querySelectorAll('.entry-row');
+    for (let i = current; i > newCount; i--) rows[i-1].remove();
+  }
+  // อัปเดตหมายเลข
+  wrap.querySelectorAll('.entry-row-num').forEach((el, i) => el.textContent = i + 1);
+  updateAvgEntry();
+}
+
+function updateLotCalc() {
+  const lotPer = parseFloat(document.getElementById('f-lot-per').value) || 0;
+  document.querySelectorAll('.entry-lot-display').forEach(el => el.textContent = lotPer.toFixed(2));
+  updateAvgEntry();
+}
+
+function updateAvgEntry() {
+  const prices = Array.from(document.querySelectorAll('.entry-price-input')).map(el => parseFloat(el.value)).filter(v => !isNaN(v) && v > 0);
+  const lotPer = parseFloat(document.getElementById('f-lot-per').value) || 0;
+  const totalLot = (lotPer * entryCount).toFixed(2);
+  const avg = prices.length ? (prices.reduce((a, b) => a + b, 0) / prices.length).toFixed(5) : '—';
+  document.getElementById('avg-entry-display').textContent = `Avg Entry: ${avg}  |  Total Lot: ${totalLot} (${entryCount} ไม้ × ${lotPer} lot)`;
+  // sync f-en กับ avg entry สำหรับ autoCalc
+  if (prices.length) { const avgNum = prices.reduce((a,b)=>a+b,0)/prices.length; document.getElementById && (window._avgEntry = avgNum); }
+}
+
+// ---- Missed Trade ----
+let missedTrades = [], missedSide = 'BUY', missedEditId = null;
+
+function openMissedModal(id) {
+  missedEditId = id || null;
+  document.getElementById('missed-modal-title').textContent = id ? 'แก้ไขแผน' : 'เพิ่มMissed Trade';
+  const msym = document.getElementById('m-sym');
+  msym.innerHTML = settings.pairs.map(p => `<option>${p}</option>`).join('');
+  const mstr = document.getElementById('m-str');
+  mstr.innerHTML = '<option value="">— เลือก —</option>' + settings.strategies.map(s => `<option>${s}</option>`).join('');
+  if (id) {
+    const m = missedTrades.find(x => x.id === id);
+    if (!m) return;
+    document.getElementById('m-date').value = m.date || '';
+    msym.value = m.symbol || '';
+    setMissedSide(m.side || 'BUY');
+    document.getElementById('m-tf').value = m.tf || 'H1';
+    mstr.value = m.strategy || '';
+    document.getElementById('m-zone').value = m.zone || '';
+    document.getElementById('m-sl').value = m.sl || '';
+    document.getElementById('m-tp').value = m.tp || '';
+    document.getElementById('m-pips').value = m.pips || '';
+    document.getElementById('m-reason').value = m.reason || '';
+    document.getElementById('m-note').value = m.note || '';
+  } else {
+    ['m-date','m-zone','m-sl','m-tp','m-pips','m-reason','m-note'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+    document.getElementById('m-date').value = new Date().toISOString().split('T')[0];
+    setMissedSide('BUY');
+  }
+  document.getElementById('missed-modal').classList.add('open');
+}
+
+function setMissedSide(s) {
+  missedSide = s;
+  document.getElementById('m-btn-buy').classList.toggle('on', s === 'BUY');
+  document.getElementById('m-btn-sell').classList.toggle('on', s === 'SELL');
+}
+
+async function saveMissed() {
+  const row = {
+    id: missedEditId || Date.now(),
+    date: document.getElementById('m-date').value,
+    symbol: document.getElementById('m-sym').value,
+    side: missedSide,
+    tf: document.getElementById('m-tf').value,
+    strategy: document.getElementById('m-str').value,
+    zone: document.getElementById('m-zone').value,
+    sl: document.getElementById('m-sl').value,
+    tp: document.getElementById('m-tp').value,
+    pips: document.getElementById('m-pips').value,
+    reason: document.getElementById('m-reason').value,
+    note: document.getElementById('m-note').value,
+  };
+  if (!row.date || !row.symbol) { toast('กรุณากรอกวันที่และคู่เงิน'); return; }
+  try {
+    if (missedEditId) {
+      await sbUpdate('missed_trades', missedEditId, row);
+      const idx = missedTrades.findIndex(x => x.id === missedEditId);
+      if (idx >= 0) missedTrades[idx] = row;
+    } else {
+      await sbInsert('missed_trades', row);
+      missedTrades.unshift(row);
+    }
+    document.getElementById('missed-modal').classList.remove('open');
+    renderMissed();
+    toast(missedEditId ? 'แก้ไขแล้ว!' : 'บันทึกแผนแล้ว!');
+  } catch(e) { toast('บันทึกไม่ได้: ' + e.message); }
+}
+
+function renderMissed() {
+  const tbody = document.getElementById('missed-tbody');
+  const empty = document.getElementById('missed-empty');
+  if (!missedTrades.length) { tbody.innerHTML = ''; empty.style.display = ''; return; }
+  empty.style.display = 'none';
+  tbody.innerHTML = missedTrades.map(m => `<tr>
+    <td class="mono" style="font-size:11px">${m.date}</td>
+    <td style="font-weight:500">${m.symbol}</td>
+    <td><span class="badge badge-${(m.side||'buy').toLowerCase()}">${m.side||'—'}</span></td>
+    <td class="mono" style="font-size:11px;color:var(--text2)">${m.tf||'—'}</td>
+    <td style="font-size:11px;color:var(--text2)">${m.strategy||'—'}</td>
+    <td class="mono" style="font-size:11px">${m.zone||'—'}</td>
+    <td class="mono" style="font-size:11px;color:var(--text2)">${m.sl||'—'}</td>
+    <td class="mono" style="font-size:11px;color:var(--text2)">${m.tp||'—'}</td>
+    <td class="mono" style="font-size:11px">${m.pips||'—'}</td>
+    <td style="font-size:11px;color:var(--text2);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${m.reason||''}">${m.reason||'—'}</td>
+    <td style="white-space:nowrap">
+      <button class="tbl-btn edit" onclick="openMissedModal(${m.id})">✎</button>
+      <button class="tbl-btn del" data-del-missed="${m.id}" onclick="delMissed(${m.id})">✕</button>
+    </td>
+  </tr>`).join('');
+}
+
+let delMissedConfirm = null, delMissedTimer = null;
+async function delMissed(id) {
+  if (delMissedConfirm === id) {
+    clearTimeout(delMissedTimer); delMissedConfirm = null;
+    const btn = document.querySelector(`[data-del-missed="${id}"]`);
+    if (btn) { btn.textContent = '✕'; btn.className = 'tbl-btn del'; }
+    await sbDelete('missed_trades', id);
+    missedTrades = missedTrades.filter(m => m.id !== id);
+    renderMissed(); toast('ลบแล้ว');
+  } else {
+    if (delMissedConfirm !== null) {
+      const prev = document.querySelector(`[data-del-missed="${delMissedConfirm}"]`);
+      if (prev) { prev.textContent = '✕'; prev.className = 'tbl-btn del'; }
+    }
+    delMissedConfirm = id;
+    const btn = document.querySelector(`[data-del-missed="${id}"]`);
+    if (btn) { btn.textContent = 'ยืนยัน?'; btn.className = 'tbl-btn del del-confirm'; }
+    delMissedTimer = setTimeout(() => {
+      delMissedConfirm = null;
+      if (btn) { btn.textContent = '✕'; btn.className = 'tbl-btn del'; }
+    }, 3000);
   }
 }
 
@@ -921,11 +1172,12 @@ function showPage(n) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
   document.getElementById('page-' + n).classList.add('active');
-  document.querySelectorAll('.nav-item')[{ overview: 0, add: 1, table: 2, stats: 3, account: 4, settings: 5 }[n]].classList.add('active');
+  document.querySelectorAll('.nav-item')[{ overview: 0, add: 1, table: 2, stats: 3, missed: 4, account: 5, settings: 6 }[n]].classList.add('active');
   localStorage.setItem('lastPage', n);
   if (n === 'overview') renderOverview();
   if (n === 'table') renderTable();
   if (n === 'stats') renderStats();
+  if (n === 'missed') renderMissed();
   if (n === 'account') renderAccount();
   if (n === 'settings') { renderPairTags(); renderStrategyTags(); }
 }
@@ -935,7 +1187,9 @@ function setSide(s) {
   document.getElementById('btn-sell').classList.toggle('on', s === 'SELL');
 }
 function autoCalc() {
-  const en = parseFloat(document.getElementById('f-en').value) || 0;
+  const entryInputs = document.querySelectorAll('.entry-price-input');
+  const prices = Array.from(entryInputs).map(el => parseFloat(el.value)).filter(v => !isNaN(v) && v > 0);
+  const en = prices.length ? prices.reduce((a,b)=>a+b,0)/prices.length : 0;
   const sl = parseFloat(document.getElementById('f-sl').value) || 0;
   const tp = parseFloat(document.getElementById('f-tp').value) || 0;
   if (en && sl && tp) {
@@ -989,8 +1243,8 @@ async function addTrade() {
     id: Date.now(),
     date, symbol: sym, side: tradeSide,
     tf: document.getElementById('f-tf').value,
-    entry: en, exit: document.getElementById('f-ex').value,
-    lot, pips: document.getElementById('f-pips').value || null,
+    entry: avgEntryVal, entry_prices: JSON.stringify(entryPrices), exit: document.getElementById('f-ex').value,
+    lot: totalLotVal, lot_per: lotPerEntry, entries: entryCount, pips: document.getElementById('f-pips').value || null,
     sl: document.getElementById('f-sl').value, tp: document.getElementById('f-tp').value,
     rr: document.getElementById('f-rr').value,
     strategy: document.getElementById('f-str').value,
@@ -1004,7 +1258,12 @@ async function addTrade() {
     toast('บันทึกแล้ว!');
     setS('ok', `connected · ${trades.length} trades`);
   } catch { toast('บันทึกไม่ได้ — ลอง sync ใหม่'); }
-  ['f-en','f-ex','f-lot','f-sl','f-tp','f-rr','f-pips','f-note','f-pnl'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  ['f-ex','f-lot-per','f-sl','f-tp','f-rr','f-pips','f-note','f-pnl'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  // reset multi-entry
+  entryCount = 1;
+  document.getElementById('entry-count-display').textContent = '1';
+  document.getElementById('entry-rows-wrap').innerHTML = '<div class="entry-row"><span class="entry-row-num">1</span><input type="number" class="entry-price-input" placeholder="0.00000" step="any" oninput="updateAvgEntry();autoCalc()"/><span style="font-size:11px;color:var(--text3);font-family:\'IBM Plex Mono\',monospace" class="entry-lot-display">0.01</span></div>';
+  document.getElementById('avg-entry-display').textContent = 'Avg Entry: — | Total Lot: —';
   document.getElementById('f-str').value = '';
   pending = []; renderPreviews();
   btn.disabled = false; btn.textContent = 'บันทึก Trade';
