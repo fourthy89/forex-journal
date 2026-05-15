@@ -1444,7 +1444,6 @@ function openEdit(id) {
   document.getElementById('e-lot').value = t.lot || '';
   document.getElementById('e-pips').value = t.pips || '';
   document.getElementById('e-sl').value = t.sl || '';
-  document.getElementById('e-tp').value = t.tp || '';
   document.getElementById('e-rr').value = t.rr || '';
   const estr = document.getElementById('e-str');
   estr.innerHTML = '<option value="">— เลือก —</option>' + settings.strategies.map(s => `<option>${s}</option>`).join('');
