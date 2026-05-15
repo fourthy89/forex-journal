@@ -53,6 +53,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'IBM Pl
 .thumb img{width:100%;height:100%;object-fit:cover;border-radius:6px;border:1px solid var(--border2)}
 .thumb-rm{position:absolute;top:-5px;right:-5px;background:var(--red);color:#fff;border:none;border-radius:50%;width:16px;height:16px;cursor:pointer;font-size:10px;display:flex;align-items:center;justify-content:center}
 .save-btn{padding:11px 28px;background:var(--accent);border:none;border-radius:var(--radius);color:#fff;font-size:13px;font-weight:500;cursor:pointer;font-family:'IBM Plex Sans Thai',sans-serif;transition:opacity .15s}
+.export-btn{padding:9px 18px;border:none;border-radius:var(--radius);font-size:13px;font-weight:500;cursor:pointer;font-family:'IBM Plex Sans Thai',sans-serif;transition:opacity .15s}
+.export-btn:hover{opacity:.85}
+.export-btn.primary{background:var(--accent);color:#fff}
+.export-btn.secondary{background:var(--bg3);border:1px solid var(--border2);color:var(--text2)}
 .save-btn:hover{opacity:.85}
 .save-btn:disabled{opacity:.4;cursor:not-allowed}
 .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
@@ -494,6 +498,15 @@ tr:hover td{background:rgba(255,255,255,.02)}
         </div>
         <div style="font-size:11px;color:var(--text2);font-family:'IBM Plex Mono',monospace">กดวงกลมเพื่อเปลี่ยนธีม — จำค่าไว้อัตโนมัติ</div>
       </div>
+      <div class="settings-block">
+        <h3>Backup &amp; Export</h3>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+          <button class="export-btn primary" onclick="exportJSON()">⬇ Export JSON</button>
+          <button class="export-btn secondary" onclick="exportCSV()">⬇ Export CSV</button>
+          <button class="export-btn secondary" onclick="backupToLocal()">💾 Backup ลง Browser</button>
+        </div>
+        <div style="font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace" id="backup-status">—</div>
+      </div>
       <button class="save-btn settings-save-btn" onclick="saveSettings()">บันทึกการตั้งค่า</button>
     </div>
   </main>
@@ -823,6 +836,7 @@ async function loadAll() {
     accounts = aRows || [];
     missedTrades = (mRows || []).map(r => ({ ...r, images: r.images ? JSON.parse(r.images) : [] }));
     setS('ok', `connected · ${trades.length} trades`);
+    autoBackup();
     applySettings();
     populateMonthFilters();
     // populate stats filters
@@ -1364,7 +1378,12 @@ function showPage(n) {
   if (n === 'stats') renderStats();
   if (n === 'missed') renderMissed();
   if (n === 'account') renderAccount();
-  if (n === 'settings') { renderPairTags(); renderStrategyTags(); }
+  if (n === 'settings') {
+    renderPairTags(); renderStrategyTags();
+    const bt = localStorage.getItem('fx_journal_backup_time');
+    const bel = document.getElementById('backup-status');
+    if (bel) bel.textContent = bt ? 'Backup ล่าสุด: ' + new Date(bt).toLocaleString('th-TH') : 'ยังไม่มี backup ใน browser';
+  }
 }
 function setSide(s) {
   tradeSide = s;
@@ -1811,6 +1830,68 @@ document.getElementById('new-strategy').addEventListener('keydown', e => { if (e
 const lastPage = IS_VIEW ? 'overview' : (localStorage.getItem('lastPage') || 'overview');
 showPage(lastPage);
 loadAll();
+// ---- Export & Backup ----
+
+function exportJSON() {
+  const data = {
+    exported_at: new Date().toISOString(),
+    trades: trades,
+    missed_trades: missedTrades,
+    accounts: accounts,
+    settings: settings
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const date = new Date().toISOString().split('T')[0];
+  a.href = url; a.download = 'fx-journal-backup-' + date + '.json';
+  a.click(); URL.revokeObjectURL(url);
+  toast('Export JSON สำเร็จ!');
+}
+
+function exportCSV() {
+  const headers = ['date','symbol','side','tf','entry','exit','lot','pips','pnl','rr','strategy','note'];
+  const rows = trades.map(t => headers.map(h => {
+    const v = t[h] ?? '';
+    const s = String(v).replace(/"/g, '""');
+    return s.includes(',') || s.includes('"') || s.includes('\n') ? '"' + s + '"' : s;
+  }).join(','));
+  const csv = [headers.join(','), ...rows].join('\n');
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const date = new Date().toISOString().split('T')[0];
+  a.href = url; a.download = 'fx-journal-trades-' + date + '.csv';
+  a.click(); URL.revokeObjectURL(url);
+  toast('Export CSV สำเร็จ!');
+}
+
+function backupToLocal() {
+  try {
+    const data = {
+      backed_up_at: new Date().toISOString(),
+      trades: trades,
+      missed_trades: missedTrades,
+      accounts: accounts,
+      settings: settings
+    };
+    localStorage.setItem('fx_journal_backup', JSON.stringify(data));
+    localStorage.setItem('fx_journal_backup_time', new Date().toISOString());
+    const el = document.getElementById('backup-status');
+    if (el) el.textContent = 'Backup ล่าสุด: ' + new Date().toLocaleString('th-TH');
+    toast('Backup ลง Browser แล้ว!');
+  } catch(e) { toast('Backup ไม่ได้: ' + e.message); }
+}
+
+function autoBackup() {
+  if (!trades.length && !accounts.length) return;
+  try {
+    localStorage.setItem('fx_journal_backup', JSON.stringify({ backed_up_at: new Date().toISOString(), trades, missed_trades: missedTrades, accounts, settings }));
+    localStorage.setItem('fx_journal_backup_time', new Date().toISOString());
+  } catch(e) { console.warn('auto backup failed', e); }
+}
+
+
 </script>
 </body>
 </html>
