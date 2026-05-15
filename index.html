@@ -266,8 +266,8 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <div class="stat-card"><div class="stat-label">กำไร/ขาดทุนรวม</div><div class="stat-val" id="ov-pnl">—</div></div>
           <div class="stat-card"><div class="stat-label">ชนะ / แพ้</div><div class="stat-val" id="ov-wl">—</div></div>
           <div class="stat-card"><div class="stat-label">Trade ทั้งหมด</div><div class="stat-val" id="ov-total">—</div></div>
-          <div class="stat-card"><div class="stat-label">Max Win</div><div class="stat-val pos" id="ov-avg-win">—</div></div>
-          <div class="stat-card"><div class="stat-label">Max Loss</div><div class="stat-val neg" id="ov-avg-loss">—</div></div>
+          <div class="stat-card"><div class="stat-label">Highest Win</div><div class="stat-val pos" id="ov-avg-win">—</div></div>
+          <div class="stat-card"><div class="stat-label">Highest Loss</div><div class="stat-val neg" id="ov-avg-loss">—</div></div>
           <div class="stat-card"><div class="stat-label">Avg R:R</div><div class="stat-val" id="ov-avg-rr">—</div></div>
           <div class="stat-card"><div class="stat-label">Avg จุด</div><div class="stat-val" id="ov-avg-pips">—</div></div>
         </div>
@@ -277,6 +277,9 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <div class="stats-grid-2">
           <div class="chart-half"><div class="chart-half-title">Cumulative P&L</div><canvas id="ov-chart-pnl"></canvas></div>
           <div class="chart-half"><div class="chart-half-title">P&L แยกตามคู่เงิน</div><canvas id="ov-chart-pair"></canvas></div>
+        </div>
+        <div style="margin-top:12px">
+          <div class="chart-half"><div class="chart-half-title">P&L แยกตามกลยุทธ์</div><canvas id="ov-chart-strategy"></canvas></div>
         </div>
       </div>
     </div>
@@ -365,8 +368,8 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <div class="stat-card"><div class="stat-label">ชนะ / แพ้</div><div class="stat-val" id="swl">—</div></div>
         <div class="stat-card"><div class="stat-label">Trade ทั้งหมด</div><div class="stat-val" id="st">0</div></div>
         <div class="stat-card"><div class="stat-label">Avg R:R</div><div class="stat-val" id="st-avg-rr">—</div></div>
-        <div class="stat-card"><div class="stat-label">Max Win</div><div class="stat-val pos" id="st-avg-win">—</div></div>
-        <div class="stat-card"><div class="stat-label">Max Loss</div><div class="stat-val neg" id="st-avg-loss">—</div></div>
+        <div class="stat-card"><div class="stat-label">Highest Win</div><div class="stat-val pos" id="st-avg-win">—</div></div>
+        <div class="stat-card"><div class="stat-label">Highest Loss</div><div class="stat-val neg" id="st-avg-loss">—</div></div>
 
       </div>
       <div class="chart-wrap"><canvas id="chart"></canvas></div>
@@ -425,17 +428,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
         </div>
       </div>
       <div class="filter-row">
-        <select id="acc-filter-month" onchange="renderAccount()" style="min-width:130px">
-          <option value="">ทุกเดือน</option>
-          <option value="2025-08">ส.ค. 2025</option>
-          <option value="2025-09">ก.ย. 2025</option>
-          <option value="2025-10">ต.ค. 2025</option>
-          <option value="2025-11">พ.ย. 2025</option>
-          <option value="2025-12">ธ.ค. 2025</option>
-          <option value="2026-01">ม.ค. 2026</option>
-          <option value="2026-02">ก.พ. 2026</option>
-          <option value="2026-03">มี.ค. 2026</option>
-        </select>
+        <select id="acc-filter-month" onchange="renderAccount()" style="min-width:130px"><option value="">ทุกเดือน</option></select>
         <select id="acc-filter-type" onchange="renderAccount()"><option value="">ทุกประเภท</option><option value="Profit">Profit</option><option value="Deposit">Deposit</option></select>
         <select id="acc-filter-acct" onchange="renderAccount()"><option value="">ทุกบัญชี</option><option>XM K.MK (82952428)</option><option>XM C.Ham (323781762)</option><option>XM C.Ham V.2 (361753612)</option><option>EX C.Gun (109107660)</option></select>
         <button onclick="openAddAccount()" style="padding:7px 14px;background:var(--accent);border:none;border-radius:var(--radius);color:#fff;font-size:12px;cursor:pointer;margin-left:auto">+ เพิ่มรายการ</button>
@@ -500,6 +493,17 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <div class="theme-dot" data-theme="light" style="background:#f0f2f5;border-color:#ccc" title="Light" onclick="setTheme('light')"></div>
         </div>
         <div style="font-size:11px;color:var(--text2);font-family:'IBM Plex Mono',monospace">กดวงกลมเพื่อเปลี่ยนธีม — จำค่าไว้อัตโนมัติ</div>
+      </div>
+      <div class="settings-block">
+        <h3>Backup & Export</h3>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="save-btn" onclick="exportJSON()" style="padding:9px 18px;background:var(--accent)">⬇ Export JSON</button>
+            <button class="save-btn" onclick="exportCSV()" style="padding:9px 18px;background:var(--bg3);border:1px solid var(--border2);color:var(--text2)">⬇ Export CSV</button>
+            <button class="save-btn" onclick="backupToLocal()" style="padding:9px 18px;background:var(--bg3);border:1px solid var(--border2);color:var(--text2)">💾 Backup ลง Browser</button>
+          </div>
+          <div style="font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace" id="backup-status">—</div>
+        </div>
       </div>
       <button class="save-btn settings-save-btn" onclick="saveSettings()">บันทึกการตั้งค่า</button>
     </div>
@@ -785,6 +789,26 @@ async function sbUpsert(table, data) {
   return r.json();
 }
 
+function populateMonthFilters() {
+  const thaiMonths = ['','ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+  const start = new Date(2025, 7); // ส.ค. 2025
+  const now = new Date();
+  const end = new Date(now.getFullYear(), now.getMonth());
+  const ids = ['acc-filter-month'];
+  ids.forEach(id => {
+    const sel = document.getElementById(id);
+    if (!sel) return;
+    const cur = sel.value;
+    sel.innerHTML = '<option value="">ทุกเดือน</option>';
+    for (let d = new Date(start); d <= end; d.setMonth(d.getMonth() + 1)) {
+      const val = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0');
+      const label = thaiMonths[d.getMonth()+1] + ' ' + d.getFullYear();
+      sel.innerHTML += `<option value="${val}">${label}</option>`;
+    }
+    if (cur) sel.value = cur;
+  });
+}
+
 function setS(state, msg) {
   document.getElementById('sdot').className = 'sync-dot ' + (state === 'ok' ? 'ok' : state === 'err' ? 'err' : 'spin');
   document.getElementById('stxt').textContent = msg;
@@ -810,7 +834,9 @@ async function loadAll() {
     accounts = aRows || [];
     missedTrades = (mRows || []).map(r => ({ ...r, images: r.images ? JSON.parse(r.images) : [] }));
     setS('ok', `connected · ${trades.length} trades`);
+    autoBackup();
     applySettings();
+    populateMonthFilters();
     // populate stats filters
     const pairs = [...new Set(trades.map(t => t.symbol).filter(Boolean))];
     const strategies = [...new Set(trades.map(t => t.strategy).filter(Boolean))];
@@ -885,7 +911,7 @@ function handleMissedImgs(input) {
 }
 
 function openMissedDetailView(id) {
-  const m = missedTrades.find(x => x.id === id); if (!m) return;
+  const m = missedTrades.find(x => x.id == id); if (!m) return;
   try {
     const imgs = Array.isArray(m.images) ? m.images : JSON.parse(m.images || '[]');
     if (!imgs.length) return;
@@ -928,7 +954,7 @@ function openMissedModal(id) {
   const mstr = document.getElementById('m-str');
   mstr.innerHTML = '<option value="">— เลือก —</option>' + settings.strategies.map(s => `<option>${s}</option>`).join('');
   if (id) {
-    const m = missedTrades.find(x => x.id === id);
+    const m = missedTrades.find(x => x.id == id);
     if (!m) return;
     document.getElementById('m-date').value = m.date || '';
     msym.value = m.symbol || '';
@@ -1000,7 +1026,7 @@ async function saveMissed() {
   try {
     if (missedEditId) {
       await sbUpdate('missed_trades', missedEditId, row);
-      const idx = missedTrades.findIndex(x => x.id === missedEditId);
+      const idx = missedTrades.findIndex(x => x.id == missedEditId);
       if (idx >= 0) missedTrades[idx] = rowWithArrayImgs;
     } else {
       await sbInsert('missed_trades', row);
@@ -1350,7 +1376,12 @@ function showPage(n) {
   if (n === 'stats') renderStats();
   if (n === 'missed') renderMissed();
   if (n === 'account') renderAccount();
-  if (n === 'settings') { renderPairTags(); renderStrategyTags(); }
+  if (n === 'settings') {
+    renderPairTags(); renderStrategyTags();
+    const bt = localStorage.getItem('fx_journal_backup_time');
+    const bel = document.getElementById('backup-status');
+    if (bel) bel.textContent = bt ? 'Backup ล่าสุด: ' + new Date(bt).toLocaleString('th-TH') : 'ยังไม่มี backup ใน browser';
+  }
 }
 function setSide(s) {
   tradeSide = s;
@@ -1428,10 +1459,12 @@ async function addTrade() {
     trades.unshift(newTrade);
     toast('บันทึกแล้ว!');
     setS('ok', `connected · ${trades.length} trades`);
+    autoBackup();
   } catch { toast('บันทึกไม่ได้ — ลอง sync ใหม่'); }
   ['f-en','f-ex','f-lot-per','f-entries','f-sl','f-tp','f-rr','f-pips','f-note','f-pnl'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
   const dispEl = document.getElementById('avg-entry-display'); if (dispEl) dispEl.textContent = '';
   document.getElementById('f-str').value = '';
+  document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
   pending = []; renderPreviews();
   btn.disabled = false; btn.textContent = 'บันทึก Trade';
 }
@@ -1527,7 +1560,7 @@ function openDetail(id) {
   if (imgs.length) {
     detailImgs = imgs; detailIdx = 0;
     document.getElementById('detail-strip').innerHTML = imgs.map((img, i) => {
-      const src = img.data || '';
+      const src = img.url || img.data || '';
       return src ? `<img class="detail-strip-thumb${i === 0 ? ' active' : ''}" src="${src}" onclick="setDetailImg(${i})">` : '';
     }).join('');
     setDetailImg(0); imgWrap.style.display = '';
@@ -1537,7 +1570,7 @@ function openDetail(id) {
 }
 function setDetailImg(idx) {
   detailIdx = idx;
-  document.getElementById('detail-main-img').src = detailImgs[idx].data || '';
+  document.getElementById('detail-main-img').src = detailImgs[idx].url || detailImgs[idx].data || '';
   document.getElementById('detail-counter').textContent = `${idx + 1} / ${detailImgs.length}`;
   document.querySelectorAll('.detail-strip-thumb').forEach((el, i) => el.classList.toggle('active', i === idx));
   document.querySelector('.detail-img-nav').style.display = detailImgs.length > 1 ? 'flex' : 'none';
@@ -1696,12 +1729,6 @@ function renderOverview() {
     setEl('ov-max-loss', s.maxLoss.toFixed(2));
     setEl('ov-dd', '-'+s.maxDD.toFixed(2));
     setEl('ov-avg-pips', s.avgPips.toFixed(1));
-    const ovAvgWin = document.getElementById('ov-avg-win');
-    const ovAvgLoss = document.getElementById('ov-avg-loss');
-    if (ovAvgWin) ovAvgWin.textContent = '+' + s.maxWin.toFixed(2);
-    if (ovAvgLoss) ovAvgLoss.textContent = s.maxLoss.toFixed(2);
-    const ovAvgRR = document.getElementById('ov-avg-rr');
-    if (ovAvgRR) ovAvgRR.textContent = '1:' + s.avgRR.toFixed(2);
     // Chart P&L
     let cum2=0; const rev2=s.withPnl.slice().reverse();
     makeChart('ov-chart-pnl','line', rev2.map((t,i)=>t.symbol+'#'+(i+1)),
@@ -1716,14 +1743,7 @@ function renderOverview() {
     trades.filter(t=>t.symbol&&t.pnl).forEach(t=>{if(!pairMap[t.symbol])pairMap[t.symbol]=0;pairMap[t.symbol]+=parseFloat(t.pnl||0);});
     const pairLabels=Object.keys(pairMap).sort((a,b)=>Math.abs(pairMap[b])-Math.abs(pairMap[a])).slice(0,8);
     makeChart('ov-chart-pair','bar',pairLabels,[{data:pairLabels.map(k=>pairMap[k]),backgroundColor:pairLabels.map(k=>pairMap[k]>=0?'rgba(0,217,126,0.6)':'rgba(255,77,106,0.6)'),borderRadius:4,label:'P&L'}]);
-    // Chart TF Win/Loss
-    const tfMap = {};
-    trades.filter(t=>t.tf&&t.pnl).forEach(t=>{if(!tfMap[t.tf])tfMap[t.tf]={w:0,l:0};parseFloat(t.pnl)>0?tfMap[t.tf].w++:tfMap[t.tf].l++;});
-    const tfLabels=Object.keys(tfMap);
-    makeChart('ov-chart-tf','bar',tfLabels,[
-      {data:tfLabels.map(k=>tfMap[k].w),backgroundColor:'rgba(0,217,126,0.6)',label:'ชนะ',borderRadius:4},
-      {data:tfLabels.map(k=>-tfMap[k].l),backgroundColor:'rgba(255,77,106,0.6)',label:'แพ้',borderRadius:4}
-    ],{plugins:{legend:{display:true}}});
+
   }
   // บัญชี
   const ap=accounts.filter(a=>a.type==='Profit').reduce((s,a)=>s+(parseFloat(a.amount_usd)||0),0);
@@ -1809,6 +1829,70 @@ document.getElementById('new-strategy').addEventListener('keydown', e => { if (e
 const lastPage = IS_VIEW ? 'overview' : (localStorage.getItem('lastPage') || 'overview');
 showPage(lastPage);
 loadAll();
+// ---- Export & Backup ----
+
+function exportJSON() {
+  const data = {
+    exported_at: new Date().toISOString(),
+    trades: trades,
+    missed_trades: missedTrades,
+    accounts: accounts,
+    settings: settings
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const date = new Date().toISOString().split('T')[0];
+  a.href = url; a.download = `fx-journal-backup-${date}.json`;
+  a.click(); URL.revokeObjectURL(url);
+  toast('Export JSON สำเร็จ!');
+}
+
+function exportCSV() {
+  const headers = ['date','symbol','side','tf','entry','exit','lot','pips','pnl','rr','strategy','note'];
+  const rows = trades.map(t => headers.map(h => {
+    const v = t[h] ?? '';
+    const s = String(v).replace(/"/g, '""');
+    return s.includes(',') || s.includes('"') || s.includes('
+') ? `"${s}"` : s;
+  }).join(','));
+  const csv = [headers.join(','), ...rows].join('
+');
+  const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const date = new Date().toISOString().split('T')[0];
+  a.href = url; a.download = `fx-journal-trades-${date}.csv`;
+  a.click(); URL.revokeObjectURL(url);
+  toast('Export CSV สำเร็จ!');
+}
+
+function backupToLocal() {
+  try {
+    const data = {
+      backed_up_at: new Date().toISOString(),
+      trades: trades,
+      missed_trades: missedTrades,
+      accounts: accounts,
+      settings: settings
+    };
+    localStorage.setItem('fx_journal_backup', JSON.stringify(data));
+    const el = document.getElementById('backup-status');
+    if (el) el.textContent = 'Backup ล่าสุด: ' + new Date().toLocaleString('th-TH');
+    toast('Backup ลง Browser แล้ว!');
+  } catch(e) { toast('Backup ไม่ได้: ' + e.message); }
+}
+
+function autoBackup() {
+  if (!trades.length && !accounts.length) return;
+  try {
+    const data = { backed_up_at: new Date().toISOString(), trades, missed_trades: missedTrades, accounts, settings };
+    localStorage.setItem('fx_journal_backup', JSON.stringify(data));
+    localStorage.setItem('fx_journal_backup_time', new Date().toISOString());
+  } catch(e) { console.warn('auto backup failed', e); }
+}
+
+
 </script>
 </body>
 </html>
