@@ -1473,10 +1473,10 @@ async function saveEdit() {
   const updated = { ...trades[idx],
     date: document.getElementById('e-date').value,
     symbol: document.getElementById('e-sym').value,
-    side: editSide, tf: document.getElementById('e-tf').value,
+    side: editSide,
     entry: document.getElementById('e-en').value, exit: document.getElementById('e-ex').value,
     lot: document.getElementById('e-lot').value, pips: document.getElementById('e-pips').value || null,
-    sl: document.getElementById('e-sl').value, tp: document.getElementById('e-tp').value,
+    sl: document.getElementById('e-sl').value,
     rr: document.getElementById('e-rr').value, strategy: document.getElementById('e-str').value,
     pnl: document.getElementById('e-pnl').value || null, note: document.getElementById('e-note').value,
   };
