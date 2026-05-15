@@ -193,7 +193,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       </div>
       <div class="nav-item" onclick="showPage('stats')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-        <span>สถิติ</span>
+        <span>สถิติ (soon)</span>
       </div>
       <div class="nav-item" onclick="showPage('account')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
@@ -231,9 +231,9 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <div class="stat-card"><div class="stat-label">กำไร/ขาดทุนรวม</div><div class="stat-val" id="ov-pnl">—</div></div>
           <div class="stat-card"><div class="stat-label">ชนะ / แพ้</div><div class="stat-val" id="ov-wl">—</div></div>
           <div class="stat-card"><div class="stat-label">Trade ทั้งหมด</div><div class="stat-val" id="ov-total">—</div></div>
-          <div class="stat-card"><div class="stat-label">Avg R:R</div><div class="stat-val" id="ov-avg-rr">—</div></div>
           <div class="stat-card"><div class="stat-label">Max Win</div><div class="stat-val pos" id="ov-avg-win">—</div></div>
           <div class="stat-card"><div class="stat-label">Max Loss</div><div class="stat-val neg" id="ov-avg-loss">—</div></div>
+          <div class="stat-card"><div class="stat-label">Avg R:R</div><div class="stat-val" id="ov-avg-rr">—</div></div>
           <div class="stat-card"><div class="stat-label">Avg จุด</div><div class="stat-val" id="ov-avg-pips">—</div></div>
         </div>
       </div>
@@ -311,7 +311,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
     </div>
 
     <div id="page-stats" class="page">
-      <div class="page-title">สถิติ</div>
+      <div class="page-title">สถิติ <span style="font-size:13px;color:var(--text3);font-weight:400">(soon)</span></div>
       <div class="filter-month-wrap">
         <select id="stats-filter-month" onchange="renderStats()">
           <option value="">ทุกเดือน</option>
