@@ -57,7 +57,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'IBM Pl
 .save-btn:disabled{opacity:.4;cursor:not-allowed}
 .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
 .metric{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 18px}
-.metric-label{font-size:12px;color:var(--text2);letter-spacing:.04em;font-family:'IBM Plex Mono',monospace;margin-bottom:6px}
+.metric-label{font-size:12px;color:var(--text);letter-spacing:.04em;font-family:'IBM Plex Mono',monospace;margin-bottom:6px;opacity:.75}
 .metric-val{font-size:22px;font-weight:500;font-family:'IBM Plex Mono',monospace}
 .metric-val.pos{color:var(--green)}
 .metric-val.neg{color:var(--red)}
@@ -94,7 +94,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
 .stats-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
 .stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px 16px}
-.stat-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;font-family:"IBM Plex Mono",monospace;margin-bottom:6px}
+.stat-label{font-size:10px;color:var(--text);text-transform:uppercase;letter-spacing:.07em;font-family:"IBM Plex Mono",monospace;margin-bottom:6px;opacity:.7}
 .stat-val{font-size:20px;font-weight:500;font-family:"IBM Plex Mono",monospace;color:var(--text)}
 .stat-val.pos{color:var(--green)}.stat-val.neg{color:var(--red)}
 .stat-sub{font-size:11px;color:var(--text3);font-family:"IBM Plex Mono",monospace;margin-top:3px}
@@ -154,6 +154,10 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .section-label{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;font-family:'IBM Plex Mono',monospace;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
 .del-confirm{background:var(--red-bg)!important;color:var(--red)!important;border:1px solid rgba(255,77,106,.5)!important;font-size:10px!important;animation:shake .15s ease;}
 @keyframes shake{0%,100%{transform:translateX(0)}50%{transform:translateX(-2px)}}
+.theme-picker{display:flex;flex-direction:row;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.theme-dot{width:28px;height:28px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .15s}
+.theme-dot:hover{transform:scale(1.15)}
+.theme-dot.active{border-color:var(--text);box-shadow:0 0 0 2px var(--accent)}
 .toast{position:fixed;bottom:24px;right:24px;background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:10px 18px;border-radius:var(--radius);font-size:12px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:9999;font-family:'IBM Plex Mono',monospace}
 .toast.show{opacity:1}
 @media(max-width:640px){
@@ -201,7 +205,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       </div>
       <div class="nav-item" onclick="showPage('settings')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-        <span>จัดการ</span>
+        <span>การตั้งค่า</span>
       </div>
     </nav>
     <div class="sidebar-footer">
@@ -437,7 +441,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
     </div>
 
     <div id="page-settings" class="page">
-      <div class="page-title">จัดการ</div>
+      <div class="page-title">การตั้งค่า</div>
       <div class="settings-block">
         <h3>คู่เงิน</h3>
         <div class="tag-list" id="pair-tags"></div>
@@ -453,6 +457,18 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <input type="text" id="new-strategy" placeholder="เช่น ICT, Price Action..."/>
           <button onclick="addStrategy()">+ เพิ่ม</button>
         </div>
+      </div>
+      <div class="settings-block">
+        <h3>ธีมสี</h3>
+        <div class="theme-picker" id="theme-picker">
+          <div class="theme-dot active" data-theme="default" style="background:#1a1e25" title="Dark" onclick="setTheme('default')"></div>
+          <div class="theme-dot" data-theme="midnight" style="background:#0a0a1a" title="Midnight" onclick="setTheme('midnight')"></div>
+          <div class="theme-dot" data-theme="forest" style="background:#0d1a12" title="Forest" onclick="setTheme('forest')"></div>
+          <div class="theme-dot" data-theme="slate" style="background:#1e2433" title="Slate" onclick="setTheme('slate')"></div>
+          <div class="theme-dot" data-theme="purple" style="background:#1e1538" title="Purple" onclick="setTheme('purple')"></div>
+          <div class="theme-dot" data-theme="light" style="background:#f0f2f5;border-color:#ccc" title="Light" onclick="setTheme('light')"></div>
+        </div>
+        <div style="font-size:11px;color:var(--text2);font-family:'IBM Plex Mono',monospace">กดวงกลมเพื่อเปลี่ยนธีม — จำค่าไว้อัตโนมัติ</div>
       </div>
       <button class="save-btn" onclick="saveSettings()">บันทึกการตั้งค่า</button>
     </div>
@@ -610,9 +626,75 @@ tr:hover td{background:rgba(255,255,255,.02)}
   </div>
 </div>
 
+
 <div class="toast" id="toast"></div>
 
 <script>
+const THEMES = {
+  default: {
+    '--bg':'#0d0f12','--bg2':'#13161b','--bg3':'#1a1e25',
+    '--border':'rgba(255,255,255,0.07)','--border2':'rgba(255,255,255,0.13)',
+    '--text':'#e8eaf0','--text2':'#7c8494','--text3':'#4a5060',
+    '--green':'#00d97e','--green-bg':'rgba(0,217,126,0.08)',
+    '--red':'#ff4d6a','--red-bg':'rgba(255,77,106,0.08)',
+    '--accent':'#4f8eff','--accent-bg':'rgba(79,142,255,0.1)'
+  },
+  midnight: {
+    '--bg':'#07071a','--bg2':'#0d0d2b','--bg3':'#12123a',
+    '--border':'rgba(255,255,255,0.06)','--border2':'rgba(255,255,255,0.11)',
+    '--text':'#e0e4ff','--text2':'#6b75aa','--text3':'#3d4470',
+    '--green':'#00e5a0','--green-bg':'rgba(0,229,160,0.08)',
+    '--red':'#ff4d8a','--red-bg':'rgba(255,77,138,0.08)',
+    '--accent':'#7b6fff','--accent-bg':'rgba(123,111,255,0.1)'
+  },
+  forest: {
+    '--bg':'#080f0a','--bg2':'#0d1a10','--bg3':'#122218',
+    '--border':'rgba(255,255,255,0.06)','--border2':'rgba(255,255,255,0.11)',
+    '--text':'#d8eed0','--text2':'#6a8a70','--text3':'#3a5040',
+    '--green':'#00e07a','--green-bg':'rgba(0,224,122,0.08)',
+    '--red':'#ff5252','--red-bg':'rgba(255,82,82,0.08)',
+    '--accent':'#4ecf8a','--accent-bg':'rgba(78,207,138,0.1)'
+  },
+  slate: {
+    '--bg':'#111622','--bg2':'#181f2e','--bg3':'#1f2940',
+    '--border':'rgba(255,255,255,0.07)','--border2':'rgba(255,255,255,0.13)',
+    '--text':'#dce6f0','--text2':'#6a7d99','--text3':'#3d5066',
+    '--green':'#00d4aa','--green-bg':'rgba(0,212,170,0.08)',
+    '--red':'#ff6b6b','--red-bg':'rgba(255,107,107,0.08)',
+    '--accent':'#4fa3ff','--accent-bg':'rgba(79,163,255,0.1)'
+  },
+  purple: {
+    '--bg':'#0f0a1a','--bg2':'#160f2a','--bg3':'#1e1538',
+    '--border':'rgba(255,255,255,0.07)','--border2':'rgba(200,180,255,0.15)',
+    '--text':'#ede0ff','--text2':'#9b80cc','--text3':'#5a4480',
+    '--green':'#a0e080','--green-bg':'rgba(160,224,128,0.08)',
+    '--red':'#ff80b0','--red-bg':'rgba(255,128,176,0.08)',
+    '--accent':'#c080ff','--accent-bg':'rgba(192,128,255,0.12)'
+  },
+  light: {
+    '--bg':'#f0f2f5','--bg2':'#ffffff','--bg3':'#e8ecf0',
+    '--border':'rgba(0,0,0,0.08)','--border2':'rgba(0,0,0,0.14)',
+    '--text':'#1a2030','--text2':'#5a6478','--text3':'#9aa0b0',
+    '--green':'#00a860','--green-bg':'rgba(0,168,96,0.08)',
+    '--red':'#e02040','--red-bg':'rgba(224,32,64,0.08)',
+    '--accent':'#2060e0','--accent-bg':'rgba(32,96,224,0.08)'
+  }
+};
+
+function setTheme(name) {
+  const t = THEMES[name] || THEMES.default;
+  Object.entries(t).forEach(([k,v]) => document.documentElement.style.setProperty(k, v));
+  localStorage.setItem('theme', name);
+  document.querySelectorAll('.theme-dot').forEach(d => d.classList.toggle('active', d.dataset.theme === name));
+  // update border color for light theme dots
+  document.querySelectorAll('.theme-dot[data-theme="light"]').forEach(d => d.style.borderColor = name === 'light' ? 'var(--text)' : '#ccc');
+}
+
+function loadTheme() {
+  const saved = localStorage.getItem('theme') || 'default';
+  setTheme(saved);
+}
+
 const SB_URL = 'https://onxgkdnjtkfmlxydmxkr.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9ueGdrZG5qdGtmbWx4eWRteGtyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NjM3NjksImV4cCI6MjA5NDIzOTc2OX0.PAEpOSQIkJ7evZqOmcW7NPOMZ3hr0WugVfsjKNqmwCU';
 const H = { 
@@ -1684,6 +1766,7 @@ document.addEventListener('keydown', e => {
   }
 });
 
+loadTheme();
 document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
 document.getElementById('new-pair').addEventListener('keydown', e => { if (e.key === 'Enter') addPair(); });
 document.getElementById('new-strategy').addEventListener('keydown', e => { if (e.key === 'Enter') addStrategy(); });
