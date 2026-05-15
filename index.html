@@ -232,6 +232,8 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <div class="stat-card"><div class="stat-label">ชนะ / แพ้</div><div class="stat-val" id="ov-wl">—</div></div>
           <div class="stat-card"><div class="stat-label">กำไร/ขาดทุนรวม</div><div class="stat-val" id="ov-pnl">—</div></div>
           <div class="stat-card"><div class="stat-label">Avg จุดต่อ Trade</div><div class="stat-val" id="ov-avg-pips">—</div></div>
+          <div class="stat-card"><div class="stat-label">Max Win</div><div class="stat-val pos" id="ov-avg-win">—</div></div>
+          <div class="stat-card"><div class="stat-label">Max Loss</div><div class="stat-val neg" id="ov-avg-loss">—</div></div>
         </div>
       </div>
       <div class="overview-section">
@@ -326,6 +328,8 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <div class="stat-card"><div class="stat-label">กำไร/ขาดทุนรวม</div><div class="stat-val" id="sp">—</div></div>
         <div class="stat-card"><div class="stat-label">Win Rate</div><div class="stat-val" id="sw">—</div></div>
         <div class="stat-card"><div class="stat-label">ชนะ / แพ้</div><div class="stat-val" id="swl">—</div></div>
+        <div class="stat-card"><div class="stat-label">Max Win</div><div class="stat-val pos" id="st-avg-win">—</div></div>
+        <div class="stat-card"><div class="stat-label">Max Loss</div><div class="stat-val neg" id="st-avg-loss">—</div></div>
 
       </div>
       <div class="chart-wrap"><canvas id="chart"></canvas></div>
@@ -1578,6 +1582,10 @@ function renderOverview() {
     setEl('ov-max-loss', s.maxLoss.toFixed(2));
     setEl('ov-dd', '-'+s.maxDD.toFixed(2));
     setEl('ov-avg-pips', s.avgPips.toFixed(1));
+    const ovAvgWin = document.getElementById('ov-avg-win');
+    const ovAvgLoss = document.getElementById('ov-avg-loss');
+    if (ovAvgWin) ovAvgWin.textContent = '+' + s.maxWin.toFixed(2);
+    if (ovAvgLoss) ovAvgLoss.textContent = s.maxLoss.toFixed(2);
     // Chart P&L
     let cum2=0; const rev2=s.withPnl.slice().reverse();
     makeChart('ov-chart-pnl','line', rev2.map((t,i)=>t.symbol+'#'+(i+1)),
@@ -1643,6 +1651,10 @@ function renderStats() {
   sp.className = 'stat-val ' + (total >= 0 ? 'pos' : 'neg');
   document.getElementById('sw').textContent = ((wins / withPnl.length) * 100).toFixed(1) + '%';
   document.getElementById('swl').textContent = `${wins} / ${losses}`;
+  const stAvgWin = document.getElementById('st-avg-win');
+  const stAvgLoss = document.getElementById('st-avg-loss');
+  if (stAvgWin) stAvgWin.textContent = '+' + s.maxWin.toFixed(2);
+  if (stAvgLoss) stAvgLoss.textContent = s.maxLoss.toFixed(2);
 
   let cum = 0;
   const rev = withPnl.slice().reverse();
