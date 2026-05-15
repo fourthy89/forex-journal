@@ -158,6 +158,33 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .theme-dot{width:28px;height:28px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .15s}
 .theme-dot:hover{transform:scale(1.15)}
 .theme-dot.active{border-color:var(--text);box-shadow:0 0 0 2px var(--accent)}
+/* View mode */
+[data-view='1'] .tbl-btn,
+[data-view='1'] #savebtn,
+[data-view='1'] .save-btn,
+[data-view='1'] .add-entry-btn,
+[data-view='1'] .thumb-rm,
+[data-view='1'] .upload-area,
+[data-view='1'] #img-in,
+[data-view='1'] .add-row,
+[data-view='1'] .sync-btn,
+[data-view='1'] [onclick*="openAddAccount"],
+[data-view='1'] [onclick*="openMissedModal"],
+[data-view='1'] [onclick*="openEdit"],
+[data-view='1'] [onclick*="delTrade"],
+[data-view='1'] [onclick*="delAccount"],
+[data-view='1'] [onclick*="delMissed"] { display:none !important; }
+
+[data-view='1'] #page-add,
+[data-view='1'] #page-settings { display:none !important; }
+
+[data-view='1'] .nav-item[onclick*="'add'"],
+[data-view='1'] .nav-item[onclick*="'settings'"] { display:none !important; }
+
+[data-view='1'] .view-badge { display:flex !important; }
+
+.view-badge { display:none; align-items:center; gap:6px; padding:4px 10px; background:var(--accent-bg); border:1px solid var(--accent); border-radius:20px; font-size:11px; color:var(--accent); font-family:'IBM Plex Mono',monospace; margin-bottom:12px; }
+
 .toast{position:fixed;bottom:24px;right:24px;background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:10px 18px;border-radius:var(--radius);font-size:12px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:9999;font-family:'IBM Plex Mono',monospace}
 .toast.show{opacity:1}
 @media(max-width:640px){
@@ -209,6 +236,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       </div>
     </nav>
     <div class="sidebar-footer">
+      <div class="view-badge">👁 View Only</div>
       <div class="sync-status">
         <div class="sync-dot spin" id="sdot"></div>
         <span id="stxt">connecting...</span>
@@ -1766,11 +1794,16 @@ document.addEventListener('keydown', e => {
   }
 });
 
+// View mode detection
+const IS_VIEW = new URLSearchParams(window.location.search).get('view') === '1';
+if (IS_VIEW) {
+  document.documentElement.setAttribute('data-view', '1');
+}
 loadTheme();
 document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
 document.getElementById('new-pair').addEventListener('keydown', e => { if (e.key === 'Enter') addPair(); });
 document.getElementById('new-strategy').addEventListener('keydown', e => { if (e.key === 'Enter') addStrategy(); });
-const lastPage = localStorage.getItem('lastPage') || 'overview';
+const lastPage = IS_VIEW ? 'overview' : (localStorage.getItem('lastPage') || 'overview');
 showPage(lastPage);
 loadAll();
 </script>
