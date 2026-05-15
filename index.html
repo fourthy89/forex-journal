@@ -1297,8 +1297,11 @@ async function addTrade() {
   const date = document.getElementById('f-date').value;
   const sym = document.getElementById('f-sym').value;
   const en = document.getElementById('f-en').value;
-  const lot = document.getElementById('f-lot').value;
-  if (!date || !sym || !en || !lot) { toast('กรุณากรอก วันที่, Pair, Entry, Lot'); return; }
+  const lotPerEntry = parseFloat(document.getElementById('f-lot-per').value) || 0;
+  const entriesNum = parseInt(document.getElementById('f-entries').value) || 1;
+  const totalLotVal = lotPerEntry ? (lotPerEntry * entriesNum).toFixed(2) : '0';
+  const avgEntryVal = document.getElementById('f-en').value;
+  if (!date || !sym || !avgEntryVal || !lotPerEntry) { toast('กรุณากรอก วันที่, Pair, Entry, Lot'); btn && (btn.disabled=false) && (btn.textContent='บันทึก Trade'); return; }
   const btn = document.getElementById('savebtn');
   btn.disabled = true; btn.textContent = 'กำลังบันทึก...';
   const newTrade = {
