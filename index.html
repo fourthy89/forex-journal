@@ -494,17 +494,6 @@ tr:hover td{background:rgba(255,255,255,.02)}
         </div>
         <div style="font-size:11px;color:var(--text2);font-family:'IBM Plex Mono',monospace">กดวงกลมเพื่อเปลี่ยนธีม — จำค่าไว้อัตโนมัติ</div>
       </div>
-      <div class="settings-block">
-        <h3>Backup & Export</h3>
-        <div style="display:flex;flex-direction:column;gap:10px">
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <button class="save-btn" onclick="exportJSON()" style="padding:9px 18px;background:var(--accent)">⬇ Export JSON</button>
-            <button class="save-btn" onclick="exportCSV()" style="padding:9px 18px;background:var(--bg3);border:1px solid var(--border2);color:var(--text2)">⬇ Export CSV</button>
-            <button class="save-btn" onclick="backupToLocal()" style="padding:9px 18px;background:var(--bg3);border:1px solid var(--border2);color:var(--text2)">💾 Backup ลง Browser</button>
-          </div>
-          <div style="font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace" id="backup-status">—</div>
-        </div>
-      </div>
       <button class="save-btn settings-save-btn" onclick="saveSettings()">บันทึกการตั้งค่า</button>
     </div>
   </main>
@@ -834,7 +823,6 @@ async function loadAll() {
     accounts = aRows || [];
     missedTrades = (mRows || []).map(r => ({ ...r, images: r.images ? JSON.parse(r.images) : [] }));
     setS('ok', `connected · ${trades.length} trades`);
-    autoBackup();
     applySettings();
     populateMonthFilters();
     // populate stats filters
@@ -1376,12 +1364,7 @@ function showPage(n) {
   if (n === 'stats') renderStats();
   if (n === 'missed') renderMissed();
   if (n === 'account') renderAccount();
-  if (n === 'settings') {
-    renderPairTags(); renderStrategyTags();
-    const bt = localStorage.getItem('fx_journal_backup_time');
-    const bel = document.getElementById('backup-status');
-    if (bel) bel.textContent = bt ? 'Backup ล่าสุด: ' + new Date(bt).toLocaleString('th-TH') : 'ยังไม่มี backup ใน browser';
-  }
+  if (n === 'settings') { renderPairTags(); renderStrategyTags(); }
 }
 function setSide(s) {
   tradeSide = s;
@@ -1459,7 +1442,6 @@ async function addTrade() {
     trades.unshift(newTrade);
     toast('บันทึกแล้ว!');
     setS('ok', `connected · ${trades.length} trades`);
-    autoBackup();
   } catch { toast('บันทึกไม่ได้ — ลอง sync ใหม่'); }
   ['f-en','f-ex','f-lot-per','f-entries','f-sl','f-tp','f-rr','f-pips','f-note','f-pnl'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
   const dispEl = document.getElementById('avg-entry-display'); if (dispEl) dispEl.textContent = '';
@@ -1829,70 +1811,6 @@ document.getElementById('new-strategy').addEventListener('keydown', e => { if (e
 const lastPage = IS_VIEW ? 'overview' : (localStorage.getItem('lastPage') || 'overview');
 showPage(lastPage);
 loadAll();
-// ---- Export & Backup ----
-
-function exportJSON() {
-  const data = {
-    exported_at: new Date().toISOString(),
-    trades: trades,
-    missed_trades: missedTrades,
-    accounts: accounts,
-    settings: settings
-  };
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  const date = new Date().toISOString().split('T')[0];
-  a.href = url; a.download = `fx-journal-backup-${date}.json`;
-  a.click(); URL.revokeObjectURL(url);
-  toast('Export JSON สำเร็จ!');
-}
-
-function exportCSV() {
-  const headers = ['date','symbol','side','tf','entry','exit','lot','pips','pnl','rr','strategy','note'];
-  const rows = trades.map(t => headers.map(h => {
-    const v = t[h] ?? '';
-    const s = String(v).replace(/"/g, '""');
-    return s.includes(',') || s.includes('"') || s.includes('
-') ? `"${s}"` : s;
-  }).join(','));
-  const csv = [headers.join(','), ...rows].join('
-');
-  const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  const date = new Date().toISOString().split('T')[0];
-  a.href = url; a.download = `fx-journal-trades-${date}.csv`;
-  a.click(); URL.revokeObjectURL(url);
-  toast('Export CSV สำเร็จ!');
-}
-
-function backupToLocal() {
-  try {
-    const data = {
-      backed_up_at: new Date().toISOString(),
-      trades: trades,
-      missed_trades: missedTrades,
-      accounts: accounts,
-      settings: settings
-    };
-    localStorage.setItem('fx_journal_backup', JSON.stringify(data));
-    const el = document.getElementById('backup-status');
-    if (el) el.textContent = 'Backup ล่าสุด: ' + new Date().toLocaleString('th-TH');
-    toast('Backup ลง Browser แล้ว!');
-  } catch(e) { toast('Backup ไม่ได้: ' + e.message); }
-}
-
-function autoBackup() {
-  if (!trades.length && !accounts.length) return;
-  try {
-    const data = { backed_up_at: new Date().toISOString(), trades, missed_trades: missedTrades, accounts, settings };
-    localStorage.setItem('fx_journal_backup', JSON.stringify(data));
-    localStorage.setItem('fx_journal_backup_time', new Date().toISOString());
-  } catch(e) { console.warn('auto backup failed', e); }
-}
-
-
 </script>
 </body>
 </html>
