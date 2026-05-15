@@ -175,11 +175,14 @@ tr:hover td{background:rgba(255,255,255,.02)}
 [data-view='1'] [onclick*="delAccount"],
 [data-view='1'] [onclick*="delMissed"] { display:none !important; }
 
-[data-view='1'] #page-add,
-[data-view='1'] #page-settings { display:none !important; }
+[data-view='1'] #page-add { display:none !important; }
 
-[data-view='1'] .nav-item[onclick*="'add'"],
-[data-view='1'] .nav-item[onclick*="'settings'"] { display:none !important; }
+[data-view='1'] .nav-item[onclick*="'add'"] { display:none !important; }
+[data-view='1'] .nav-item[onclick*="'settings'"] { display:flex !important; }
+
+[data-view='1'] .settings-pairs,
+[data-view='1'] .settings-strategies,
+[data-view='1'] .settings-save-btn { display:none !important; }
 
 [data-view='1'] .view-badge { display:flex !important; }
 
@@ -470,7 +473,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
     <div id="page-settings" class="page">
       <div class="page-title">การตั้งค่า</div>
-      <div class="settings-block">
+      <div class="settings-block settings-pairs">
         <h3>คู่เงิน</h3>
         <div class="tag-list" id="pair-tags"></div>
         <div class="add-row">
@@ -478,7 +481,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <button onclick="addPair()">+ เพิ่ม</button>
         </div>
       </div>
-      <div class="settings-block">
+      <div class="settings-block settings-strategies">
         <h3>กลยุทธ์</h3>
         <div class="tag-list" id="strategy-tags"></div>
         <div class="add-row">
@@ -498,7 +501,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
         </div>
         <div style="font-size:11px;color:var(--text2);font-family:'IBM Plex Mono',monospace">กดวงกลมเพื่อเปลี่ยนธีม — จำค่าไว้อัตโนมัติ</div>
       </div>
-      <button class="save-btn" onclick="saveSettings()">บันทึกการตั้งค่า</button>
+      <button class="save-btn settings-save-btn" onclick="saveSettings()">บันทึกการตั้งค่า</button>
     </div>
   </main>
 </div>
