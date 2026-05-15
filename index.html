@@ -1291,20 +1291,19 @@ async function addTrade() {
   const date = document.getElementById('f-date').value;
   const sym = document.getElementById('f-sym').value;
   const en = document.getElementById('f-en').value;
+  const btn = document.getElementById('savebtn');
   const lotPerEntry = parseFloat(document.getElementById('f-lot-per').value) || 0;
   const entriesNum = parseInt(document.getElementById('f-entries').value) || 1;
   const totalLotVal = lotPerEntry ? (lotPerEntry * entriesNum).toFixed(2) : '0';
   const avgEntryVal = document.getElementById('f-en').value;
-  if (!date || !sym || !avgEntryVal || !lotPerEntry) { toast('กรุณากรอก วันที่, Pair, Entry, Lot'); btn && (btn.disabled=false) && (btn.textContent='บันทึก Trade'); return; }
-  const btn = document.getElementById('savebtn');
+  if (!date || !sym || !avgEntryVal || !lotPerEntry) { toast('กรุณากรอก วันที่, Pair, Entry, Lot'); return; }
   btn.disabled = true; btn.textContent = 'กำลังบันทึก...';
   const newTrade = {
     id: Date.now(),
     date, symbol: sym, side: tradeSide,
-
     entry: avgEntryVal, exit: document.getElementById('f-ex').value,
     lot: totalLotVal, lot_per: lotPerEntry, entries: entriesNum, pips: document.getElementById('f-pips').value || null,
-    sl: document.getElementById('f-sl').value, tp: document.getElementById('f-tp').value,
+    sl: document.getElementById('f-sl').value,
     rr: document.getElementById('f-rr').value,
     strategy: document.getElementById('f-str').value,
     pnl: document.getElementById('f-pnl').value || null,
