@@ -1722,8 +1722,8 @@ function renderOverview() {
     setEl('ov-wr', ((s.wins.length/s.withPnl.length)*100).toFixed(1)+'%');
     setEl('ov-wl', `${s.wins.length} / ${s.losses.length}`);
     setEl('ov-pnl', (s.total>=0?'+':'')+s.total.toFixed(2), s.total>=0?'pos':'neg');
-    setEl('ov-avg-win', '+'+s.avgWin.toFixed(2));
-    setEl('ov-avg-loss', s.avgLoss.toFixed(2));
+    setEl('ov-avg-win', '+'+s.maxWin.toFixed(2));
+    setEl('ov-avg-loss', s.maxLoss.toFixed(2));
     setEl('ov-pf', s.pf === Infinity ? '∞' : s.pf.toFixed(2), s.pf >= 1 ? 'pos' : 'neg');
     setEl('ov-avg-rr', '1:'+s.avgRR.toFixed(2));
     setEl('ov-max-win', '+'+s.maxWin.toFixed(2));
