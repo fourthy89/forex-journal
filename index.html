@@ -649,6 +649,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div class="fg"><label>R:R Ratio</label><input type="text" id="e-rr" readonly/></div>
       <div class="fg"><label>กลยุทธ์</label><select id="e-str"></select></div>
       <div class="fg"><label>กำไร / ขาดทุน ($)</label><input type="number" id="e-pnl" step="any"/></div>
+      <div class="fg"><label>Credit ที่ใช้ ($) <span style="font-size:10px;color:var(--text3)">(ถ้ามี)</span></label><input type="number" id="e-credit" step="any"/></div>
       <div class="fg full"><label>หมายเหตุ</label><textarea id="e-note"></textarea></div>
       <div class="fg full"><button class="save-btn" onclick="saveEdit()">บันทึกการแก้ไข</button></div>
     </div>
@@ -1589,6 +1590,7 @@ function openEdit(id) {
   estr.innerHTML = '<option value="">— เลือก —</option>' + settings.strategies.map(s => `<option>${s}</option>`).join('');
   estr.value = t.strategy || '';
   document.getElementById('e-pnl').value = t.pnl || '';
+  document.getElementById('e-credit').value = t.credit || '';
   document.getElementById('e-note').value = t.note || '';
   document.getElementById('edit-modal').classList.add('open');
 }
@@ -1610,10 +1612,10 @@ async function saveEdit() {
     symbol: document.getElementById('e-sym').value,
     side: editSide,
     entry: document.getElementById('e-en').value, exit: document.getElementById('e-ex').value,
-    lot: document.getElementById('e-lot').value, pips: document.getElementById('e-pips').value || null,
+    lot: document.getElementById('e-lot').value,
     sl: document.getElementById('e-sl').value,
     rr: document.getElementById('e-rr').value, strategy: document.getElementById('e-str').value,
-    pnl: document.getElementById('e-pnl').value || null, note: document.getElementById('e-note').value,
+    pnl: document.getElementById('e-pnl').value || null, credit: document.getElementById('e-credit').value || null, note: document.getElementById('e-note').value,
   };
   try {
     await sbUpdate('trades', editId, tradeToRow(updated));
