@@ -306,11 +306,11 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <div class="fg"><label>Lot ต่อไม้</label><input type="number" id="f-lot-per" placeholder="0.01" step="any" oninput="updateLotCalc()"/>
           <div id="avg-entry-display" style="font-size:11px;color:var(--text2);font-family:'IBM Plex Mono',monospace;margin-top:4px"></div>
         </div>
-        <div class="fg"><label>จุด (กรอกเอง)</label><input type="number" id="f-pips" placeholder="เช่น 110" step="any"/></div>
         <div class="fg"><label>Stop Loss</label><input type="number" id="f-sl" placeholder="0.00000" step="any" oninput="autoCalc()"/></div>
         <div class="fg"><label>R:R Ratio (อัตโนมัติ)</label><input type="text" id="f-rr" placeholder="—" readonly/></div>
         <div class="fg"><label>กลยุทธ์</label><select id="f-str"></select></div>
         <div class="fg"><label>กำไร / ขาดทุน ($)</label><input type="number" id="f-pnl" placeholder="เช่น 12.50 หรือ -8.00" step="any"/></div>
+        <div class="fg"><label>Credit ที่ใช้ ($) <span style="font-size:10px;color:var(--text3)">(ถ้ามี)</span></label><input type="number" id="f-credit" placeholder="เช่น 27.00" step="any"/></div>
         <div class="fg full">
           <label>รูป Chart</label>
           <div class="upload-area" onclick="document.getElementById('img-in').click()">
@@ -338,8 +338,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <table>
           <thead><tr>
             <th>วันที่</th><th>Pair</th><th>Side</th><th>TF</th>
-            <th>Entry</th><th>Exit</th><th>Lot</th><th>จุด</th>
-            <th>กำไร/ขาดทุน</th><th>R:R</th><th>กลยุทธ์</th><th>รูป</th><th></th>
+            <th>Entry</th><th>Exit</th><th>Lot</th><th>กำไร/ขาดทุน</th><th>Credit</th><th>R:R</th><th>กลยุทธ์</th><th>รูป</th><th></th>
           </tr></thead>
           <tbody id="tbody"></tbody>
         </table>
@@ -1314,6 +1313,7 @@ function tradeToRow(t) {
     rr: t.rr || null,
     strategy: t.strategy || null,
     pnl: t.pnl || null,
+    credit: t.credit || null,
     note: t.note || null,
     images: t.images && t.images.length ? JSON.stringify(t.images) : null
   };
@@ -1453,6 +1453,7 @@ async function addTrade() {
     rr: document.getElementById('f-rr').value,
     strategy: document.getElementById('f-str').value,
     pnl: document.getElementById('f-pnl').value || null,
+    credit: document.getElementById('f-credit').value || null,
     note: document.getElementById('f-note').value,
     images: pending.map(p => ({ name: p.name, data: p.data }))
   };
@@ -1462,7 +1463,7 @@ async function addTrade() {
     toast('บันทึกแล้ว!');
     setS('ok', `connected · ${trades.length} trades`);
   } catch { toast('บันทึกไม่ได้ — ลอง sync ใหม่'); }
-  ['f-en','f-ex','f-lot-per','f-entries','f-sl','f-tp','f-rr','f-pips','f-note','f-pnl'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  ['f-en','f-ex','f-lot-per','f-entries','f-sl','f-tp','f-rr','f-pips','f-note','f-pnl','f-credit'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
   const dispEl = document.getElementById('avg-entry-display'); if (dispEl) dispEl.textContent = '';
   document.getElementById('f-str').value = '';
   document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
@@ -1498,8 +1499,6 @@ function renderTable() {
     document.getElementById('pg-next').disabled = currentPage === totalPages;
   } else { pagination.style.display = 'none'; }
   tbody.innerHTML = paginated.map(t => {
-    const pips = parseFloat(t.pips);
-    const pipsStr = t.pips ? `<span class="mono" style="font-size:11px">${pips.toFixed(1)}</span>` : '—';
     const pnl = parseFloat(t.pnl);
     const pnlStr = t.pnl ? (pnl >= 0 ? `<span class="pnl-pos">+${pnl.toFixed(2)}</span>` : `<span class="pnl-neg">${pnl.toFixed(2)}</span>`) : '—';
     const imgs = t.images || [];
@@ -1517,8 +1516,8 @@ function renderTable() {
       <td class="mono" style="font-size:11px">${t.entry ? parseFloat(t.entry).toFixed(5) : '—'}</td>
       <td class="mono" style="font-size:11px">${t.exit ? parseFloat(t.exit).toFixed(5) : '—'}</td>
       <td class="mono" style="font-size:11px">${t.lot || '—'}</td>
-      <td>${pipsStr}</td>
       <td>${pnlStr}</td>
+      <td>${t.credit ? `<span class="mono" style="font-size:11px;color:#f5a623">+${parseFloat(t.credit).toFixed(2)}</span>` : '<span style="color:var(--text3)">—</span>'}</td>
       <td class="mono" style="font-size:11px;color:var(--text2)">${t.rr || '—'}</td>
       <td style="font-size:11px;color:var(--text2)">${t.strategy || '—'}</td>
       <td>${imgCell}</td>
