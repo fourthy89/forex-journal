@@ -275,6 +275,12 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <div class="stat-card"><div class="stat-label">Avg R:R</div><div class="stat-val" id="ov-avg-rr">—</div></div>
           <div class="stat-card"><div class="stat-label">Avg จุด</div><div class="stat-val" id="ov-avg-pips">—</div></div>
         </div>
+        <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);margin-top:10px">
+          <div class="stat-card"><div class="stat-label">Win Rate BUY</div><div class="stat-val" id="ov-wr-buy">—</div><div class="stat-sub" id="ov-wl-buy">—</div></div>
+          <div class="stat-card"><div class="stat-label">Win Rate SELL</div><div class="stat-val" id="ov-wr-sell">—</div><div class="stat-sub" id="ov-wl-sell">—</div></div>
+          <div class="stat-card"><div class="stat-label">P&L BUY</div><div class="stat-val" id="ov-pnl-buy">—</div></div>
+          <div class="stat-card"><div class="stat-label">P&L SELL</div><div class="stat-val" id="ov-pnl-sell">—</div></div>
+        </div>
       </div>
       <div class="overview-section">
         <div class="overview-section-title">กราฟ</div>
@@ -1720,6 +1726,31 @@ function renderOverview() {
     setEl('ov-max-loss', s.maxLoss.toFixed(2));
     setEl('ov-dd', '-'+s.maxDD.toFixed(2));
     setEl('ov-avg-pips', s.avgPips.toFixed(1));
+
+    // Win Rate Buy/Sell
+    const buyTrades = trades.filter(t => t.side === 'BUY' && t.pnl !== null && t.pnl !== '');
+    const sellTrades = trades.filter(t => t.side === 'SELL' && t.pnl !== null && t.pnl !== '');
+    const buyWins = buyTrades.filter(t => parseFloat(t.pnl) > 0);
+    const sellWins = sellTrades.filter(t => parseFloat(t.pnl) > 0);
+    const buyPnl = buyTrades.reduce((a, t) => a + parseFloat(t.pnl || 0), 0);
+    const sellPnl = sellTrades.reduce((a, t) => a + parseFloat(t.pnl || 0), 0);
+
+    const wrBuyEl = document.getElementById('ov-wr-buy');
+    const wrSellEl = document.getElementById('ov-wr-sell');
+    if (buyTrades.length) {
+      const wrBuy = (buyWins.length / buyTrades.length * 100).toFixed(1);
+      if (wrBuyEl) { wrBuyEl.textContent = wrBuy + '%'; wrBuyEl.className = 'stat-val ' + (parseFloat(wrBuy) >= 50 ? 'pos' : 'neg'); }
+      const wlBuy = document.getElementById('ov-wl-buy'); if (wlBuy) wlBuy.textContent = buyWins.length + 'W / ' + (buyTrades.length - buyWins.length) + 'L';
+    }
+    if (sellTrades.length) {
+      const wrSell = (sellWins.length / sellTrades.length * 100).toFixed(1);
+      if (wrSellEl) { wrSellEl.textContent = wrSell + '%'; wrSellEl.className = 'stat-val ' + (parseFloat(wrSell) >= 50 ? 'pos' : 'neg'); }
+      const wlSell = document.getElementById('ov-wl-sell'); if (wlSell) wlSell.textContent = sellWins.length + 'W / ' + (sellTrades.length - sellWins.length) + 'L';
+    }
+    const pnlBuyEl = document.getElementById('ov-pnl-buy');
+    const pnlSellEl = document.getElementById('ov-pnl-sell');
+    if (pnlBuyEl) { pnlBuyEl.textContent = (buyPnl >= 0 ? '+' : '') + buyPnl.toFixed(2); pnlBuyEl.className = 'stat-val ' + (buyPnl >= 0 ? 'pos' : 'neg'); }
+    if (pnlSellEl) { pnlSellEl.textContent = (sellPnl >= 0 ? '+' : '') + sellPnl.toFixed(2); pnlSellEl.className = 'stat-val ' + (sellPnl >= 0 ? 'pos' : 'neg'); }
     // Chart P&L
     let cum2=0; const rev2=s.withPnl.slice().reverse();
     makeChart('ov-chart-pnl','line', rev2.map((t,i)=>t.symbol+'#'+(i+1)),
