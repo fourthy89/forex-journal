@@ -330,14 +330,11 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div class="filter-row">
         <input type="text" id="srch" placeholder="ค้นหา pair..." oninput="renderTable()"/>
         <select id="fs" onchange="renderTable()"><option value="">ทุกทิศทาง</option><option value="BUY">Buy</option><option value="SELL">Sell</option></select>
-        <select id="ftf" onchange="renderTable()">
-          <option value="">ทุก TF</option><option>M1</option><option>M3</option><option>M5</option><option>M15</option><option>M30</option><option>H1</option><option>H4</option><option>D1</option><option>W1</option>
-        </select>
       </div>
       <div class="table-wrap">
         <table>
           <thead><tr>
-            <th>วันที่</th><th>Pair</th><th>Side</th><th>TF</th>
+            <th>วันที่</th><th>Pair</th><th>Side</th>
             <th>Entry</th><th>Exit</th><th>Lot</th><th>กำไร/ขาดทุน</th><th>Credit</th><th>R:R</th><th>กลยุทธ์</th><th>รูป</th><th></th>
           </tr></thead>
           <tbody id="tbody"></tbody>
@@ -644,9 +641,6 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <button class="side-btn buy" id="e-btn-buy" onclick="setEditSide('BUY')">↑ Buy</button>
           <button class="side-btn sell" id="e-btn-sell" onclick="setEditSide('SELL')">↓ Sell</button>
         </div>
-      </div>
-      <div class="fg"><label>Timeframe</label>
-        <select id="e-tf"><option>M1</option><option>M3</option><option>M5</option><option>M15</option><option>M30</option><option>H1</option><option>H4</option><option>D1</option><option>W1</option></select>
       </div>
       <div class="fg"><label>Entry Price</label><input type="number" id="e-en" step="any" oninput="calcEditRR()"/></div>
       <div class="fg"><label>TP (ราคาที่ปิดจริง)</label><input type="number" id="e-ex" step="any" oninput="calcEditRR()"/></div>
@@ -1481,8 +1475,7 @@ function changePage(dir) {
 function renderTable() {
   const srch = (document.getElementById('srch').value || '').toLowerCase();
   const fs = document.getElementById('fs').value;
-  const ftf = document.getElementById('ftf').value;
-  const filtered = trades.filter(t => (!srch || t.symbol.toLowerCase().includes(srch)) && (!fs || t.side === fs) && (!ftf || t.tf === ftf));
+  const filtered = trades.filter(t => (!srch || t.symbol.toLowerCase().includes(srch)) && (!fs || t.side === fs));
   const tbody = document.getElementById('tbody');
   const empty = document.getElementById('empty');
   const pagination = document.getElementById('pagination');
@@ -1511,9 +1504,8 @@ function renderTable() {
       <td class="mono" style="font-size:11px;cursor:pointer;color:var(--accent)" onclick="openDetail(${t.id})">${t.date}</td>
       <td style="font-weight:500;cursor:pointer" onclick="openDetail(${t.id})">${t.symbol}</td>
       <td><span class="badge badge-${t.side.toLowerCase()}">${t.side}</span></td>
-      <td class="mono" style="color:var(--text2);font-size:11px">${t.tf || '—'}</td>
-      <td class="mono" style="font-size:11px">${t.entry ? parseFloat(t.entry).toFixed(5) : '—'}</td>
-      <td class="mono" style="font-size:11px">${t.exit ? parseFloat(t.exit).toFixed(5) : '—'}</td>
+      <td class="mono" style="font-size:11px">${t.entry ? parseFloat(t.entry).toFixed(2) : '—'}</td>
+      <td class="mono" style="font-size:11px">${t.exit ? parseFloat(t.exit).toFixed(2) : '—'}</td>
       <td class="mono" style="font-size:11px">${t.lot || '—'}</td>
       <td>${pnlStr}</td>
       <td>${t.credit ? `<span class="mono" style="font-size:11px;color:#f5a623">+${parseFloat(t.credit).toFixed(2)}</span>` : '<span style="color:var(--text3)">—</span>'}</td>
@@ -1538,10 +1530,10 @@ function openDetail(id) {
   document.getElementById('detail-grid').innerHTML = [
     ['คู่เงิน', t.symbol], ['วันที่', t.date],
     ['ทิศทาง', t.side], ['Timeframe', t.tf || '—'],
-    ['Entry', t.entry ? parseFloat(t.entry).toFixed(5) : '—'], ['Exit', t.exit ? parseFloat(t.exit).toFixed(5) : '—'],
+    ['Entry', t.entry ? parseFloat(t.entry).toFixed(2) : '—'], ['Exit', t.exit ? parseFloat(t.exit).toFixed(2) : '—'],
     ['Lot', t.lot || '—'], ['จุด', t.pips || '—'],
     ['R:R', t.rr || '—'], ['กลยุทธ์', t.strategy || '—'],
-    ['Stop Loss', t.sl ? parseFloat(t.sl).toFixed(5) : '—'], ['Take Profit', t.tp ? parseFloat(t.tp).toFixed(5) : '—'],
+    ['Stop Loss', t.sl ? parseFloat(t.sl).toFixed(2) : '—'], ['Take Profit', t.tp ? parseFloat(t.tp).toFixed(2) : '—'],
   ].map(([label, val]) => `
     <div class="detail-item">
       <div class="detail-label">${label}</div>
