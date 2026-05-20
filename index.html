@@ -1529,7 +1529,7 @@ function openDetail(id) {
   const pnlColor = t.pnl ? (pnl >= 0 ? 'var(--green)' : 'var(--red)') : 'var(--text)';
   document.getElementById('detail-grid').innerHTML = [
     ['คู่เงิน', t.symbol], ['วันที่', t.date],
-    ['ทิศทาง', t.side], ['Timeframe', t.tf || '—'],
+    ['ทิศทาง', t.side],
     ['Entry', t.entry ? parseFloat(t.entry).toFixed(2) : '—'], ['Exit', t.exit ? parseFloat(t.exit).toFixed(2) : '—'],
     ['Lot', t.lot || '—'], ['จุด', t.pips || '—'],
     ['R:R', t.rr || '—'], ['กลยุทธ์', t.strategy || '—'],
@@ -1580,7 +1580,6 @@ function openEdit(id) {
   esym.innerHTML = settings.pairs.map(p => `<option>${p}</option>`).join('');
   esym.value = t.symbol || settings.pairs[0];
   setEditSide(t.side);
-  document.getElementById('e-tf').value = t.tf || 'H1';
   document.getElementById('e-en').value = t.entry || '';
   document.getElementById('e-ex').value = t.exit || '';
   document.getElementById('e-lot').value = t.lot || '';
