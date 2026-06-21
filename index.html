@@ -127,7 +127,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .settings-block{max-width:580px;margin-bottom:28px}
 .settings-block h3{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.08em;font-family:'IBM Plex Mono',monospace;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
 .tag-list{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;min-height:32px}
-.tag{display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;border:1px solid var(--border2);background:var(--bg3);font-size:12px}
+.tag{display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;border:1px solid var(--border2);background:var(--bg3);font-size:12px;color:var(--text)}
 .tag button{background:none;border:none;cursor:pointer;color:var(--text3);font-size:12px;display:flex;align-items:center;transition:color .15s;line-height:1}
 .tag button:hover{color:var(--red)}
 .add-row{display:flex;gap:8px}
@@ -1407,7 +1407,7 @@ function renderStrategyTags() {
     `<div class="tag">${s}<button onclick="removeStrategy(${i})">✕</button></div>`).join('');
 }
 function addPair() {
-  const inp = document.getElementById('new-pair'), val = inp.value.trim().toUpperCase();
+  const inp = document.getElementById('new-pair'), val = inp.value.trim();
   if (!val || settings.pairs.includes(val)) { toast(val ? 'มีคู่เงินนี้แล้ว' : 'กรุณากรอกชื่อ'); return; }
   settings.pairs.push(val); inp.value = ''; applySettings(); autoSaveSettings();
 }
