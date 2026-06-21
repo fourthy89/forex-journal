@@ -1384,6 +1384,9 @@ function applySettings() {
   const str = document.getElementById('f-str'), scur = str.value;
   str.innerHTML = '<option value="">— เลือก —</option>' + settings.strategies.map(s => `<option>${s}</option>`).join('');
   if (settings.strategies.includes(scur)) str.value = scur;
+  // sync hist pair dropdown
+  const histPairSel = document.getElementById('hist-fp');
+  if (histPairSel) histPairSel.innerHTML = '<option value="">ทุกคู่เงิน</option>' + settings.pairs.map(p => `<option>${p}</option>`).join('');
   // sync account dropdowns จาก settings.accounts_list
   const acctOpts = settings.accounts_list.map(a => `<option>${a}</option>`).join('');
   const acctFilter = document.getElementById('acc-filter-acct');
@@ -1616,13 +1619,8 @@ function renderHistory() {
   const fstr = document.getElementById('hist-fstr')?.value || '';
   const fses  = document.getElementById('hist-fses')?.value  || '';
 
-  // populate pair + strategy dropdowns once
-  const pairSel = document.getElementById('hist-fp');
-  const strSel  = document.getElementById('hist-fstr');
-  if (pairSel && pairSel.options.length <= 1) {
-    pairSel.innerHTML = '<option value="">ทุกคู่เงิน</option>' + settings.pairs.map(p => `<option>${p}</option>`).join('');
-    if (fp) pairSel.value = fp;
-  }
+  // strategy dropdown (populate once)
+  const strSel = document.getElementById('hist-fstr');
   if (strSel && strSel.options.length <= 1) {
     const strats = [...new Set(trades.map(t => t.strategy).filter(Boolean))];
     strSel.innerHTML = '<option value="">ทุกกลยุทธ์</option>' + strats.map(s => `<option>${s}</option>`).join('');
