@@ -1339,6 +1339,7 @@ async function delAccount(id) {
 function tradeToRow(t) {
   return {
     id: t.id,
+    source: 'manual',
     date: t.date || null,
     symbol: t.symbol || null,
     side: t.side || null,
@@ -1560,7 +1561,7 @@ function renderHistory() {
   }
 
   const filtered = trades.filter(t =>
-    String(t.id).length < 13 &&
+    (t.source === 'mt5' || (!t.source && String(t.id).length < 13)) &&
     (!fm   || (t.date && t.date.startsWith(fm))) &&
     (!fp   || t.symbol   === fp) &&
     (!fs   || t.side     === fs) &&
@@ -1642,7 +1643,7 @@ function renderTable() {
   const srch = (document.getElementById('srch').value || '').toLowerCase();
   const fs = document.getElementById('fs').value;
   const filtered = trades.filter(t =>
-    String(t.id).length >= 13 &&
+    (t.source === 'manual' || (!t.source && String(t.id).length >= 13)) &&
     (!srch || t.symbol.toLowerCase().includes(srch)) &&
     (!fs || t.side === fs))
     .sort((a, b) => new Date(b.date) - new Date(a.date));
