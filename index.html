@@ -69,7 +69,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'IBM Pl
 .filter-row input,.filter-row select{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);padding:8px 12px;font-size:12px;outline:none;font-family:'IBM Plex Sans Thai',sans-serif;transition:border-color .15s}
 .filter-row input{flex:1;min-width:160px}
 .filter-row input:focus,.filter-row select:focus{border-color:var(--accent)}
-.filter-row select option{background:#1a1e25}
+.filter-row select option{background:var(--bg3);color:var(--text)}
 .table-wrap{overflow-x:auto;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg)}
 table{width:100%;border-collapse:collapse;font-size:12px}
 th{padding:10px 12px;text-align:left;font-size:11px;color:var(--text);text-transform:uppercase;letter-spacing:.07em;font-family:'IBM Plex Mono',monospace;border-bottom:1px solid var(--border);white-space:nowrap;font-weight:500}
@@ -179,7 +179,6 @@ tr:hover td{background:rgba(255,255,255,.02)}
 [data-view='1'] [onclick*="delAccount"],
 [data-view='1'] [onclick*="delMissed"] { display:none !important; }
 
-[data-view='1'] #page-add { display:none !important; }
 
 [data-view='1'] .nav-item[onclick*="'add'"] { display:none !important; }
 [data-view='1'] .nav-item[onclick*="'settings'"] { display:flex !important; }
@@ -702,10 +701,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       </div>
       <div class="fg"><label>Entry Price</label><input type="number" id="e-en" step="any" oninput="calcEditRR()"/></div>
       <div class="fg"><label>Take Profit</label><input type="number" id="e-ex" step="any" oninput="calcEditRR()"/></div>
-      <div class="fg"><label>Lot ต่อไม้</label><input type="number" id="e-lot-per" step="any" oninput="updateEditLotCalc()"/></div>
-      <div class="fg"><label>จำนวนไม้</label><input type="number" id="e-entries" placeholder="1" min="1" step="1" oninput="updateEditLotCalc()"/>
-        <div id="e-lot-display" style="font-size:11px;color:var(--text2);font-family:'IBM Plex Mono',monospace;margin-top:4px"></div>
-      </div>
+      <div class="fg"><label>Lot Size</label><input type="number" id="e-lot" step="any"/></div>
       <div class="fg"><label>Stop Loss</label><input type="number" id="e-sl" step="any" oninput="calcEditRR()"/></div>
       <div class="fg"><label>R:R Ratio</label><input type="text" id="e-rr" readonly/></div>
       <div class="fg"><label>กลยุทธ์</label><select id="e-str"></select></div>
@@ -1550,7 +1546,7 @@ async function addTrade() {
     images: pending.map(p => ({ name: p.name, data: p.data }))
   };
   try {
-    await sbInsert('trades', tradeToRow(newTrade));
+    await sbUpsert('trades', tradeToRow(newTrade));
     trades.unshift(newTrade);
     toast('บันทึกแล้ว!');
     setS('ok', `connected · ${trades.length} trades`);
@@ -1855,9 +1851,7 @@ function openEdit(id) {
   setEditSide(t.side);
   document.getElementById('e-en').value = t.entry || '';
   document.getElementById('e-ex').value = t.exit || '';
-  document.getElementById('e-lot-per').value = t.lot_per || '';
-  document.getElementById('e-entries').value = t.entries || '1';
-  updateEditLotCalc();
+  document.getElementById('e-lot').value = t.lot || '';
   document.getElementById('e-sl').value = t.sl || '';
   document.getElementById('e-rr').value = t.rr || '';
   const estr = document.getElementById('e-str');
@@ -1881,16 +1875,12 @@ function calcEditRR() {
 }
 async function saveEdit() {
   const idx = trades.findIndex(x => x.id === editId); if (idx < 0) return;
-  const eLotPer = parseFloat(document.getElementById('e-lot-per').value) || 0;
-  const eEntries = parseInt(document.getElementById('e-entries').value) || 1;
   const updated = { ...trades[idx],
     date: document.getElementById('e-date').value,
     symbol: document.getElementById('e-sym').value,
     side: editSide,
     entry: document.getElementById('e-en').value, exit: document.getElementById('e-ex').value,
-    lot: eLotPer ? (eLotPer * eEntries).toFixed(2) : trades[idx].lot,
-    lot_per: eLotPer || null,
-    entries: eEntries,
+    lot: document.getElementById('e-lot').value || trades[idx].lot,
     sl: document.getElementById('e-sl').value,
     rr: document.getElementById('e-rr').value, strategy: document.getElementById('e-str').value,
     session: document.getElementById('e-session').value || null,
@@ -2064,52 +2054,6 @@ function renderOverview() {
   const an=ap+ad, anThb=apThb+adThb;
   setAcc('ov-acc-net2',(an>=0?'+$':'$')+an.toFixed(2),an>=0?'pos':'neg');
   const n2=document.getElementById('ov-acc-net-thb2'); if(n2) n2.textContent=(anThb>=0?'+฿':'฿')+anThb.toLocaleString();
-}
-
-function renderStats() {
-  const fm = document.getElementById('stats-filter-month')?.value || '';
-  const fp = document.getElementById('stats-filter-pair')?.value || '';
-  const fs2 = document.getElementById('stats-filter-strategy')?.value || '';
-  const filtered = trades.filter(t =>
-    (!fm || (t.date && t.date.startsWith(fm))) &&
-    (!fp || t.symbol === fp) &&
-    (!fs2 || t.strategy === fs2)
-  );
-  const withPnl = filtered.filter(t => t.pnl !== null && t.pnl !== undefined && t.pnl !== '');
-  const sempty = document.getElementById('sempty');
-  const cw = document.querySelector('.chart-wrap');
-  document.getElementById('st').textContent = filtered.length;
-  if (!withPnl.length) {
-    sempty.style.display = ''; cw.style.display = 'none';
-    ['sp','sw','swl','st-avg-win','st-avg-loss','st-pf','st-dd'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent='—'; });
-    return;
-  }
-  sempty.style.display = 'none'; cw.style.display = '';
-  const s = calcStats(filtered);
-  const total = s.total, wins = s.wins.length, losses = s.losses.length;
-  const sp = document.getElementById('sp');
-  sp.textContent = (total >= 0 ? '+' : '') + total.toFixed(2);
-  sp.className = 'stat-val ' + (total >= 0 ? 'pos' : 'neg');
-  document.getElementById('sw').textContent = ((wins / withPnl.length) * 100).toFixed(1) + '%';
-  document.getElementById('swl').textContent = `${wins} / ${losses}`;
-  const stAvgWin = document.getElementById('st-avg-win');
-  const stAvgLoss = document.getElementById('st-avg-loss');
-  if (stAvgWin) stAvgWin.textContent = '+' + s.maxWin.toFixed(2);
-  if (stAvgLoss) stAvgLoss.textContent = s.maxLoss.toFixed(2);
-  const stAvgRR = document.getElementById('st-avg-rr');
-  if (stAvgRR) stAvgRR.textContent = '1:' + s.avgRR.toFixed(2);
-
-  let cum = 0;
-  const rev = withPnl.slice().reverse();
-  const running = rev.map(t => { cum += parseFloat(t.pnl || 0); return parseFloat(cum.toFixed(2)); });
-  const labels = rev.map((t, i) => t.symbol + ' #' + (i + 1));
-  if (chartInst) chartInst.destroy();
-  chartInst = new Chart(document.getElementById('chart'), {
-    type: 'line',
-    data: { labels, datasets: [{ label: 'Cumulative P&L', data: running, borderColor: total >= 0 ? '#00d97e' : '#ff4d6a', backgroundColor: total >= 0 ? 'rgba(0,217,126,0.06)' : 'rgba(255,77,106,0.06)', fill: true, tension: 0.3, pointRadius: 3, borderWidth: 2, pointBackgroundColor: total >= 0 ? '#00d97e' : '#ff4d6a' }] },
-    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
-      scales: { x: { ticks: { font: { family: "'IBM Plex Mono'", size: 10 }, color: '#4a5060', maxRotation: 30 }, grid: { color: 'rgba(255,255,255,0.04)' } }, y: { ticks: { font: { family: "'IBM Plex Mono'", size: 10 }, color: '#4a5060' }, grid: { color: 'rgba(255,255,255,0.04)' } } } }
-  });
 }
 
 function toast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2500); }
