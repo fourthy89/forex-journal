@@ -1880,9 +1880,10 @@ function makeChart(canvasId, type, labels, datasets, opts={}) {
 }
 
 function renderOverview() {
-  const s = calcStats(trades);
+  const mt5Trades = trades.filter(t => t.source === 'mt5' || (!t.source && String(t.id).length < 13));
+  const s = calcStats(mt5Trades);
   const setEl = (id, val, cls) => { const el = document.getElementById(id); if (el) { el.textContent = val; if (cls) el.className = 'stat-val ' + cls; } };
-  setEl('ov-total', trades.length);
+  setEl('ov-total', mt5Trades.length);
   if (!s) { ['ov-wr','ov-wl','ov-pnl','ov-avg-win','ov-avg-loss','ov-pf','ov-avg-rr','ov-max-win','ov-max-loss','ov-dd','ov-avg-pips'].forEach(id => setEl(id,'—')); }
   else {
     setEl('ov-wr', ((s.wins.length/s.withPnl.length)*100).toFixed(1)+'%');
@@ -1898,8 +1899,8 @@ function renderOverview() {
     setEl('ov-avg-pips', s.avgPips.toFixed(1));
 
     // Win Rate Buy/Sell
-    const buyTrades = trades.filter(t => t.side === 'BUY' && t.pnl !== null && t.pnl !== '');
-    const sellTrades = trades.filter(t => t.side === 'SELL' && t.pnl !== null && t.pnl !== '');
+    const buyTrades = mt5Trades.filter(t => t.side === 'BUY' && t.pnl !== null && t.pnl !== '');
+    const sellTrades = mt5Trades.filter(t => t.side === 'SELL' && t.pnl !== null && t.pnl !== '');
     const buyWins = buyTrades.filter(t => parseFloat(t.pnl) > 0);
     const sellWins = sellTrades.filter(t => parseFloat(t.pnl) > 0);
     const buyPnl = buyTrades.reduce((a, t) => a + parseFloat(t.pnl || 0), 0);
@@ -1927,12 +1928,12 @@ function renderOverview() {
       [{data:rev2.map(t=>{cum2+=parseFloat(t.pnl||0);return parseFloat(cum2.toFixed(2));}),borderColor:s.total>=0?'#00d97e':'#ff4d6a',backgroundColor:s.total>=0?'rgba(0,217,126,0.06)':'rgba(255,77,106,0.06)',fill:true,tension:0.3,pointRadius:2,borderWidth:2,label:'P&L'}]);
     // Chart กลยุทธ์
     const strMap = {};
-    trades.filter(t=>t.strategy&&t.pnl).forEach(t=>{if(!strMap[t.strategy])strMap[t.strategy]=0;strMap[t.strategy]+=parseFloat(t.pnl||0);});
+    mt5Trades.filter(t=>t.strategy&&t.pnl).forEach(t=>{if(!strMap[t.strategy])strMap[t.strategy]=0;strMap[t.strategy]+=parseFloat(t.pnl||0);});
     const strLabels=Object.keys(strMap), strData=strLabels.map(k=>strMap[k]);
     makeChart('ov-chart-strategy','bar',strLabels,[{data:strData,backgroundColor:strData.map(v=>v>=0?'rgba(0,217,126,0.6)':'rgba(255,77,106,0.6)'),borderRadius:4,label:'P&L'}]);
     // Chart คู่เงิน
     const pairMap = {};
-    trades.filter(t=>t.symbol&&t.pnl).forEach(t=>{if(!pairMap[t.symbol])pairMap[t.symbol]=0;pairMap[t.symbol]+=parseFloat(t.pnl||0);});
+    mt5Trades.filter(t=>t.symbol&&t.pnl).forEach(t=>{if(!pairMap[t.symbol])pairMap[t.symbol]=0;pairMap[t.symbol]+=parseFloat(t.pnl||0);});
     const pairLabels=Object.keys(pairMap).sort((a,b)=>Math.abs(pairMap[b])-Math.abs(pairMap[a])).slice(0,8);
     makeChart('ov-chart-pair','bar',pairLabels,[{data:pairLabels.map(k=>pairMap[k]),backgroundColor:pairLabels.map(k=>pairMap[k]>=0?'rgba(0,217,126,0.6)':'rgba(255,77,106,0.6)'),borderRadius:4,label:'P&L'}]);
 
