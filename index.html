@@ -1560,11 +1560,12 @@ function renderHistory() {
   }
 
   const filtered = trades.filter(t =>
+    String(t.id).length < 13 &&
     (!fm   || (t.date && t.date.startsWith(fm))) &&
     (!fp   || t.symbol   === fp) &&
     (!fs   || t.side     === fs) &&
     (!fstr || t.strategy === fstr)
-  );
+  ).sort((a, b) => new Date(b.date) - new Date(a.date));
 
   // Stats
   const s = calcStats(filtered);
@@ -1640,7 +1641,11 @@ function changePage(dir) {
 function renderTable() {
   const srch = (document.getElementById('srch').value || '').toLowerCase();
   const fs = document.getElementById('fs').value;
-  const filtered = trades.filter(t => (!srch || t.symbol.toLowerCase().includes(srch)) && (!fs || t.side === fs));
+  const filtered = trades.filter(t =>
+    String(t.id).length >= 13 &&
+    (!srch || t.symbol.toLowerCase().includes(srch)) &&
+    (!fs || t.side === fs))
+    .sort((a, b) => new Date(b.date) - new Date(a.date));
   const tbody = document.getElementById('tbody');
   const empty = document.getElementById('empty');
   const pagination = document.getElementById('pagination');
