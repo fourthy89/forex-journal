@@ -1620,8 +1620,7 @@ function renderHistory() {
   const pairSel = document.getElementById('hist-fp');
   const strSel  = document.getElementById('hist-fstr');
   if (pairSel && pairSel.options.length <= 1) {
-    const pairs = [...new Set(trades.map(t => t.symbol).filter(Boolean))];
-    pairSel.innerHTML = '<option value="">ทุกคู่เงิน</option>' + pairs.map(p => `<option>${p}</option>`).join('');
+    pairSel.innerHTML = '<option value="">ทุกคู่เงิน</option>' + settings.pairs.map(p => `<option>${p}</option>`).join('');
     if (fp) pairSel.value = fp;
   }
   if (strSel && strSel.options.length <= 1) {
