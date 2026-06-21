@@ -718,6 +718,15 @@ tr:hover td{background:rgba(255,255,255,.02)}
       </select></div>
       <div class="fg"><label>กำไร / ขาดทุน ($)</label><input type="number" id="e-pnl" step="any"/></div>
       <div class="fg full"><label>หมายเหตุ</label><textarea id="e-note"></textarea></div>
+      <div class="fg full">
+        <label>รูป Chart</label>
+        <div class="upload-area" onclick="document.getElementById('e-img-in').click()">
+          <div style="font-size:24px;margin-bottom:6px">↑</div>
+          คลิกเพื่อเพิ่มรูป
+        </div>
+        <input type="file" id="e-img-in" accept="image/*" multiple style="display:none" onchange="handleEditImgs(this)"/>
+        <div class="preview-row" id="e-preview-row"></div>
+      </div>
       <div class="fg full"><button class="save-btn" onclick="saveEdit()">บันทึกการแก้ไข</button></div>
     </div>
   </div>
@@ -1888,12 +1897,18 @@ async function saveEdit() {
     pnl: document.getElementById('e-pnl').value || null, note: document.getElementById('e-note').value,
   };
   try {
+    let newImgs = [];
+    for (const p of editPending) {
+      if (p.file) { const url = await uploadToStorage(p.file, 'trade_'+editId); newImgs.push(url ? {name:p.name,url} : {name:p.name,data:p.data}); }
+      else newImgs.push({name:p.name,data:p.data});
+    }
+    updated.images = [...editExistingImgs, ...newImgs];
     await sbUpsert('trades', tradeToRow(updated));
     trades[idx] = updated;
     closeEdit(); toast('แก้ไขแล้ว!'); renderTable(); renderHistory();
   } catch { toast('แก้ไขไม่ได้'); }
 }
-function closeEdit() { document.getElementById('edit-modal').classList.remove('open'); }
+function closeEdit() { document.getElementById('edit-modal').classList.remove('open'); editPending = []; editExistingImgs = []; }
 function editBgClick(e) { if (e.target === document.getElementById('edit-modal')) closeEdit(); }
 
 let delTradeConfirm = null;
