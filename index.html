@@ -231,7 +231,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       </div>
       <div class="nav-item" onclick="showPage('stats')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-        <span>สถิติ (soon)</span>
+        <span>สถิติ</span>
       </div>
       <div class="nav-item" onclick="showPage('account')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
@@ -243,7 +243,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       </div>
     </nav>
     <div class="sidebar-footer">
-      <div class="view-badge">👁 View Only</div>
+      <div class="view-badge" id="view-badge">👁 View Only</div>
       <div class="sync-status">
         <div class="sync-dot spin" id="sdot"></div>
         <span id="stxt">connecting...</span>
@@ -280,6 +280,10 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <div class="stat-card"><div class="stat-label">Win Rate SELL</div><div class="stat-val" id="ov-wr-sell">—</div><div class="stat-sub" id="ov-wl-sell">—</div></div>
           <div class="stat-card"><div class="stat-label">P&L BUY</div><div class="stat-val" id="ov-pnl-buy">—</div></div>
           <div class="stat-card"><div class="stat-label">P&L SELL</div><div class="stat-val" id="ov-pnl-sell">—</div></div>
+        </div>
+        <div class="stats-grid" style="grid-template-columns:repeat(2,1fr);margin-top:10px">
+          <div class="stat-card"><div class="stat-label">Profit Factor</div><div class="stat-val" id="ov-pf">—</div></div>
+          <div class="stat-card"><div class="stat-label">Max Drawdown ($)</div><div class="stat-val neg" id="ov-dd">—</div></div>
         </div>
       </div>
       <div class="overview-section">
@@ -436,7 +440,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div class="filter-row">
         <select id="acc-filter-month" onchange="renderAccount()" style="min-width:130px"><option value="">ทุกเดือน</option></select>
         <select id="acc-filter-type" onchange="renderAccount()"><option value="">ทุกประเภท</option><option value="Profit">Profit</option><option value="Deposit">Deposit</option></select>
-        <select id="acc-filter-acct" onchange="renderAccount()"><option value="">ทุกบัญชี</option><option>XM K.MK (82952428)</option><option>XM C.Ham (323781762)</option><option>XM C.Ham V.2 (361753612)</option><option>EX C.Gun (109107660)</option></select>
+        <select id="acc-filter-acct" onchange="renderAccount()"><option value="">ทุกบัญชี</option></select>
         <button onclick="openAddAccount()" style="padding:7px 14px;background:var(--accent);border:none;border-radius:var(--radius);color:#fff;font-size:12px;cursor:pointer;margin-left:auto">+ เพิ่มรายการ</button>
       </div>
       <!-- สรุปเดือนที่เลือก -->
@@ -486,6 +490,14 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <div class="add-row">
           <input type="text" id="new-strategy" placeholder="เช่น ICT, Price Action..."/>
           <button onclick="addStrategy()">+ เพิ่ม</button>
+        </div>
+      </div>
+      <div class="settings-block">
+        <h3>บัญชีเทรด</h3>
+        <div class="tag-list" id="account-tags"></div>
+        <div class="add-row">
+          <input type="text" id="new-account" placeholder="เช่น XM K.MK (82952428)"/>
+          <button onclick="addAccountSetting()">+ เพิ่ม</button>
         </div>
       </div>
       <div class="settings-block">
@@ -570,12 +582,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       </div>
       <div class="fg full"><label>ชื่อ</label><input type="text" id="acc-m-name" placeholder="เช่น XM K.MK ถอนกำไร"/></div>
       <div class="fg full"><label>บัญชี</label>
-        <select id="acc-m-acct">
-          <option>XM K.MK (82952428)</option>
-          <option>XM C.Ham (323781762)</option>
-          <option>XM C.Ham V.2 (361753612)</option>
-          <option>EX C.Gun (109107660)</option>
-        </select>
+        <select id="acc-m-acct"></select>
       </div>
       <div class="fg"><label>จำนวน ($)</label><input type="number" id="acc-m-usd" placeholder="เช่น 50 หรือ -32.02" step="any" oninput="calcAccThb()"/></div>
       <div class="fg"><label>จำนวน (฿)</label><input type="number" id="acc-m-thb" placeholder="เช่น 1571 หรือ -1000" step="any"/></div>
@@ -650,7 +657,10 @@ tr:hover td{background:rgba(255,255,255,.02)}
       </div>
       <div class="fg"><label>Entry Price</label><input type="number" id="e-en" step="any" oninput="calcEditRR()"/></div>
       <div class="fg"><label>TP (ราคาที่ปิดจริง)</label><input type="number" id="e-ex" step="any" oninput="calcEditRR()"/></div>
-      <div class="fg"><label>Lot Size</label><input type="number" id="e-lot" step="any"/></div>
+      <div class="fg"><label>Lot ต่อไม้</label><input type="number" id="e-lot-per" step="any" oninput="updateEditLotCalc()"/></div>
+      <div class="fg"><label>จำนวนไม้</label><input type="number" id="e-entries" placeholder="1" min="1" step="1" oninput="updateEditLotCalc()"/>
+        <div id="e-lot-display" style="font-size:11px;color:var(--text2);font-family:'IBM Plex Mono',monospace;margin-top:4px"></div>
+      </div>
       <div class="fg"><label>Stop Loss</label><input type="number" id="e-sl" step="any" oninput="calcEditRR()"/></div>
       <div class="fg"><label>R:R Ratio</label><input type="text" id="e-rr" readonly/></div>
       <div class="fg"><label>กลยุทธ์</label><select id="e-str"></select></div>
@@ -746,7 +756,8 @@ let editId = null, editSide = 'BUY';
 let detailId = null, detailImgs = [], detailIdx = 0;
 let settings = {
   pairs: ['EURUSD','GBPUSD','USDJPY','USDCHF','AUDUSD','NZDUSD','USDCAD','GBPJPY','EURJPY','EURGBP','XAUUSD','XAGUSD'],
-  strategies: ['SMC','Trendline','Hybrid Trade']
+  strategies: ['SMC','Trendline','Hybrid Trade'],
+  accounts_list: ['XM K.MK (82952428)', 'XM C.Ham (323781762)', 'XM C.Ham V.2 (361753612)', 'EX C.Gun (109107660)']
 };
 
 async function sbGet(table, query='') {
@@ -831,6 +842,7 @@ async function loadAll() {
       const s = sRows[0];
       settings.pairs = s.pairs ? JSON.parse(s.pairs) : settings.pairs;
       settings.strategies = s.strategies ? JSON.parse(s.strategies) : settings.strategies;
+      settings.accounts_list = s.accounts_list ? JSON.parse(s.accounts_list) : settings.accounts_list;
     }
     accounts = aRows || [];
     missedTrades = (mRows || []).map(r => ({ ...r, images: r.images ? JSON.parse(r.images) : [] }));
@@ -852,7 +864,7 @@ async function loadAll() {
     if (activePage === 'stats') renderStats();
     if (activePage === 'missed') renderMissed();
     if (activePage === 'account') renderAccount();
-    if (activePage === 'settings') { renderPairTags(); renderStrategyTags(); }
+    if (activePage === 'settings') { renderPairTags(); renderStrategyTags(); renderAccountTags(); }
   } catch (e) {
     setS('err', 'connection error');
     toast('เชื่อมต่อ Supabase ไม่ได้');
@@ -862,31 +874,14 @@ async function loadAll() {
 // ---- Multi-Entry ----
 let entryCount = 1;
 
-function changeEntries(dir) { /* deprecated */ }
-function _unused_changeEntries(dir) {
-  const newCount = Math.max(1, Math.min(10, entryCount + dir));
-  entryCount = newCount;
-  document.getElementById('entry-count-display').textContent = newCount;
-  const wrap = document.getElementById('entry-rows-wrap');
-  const lotPer = parseFloat(document.getElementById('f-lot-per').value) || 0.01;
-  // เพิ่ม/ลบ rows
-  const current = wrap.querySelectorAll('.entry-row').length;
-  if (newCount > current) {
-    for (let i = current + 1; i <= newCount; i++) {
-      const row = document.createElement('div');
-      row.className = 'entry-row';
-      row.innerHTML = `<span class="entry-row-num">${i}</span>
-        <input type="number" class="entry-price-input" placeholder="0.00000" step="any" oninput="updateAvgEntry();autoCalc()"/>
-        <span style="font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace" class="entry-lot-display">${lotPer.toFixed(2)}</span>`;
-      wrap.appendChild(row);
-    }
-  } else {
-    const rows = wrap.querySelectorAll('.entry-row');
-    for (let i = current; i > newCount; i--) rows[i-1].remove();
-  }
-  // อัปเดตหมายเลข
-  wrap.querySelectorAll('.entry-row-num').forEach((el, i) => el.textContent = i + 1);
-  updateAvgEntry();
+
+
+function updateEditLotCalc() {
+  const lotPer = parseFloat(document.getElementById('e-lot-per').value) || 0;
+  const entries = parseInt(document.getElementById('e-entries').value) || 1;
+  const disp = document.getElementById('e-lot-display');
+  if (disp && lotPer && entries) disp.textContent = `Total Lot: ${(lotPer * entries).toFixed(2)} (${entries} ไม้ × ${lotPer} lot)`;
+  else if (disp) disp.textContent = '';
 }
 
 function updateLotCalc() {
@@ -1307,9 +1302,10 @@ function tradeToRow(t) {
     entry: t.entry || null,
     exit: t.exit || null,
     lot: t.lot || null,
+    lot_per: t.lot_per || null,
+    entries: t.entries || null,
     pips: t.pips || null,
     sl: t.sl || null,
-    tp: t.tp || null,
     rr: t.rr || null,
     strategy: t.strategy || null,
     pnl: t.pnl || null,
@@ -1326,7 +1322,29 @@ function applySettings() {
   const str = document.getElementById('f-str'), scur = str.value;
   str.innerHTML = '<option value="">— เลือก —</option>' + settings.strategies.map(s => `<option>${s}</option>`).join('');
   if (settings.strategies.includes(scur)) str.value = scur;
-  renderPairTags(); renderStrategyTags();
+  // sync account dropdowns จาก settings.accounts_list
+  const acctOpts = settings.accounts_list.map(a => `<option>${a}</option>`).join('');
+  const acctFilter = document.getElementById('acc-filter-acct');
+  const acctModal = document.getElementById('acc-m-acct');
+  if (acctFilter) acctFilter.innerHTML = '<option value="">ทุกบัญชี</option>' + acctOpts;
+  if (acctModal) acctModal.innerHTML = acctOpts;
+  renderPairTags(); renderStrategyTags(); renderAccountTags();
+}
+function renderAccountTags() {
+  const el = document.getElementById('account-tags'); if (!el) return;
+  el.innerHTML = settings.accounts_list.map((a, i) =>
+    `<div class="tag">${a}<button onclick="removeAccountSetting(${i})">✕</button></div>`).join('');
+}
+function addAccountSetting() {
+  const inp = document.getElementById('new-account'), val = inp.value.trim();
+  if (!val) { toast('กรุณากรอกชื่อบัญชี'); return; }
+  if (settings.accounts_list.includes(val)) { toast('มีบัญชีนี้แล้ว'); return; }
+  settings.accounts_list.push(val); inp.value = '';
+  applySettings();
+}
+function removeAccountSetting(i) {
+  settings.accounts_list.splice(i, 1);
+  applySettings();
 }
 function renderPairTags() {
   document.getElementById('pair-tags').innerHTML = settings.pairs.map(p =>
@@ -1356,7 +1374,7 @@ function removeStrategy(i) {
 }
 async function autoSaveSettings() {
   try {
-    await sbUpsert('settings', { id: 1, pairs: JSON.stringify(settings.pairs), strategies: JSON.stringify(settings.strategies) });
+    await sbUpsert('settings', { id: 1, pairs: JSON.stringify(settings.pairs), strategies: JSON.stringify(settings.strategies), accounts_list: JSON.stringify(settings.accounts_list) });
   } catch {}
 }
 
@@ -1379,7 +1397,7 @@ function showPage(n) {
   if (n === 'missed') renderMissed();
   if (n === 'account') renderAccount();
   if (n === 'settings') {
-    renderPairTags(); renderStrategyTags();
+    renderPairTags(); renderStrategyTags(); renderAccountTags();
     const bt = localStorage.getItem('fx_journal_backup_time');
     const bel = document.getElementById('backup-status');
     if (bel) bel.textContent = bt ? 'Backup ล่าสุด: ' + new Date(bt).toLocaleString('th-TH') : 'ยังไม่มี backup ใน browser';
@@ -1463,7 +1481,7 @@ async function addTrade() {
     toast('บันทึกแล้ว!');
     setS('ok', `connected · ${trades.length} trades`);
   } catch { toast('บันทึกไม่ได้ — ลอง sync ใหม่'); }
-  ['f-en','f-ex','f-lot-per','f-entries','f-sl','f-tp','f-rr','f-pips','f-note','f-pnl','f-credit'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  ['f-en','f-ex','f-lot-per','f-entries','f-sl','f-rr','f-pips','f-note','f-pnl','f-credit'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
   const dispEl = document.getElementById('avg-entry-display'); if (dispEl) dispEl.textContent = '';
   document.getElementById('f-str').value = '';
   document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
@@ -1540,7 +1558,7 @@ function openDetail(id) {
     ['Entry', t.entry ? parseFloat(t.entry).toFixed(2) : '—'], ['Exit', t.exit ? parseFloat(t.exit).toFixed(2) : '—'],
     ['Lot', t.lot || '—'], ['จุด', t.pips || '—'],
     ['R:R', t.rr || '—'], ['กลยุทธ์', t.strategy || '—'],
-    ['Stop Loss', t.sl ? parseFloat(t.sl).toFixed(2) : '—'], ['Take Profit', t.tp ? parseFloat(t.tp).toFixed(2) : '—'],
+    ['Stop Loss', t.sl ? parseFloat(t.sl).toFixed(2) : '—'],
   ].map(([label, val]) => `
     <div class="detail-item">
       <div class="detail-label">${label}</div>
@@ -1589,7 +1607,9 @@ function openEdit(id) {
   setEditSide(t.side);
   document.getElementById('e-en').value = t.entry || '';
   document.getElementById('e-ex').value = t.exit || '';
-  document.getElementById('e-lot').value = t.lot || '';
+  document.getElementById('e-lot-per').value = t.lot_per || '';
+  document.getElementById('e-entries').value = t.entries || '1';
+  updateEditLotCalc();
   document.getElementById('e-sl').value = t.sl || '';
   document.getElementById('e-rr').value = t.rr || '';
   const estr = document.getElementById('e-str');
@@ -1613,12 +1633,16 @@ function calcEditRR() {
 }
 async function saveEdit() {
   const idx = trades.findIndex(x => x.id === editId); if (idx < 0) return;
+  const eLotPer = parseFloat(document.getElementById('e-lot-per').value) || 0;
+  const eEntries = parseInt(document.getElementById('e-entries').value) || 1;
   const updated = { ...trades[idx],
     date: document.getElementById('e-date').value,
     symbol: document.getElementById('e-sym').value,
     side: editSide,
     entry: document.getElementById('e-en').value, exit: document.getElementById('e-ex').value,
-    lot: document.getElementById('e-lot').value,
+    lot: eLotPer ? (eLotPer * eEntries).toFixed(2) : trades[idx].lot,
+    lot_per: eLotPer || null,
+    entries: eEntries,
     sl: document.getElementById('e-sl').value,
     rr: document.getElementById('e-rr').value, strategy: document.getElementById('e-str').value,
     pnl: document.getElementById('e-pnl').value || null, credit: document.getElementById('e-credit').value || null, note: document.getElementById('e-note').value,
@@ -1844,6 +1868,8 @@ const IS_VIEW = new URLSearchParams(window.location.search).get('view') === '1';
 if (IS_VIEW) {
   document.documentElement.setAttribute('data-view', '1');
 }
+const _vb = document.getElementById('view-badge');
+if (_vb) _vb.style.display = IS_VIEW ? '' : 'none';
 loadTheme();
 document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
 document.getElementById('new-pair').addEventListener('keydown', e => { if (e.key === 'Enter') addPair(); });
@@ -1871,7 +1897,7 @@ function exportJSON() {
 }
 
 function exportCSV() {
-  const headers = ['date','symbol','side','tf','entry','exit','lot','pips','pnl','rr','strategy','note'];
+  const headers = ['date','symbol','side','tf','entry','exit','lot','lot_per','entries','pips','sl','pnl','credit','rr','strategy','note'];
   const rows = trades.map(t => headers.map(h => {
     const v = t[h] ?? '';
     const s = String(v).replace(/"/g, '""');
