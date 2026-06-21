@@ -39,7 +39,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'IBM Pl
 .fg label{font-size:11px;color:var(--text2);letter-spacing:.04em;font-family:'IBM Plex Mono',monospace}
 .fg input,.fg select,.fg textarea{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);padding:9px 12px;font-size:13px;font-family:'IBM Plex Sans Thai',sans-serif;transition:border-color .15s;outline:none;width:100%}
 .fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--accent)}
-.fg select option{background:#1a1e25}
+.fg select option{background:var(--bg3);color:var(--text)}
 .fg textarea{resize:vertical;min-height:72px}
 .fg input[readonly]{color:var(--text2);cursor:default}
 .side-row{display:flex;gap:8px}
@@ -696,7 +696,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
         </div>
       </div>
       <div class="fg"><label>Entry Price</label><input type="number" id="e-en" step="any" oninput="calcEditRR()"/></div>
-      <div class="fg"><label>TP (ราคาที่ปิดจริง)</label><input type="number" id="e-ex" step="any" oninput="calcEditRR()"/></div>
+      <div class="fg"><label>Take Profit</label><input type="number" id="e-ex" step="any" oninput="calcEditRR()"/></div>
       <div class="fg"><label>Lot ต่อไม้</label><input type="number" id="e-lot-per" step="any" oninput="updateEditLotCalc()"/></div>
       <div class="fg"><label>จำนวนไม้</label><input type="number" id="e-entries" placeholder="1" min="1" step="1" oninput="updateEditLotCalc()"/>
         <div id="e-lot-display" style="font-size:11px;color:var(--text2);font-family:'IBM Plex Mono',monospace;margin-top:4px"></div>
