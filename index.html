@@ -345,7 +345,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <thead><tr>
             <th>วันที่</th><th>Pair</th><th>Side</th>
             <th>Entry</th><th>Exit</th><th>Lot</th><th>จุด</th>
-            <th>P&L ($)</th><th>กลยุทธ์</th><th>Session</th><th>รูป</th><th></th>
+            <th>P&L ($)</th><th>R:R</th><th>กลยุทธ์</th><th>Session</th><th>รูป</th><th></th>
           </tr></thead>
           <tbody id="hist-tbody"></tbody>
         </table>
@@ -1696,6 +1696,7 @@ function renderHistory() {
       <td class="mono" style="font-size:11px">${t.lot   || '—'}</td>
       <td class="mono" style="font-size:11px;color:${pipsColor}">${t.pips || '—'}</td>
       <td>${pnlStr}</td>
+      <td class="mono" style="font-size:11px;color:var(--text2)">${t.rr || '—'}</td>
       <td style="font-size:11px;color:var(--text2)">${t.strategy || '—'}</td>
       <td>${sessionBadge(t.session)}</td>
       <td>${imgCell}</td>
