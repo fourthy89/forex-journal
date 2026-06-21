@@ -343,6 +343,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <select id="hist-fp" onchange="renderHistory()"><option value="">ทุกคู่เงิน</option></select>
         <select id="hist-fs" onchange="renderHistory()"><option value="">ทุกทิศทาง</option><option value="BUY">Buy</option><option value="SELL">Sell</option></select>
         <select id="hist-fstr" onchange="renderHistory()"><option value="">ทุกกลยุทธ์</option></select>
+        <select id="hist-fses" onchange="renderHistory()"><option value="">ทุก Session</option><option>Asia</option><option>London</option><option>New York</option><option>Overlap</option></select>
       </div>
       <!-- Table -->
       <div class="table-wrap">
@@ -350,7 +351,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <thead><tr>
             <th>วันที่</th><th>Pair</th><th>Side</th>
             <th>Entry</th><th>Exit</th><th>Lot</th><th>จุด</th>
-            <th>P&L ($)</th><th>R:R</th><th>กลยุทธ์</th><th>รูป</th><th></th>
+            <th>P&L ($)</th><th>R:R</th><th>กลยุทธ์</th><th>Session</th><th>รูป</th><th></th>
           </tr></thead>
           <tbody id="hist-tbody"></tbody>
         </table>
@@ -384,6 +385,13 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <div class="fg"><label>Stop Loss</label><input type="number" id="f-sl" placeholder="0.00000" step="any" oninput="autoCalc()"/></div>
         <div class="fg"><label>R:R Ratio (อัตโนมัติ)</label><input type="text" id="f-rr" placeholder="—" readonly/></div>
         <div class="fg"><label>กลยุทธ์</label><select id="f-str"></select></div>
+        <div class="fg"><label>Session</label><select id="f-session">
+    <option value="">— เลือก —</option>
+    <option value="Asia">Asia</option>
+    <option value="London">London</option>
+    <option value="New York">New York</option>
+    <option value="Overlap">Overlap</option>
+        </select></div>
         <div class="fg"><label>กำไร / ขาดทุน ($)</label><input type="number" id="f-pnl" placeholder="เช่น 12.50 หรือ -8.00" step="any"/></div>
         <div class="fg full">
           <label>รูป Chart</label>
@@ -728,6 +736,13 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div class="fg"><label>Stop Loss</label><input type="number" id="e-sl" step="any" oninput="calcEditRR()"/></div>
       <div class="fg"><label>R:R Ratio</label><input type="text" id="e-rr" readonly/></div>
       <div class="fg"><label>กลยุทธ์</label><select id="e-str"></select></div>
+      <div class="fg"><label>Session</label><select id="e-session">
+    <option value="">— เลือก —</option>
+    <option value="Asia">Asia</option>
+    <option value="London">London</option>
+    <option value="New York">New York</option>
+    <option value="Overlap">Overlap</option>
+      </select></div>
       <div class="fg"><label>กำไร / ขาดทุน ($)</label><input type="number" id="e-pnl" step="any"/></div>
       <div class="fg full"><label>หมายเหตุ</label><textarea id="e-note"></textarea></div>
       <div class="fg full"><button class="save-btn" onclick="saveEdit()">บันทึกการแก้ไข</button></div>
@@ -939,6 +954,18 @@ async function loadAll() {
 let entryCount = 1;
 
 
+
+function sessionBadge(s) {
+  if (!s) return '<span style="color:var(--text3)">—</span>';
+  const map = {
+    'Asia':     ['#ff1493','rgba(255,20,147,0.12)'],
+    'London':   ['#4f8eff','rgba(79,142,255,0.12)'],
+    'New York': ['#ff8c00','rgba(255,140,0,0.12)'],
+    'Overlap':  ['#a855f7','rgba(168,85,247,0.12)']
+  };
+  const [c, bg] = map[s] || ['#888','rgba(128,128,128,0.1)'];
+  return `<span style="font-size:10px;font-weight:500;padding:2px 8px;border-radius:100px;background:${bg};color:${c};border:1px solid ${c}40;white-space:nowrap">${s}</span>`;
+}
 
 function updateEditLotCalc() {
   const lotPer = parseFloat(document.getElementById('e-lot-per').value) || 0;
@@ -1370,6 +1397,7 @@ function tradeToRow(t) {
     sl: t.sl || null,
     rr: t.rr || null,
     strategy: t.strategy || null,
+    session: t.session || null,
     pnl: t.pnl || null,
     note: t.note || null,
     images: t.images && t.images.length ? JSON.stringify(t.images) : null
@@ -1532,6 +1560,7 @@ async function addTrade() {
     sl: document.getElementById('f-sl').value,
     rr: document.getElementById('f-rr').value,
     strategy: document.getElementById('f-str').value,
+    session: document.getElementById('f-session').value || null,
     pnl: document.getElementById('f-pnl').value || null,
     note: document.getElementById('f-note').value,
     images: pending.map(p => ({ name: p.name, data: p.data }))
@@ -1542,7 +1571,7 @@ async function addTrade() {
     toast('บันทึกแล้ว!');
     setS('ok', `connected · ${trades.length} trades`);
   } catch { toast('บันทึกไม่ได้ — ลอง sync ใหม่'); }
-  ['f-en','f-ex','f-lot-per','f-entries','f-sl','f-rr','f-pips','f-note','f-pnl'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  ['f-en','f-ex','f-lot-per','f-entries','f-sl','f-rr','f-pips','f-note','f-pnl','f-session'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
   const dispEl = document.getElementById('avg-entry-display'); if (dispEl) dispEl.textContent = '';
   document.getElementById('f-str').value = '';
   document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
@@ -1560,6 +1589,7 @@ function renderHistory() {
   const fp   = document.getElementById('hist-fp')?.value   || '';
   const fs   = document.getElementById('hist-fs')?.value   || '';
   const fstr = document.getElementById('hist-fstr')?.value || '';
+  const fses  = document.getElementById('hist-fses')?.value  || '';
 
   // populate pair + strategy dropdowns once
   const pairSel = document.getElementById('hist-fp');
@@ -1580,7 +1610,8 @@ function renderHistory() {
     (!fm   || (t.date && t.date.startsWith(fm))) &&
     (!fp   || t.symbol   === fp) &&
     (!fs   || t.side     === fs) &&
-    (!fstr || t.strategy === fstr)
+    (!fstr || t.strategy === fstr) &&
+    (!fses  || t.session  === fses)
   ).sort((a, b) => new Date(b.date) - new Date(a.date));
 
   // Stats
@@ -1660,6 +1691,7 @@ function renderHistory() {
       <td>${pnlStr}</td>
       <td class="mono" style="font-size:11px;color:var(--text2)">${t.rr || '—'}</td>
       <td style="font-size:11px;color:var(--text2)">${t.strategy || '—'}</td>
+      <td>${sessionBadge(t.session)}</td>
       <td>${imgCell}</td>
       <td style="white-space:nowrap">
         <button class="tbl-btn edit" onclick="openEdit(${t.id})" title="แก้ไข">✎</button>
@@ -1720,6 +1752,7 @@ function renderTable() {
       <td>${t.credit ? `<span class="mono" style="font-size:11px;color:#f5a623">+${parseFloat(t.credit).toFixed(2)}</span>` : '<span style="color:var(--text3)">—</span>'}</td>
       <td class="mono" style="font-size:11px;color:var(--text2)">${t.rr || '—'}</td>
       <td style="font-size:11px;color:var(--text2)">${t.strategy || '—'}</td>
+      <td>${sessionBadge(t.session)}</td>
       <td>${imgCell}</td>
       <td style="white-space:nowrap">
         <button class="tbl-btn edit" onclick="openEdit(${t.id})" title="แก้ไข">✎</button>
@@ -1801,6 +1834,7 @@ function openEdit(id) {
   estr.value = t.strategy || '';
   document.getElementById('e-pnl').value = t.pnl || '';
   document.getElementById('e-note').value = t.note || '';
+  document.getElementById('e-session').value = t.session || '';
   document.getElementById('edit-modal').classList.add('open');
 }
 function setEditSide(s) {
@@ -1828,6 +1862,7 @@ async function saveEdit() {
     entries: eEntries,
     sl: document.getElementById('e-sl').value,
     rr: document.getElementById('e-rr').value, strategy: document.getElementById('e-str').value,
+    session: document.getElementById('e-session').value || null,
     pnl: document.getElementById('e-pnl').value || null, note: document.getElementById('e-note').value,
   };
   try {
