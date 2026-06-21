@@ -342,6 +342,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <select id="hist-fs" onchange="renderHistory()"><option value="">ทุกทิศทาง</option><option value="BUY">Buy</option><option value="SELL">Sell</option></select>
         <select id="hist-fstr" onchange="renderHistory()"><option value="">ทุกกลยุทธ์</option></select>
         <select id="hist-fses" onchange="renderHistory()"><option value="">ทุก Session</option><option>Asia</option><option>London</option><option>New York</option><option>Overlap</option></select>
+        <select id="hist-facct" onchange="renderHistory()"><option value="">ทุกบัญชี</option></select>
       </div>
       <!-- Table -->
       <div class="table-wrap">
@@ -1391,6 +1392,14 @@ function applySettings() {
   const str = document.getElementById('f-str'), scur = str.value;
   str.innerHTML = '<option value="">— เลือก —</option>' + settings.strategies.map(s => `<option>${s}</option>`).join('');
   if (settings.strategies.includes(scur)) str.value = scur;
+  // sync hist account dropdown
+  const histAcctSel = document.getElementById('hist-facct');
+  if (histAcctSel) {
+    const accts = [...new Set(trades.filter(t => t.source_account).map(t => t.source_account))];
+    const cur = histAcctSel.value;
+    histAcctSel.innerHTML = '<option value="">ทุกบัญชี</option>' + accts.map(a => `<option>${a}</option>`).join('');
+    if (cur) histAcctSel.value = cur;
+  }
   // sync hist pair dropdown
   const histPairSel = document.getElementById('hist-fp');
   if (histPairSel) histPairSel.innerHTML = '<option value="">ทุกคู่เงิน</option>' + settings.pairs.map(p => `<option>${p}</option>`).join('');
@@ -1625,6 +1634,7 @@ function renderHistory() {
   const fs   = document.getElementById('hist-fs')?.value   || '';
   const fstr = document.getElementById('hist-fstr')?.value || '';
   const fses  = document.getElementById('hist-fses')?.value  || '';
+  const facct  = document.getElementById('hist-facct')?.value || '';
 
   // strategy dropdown (populate once)
   const strSel = document.getElementById('hist-fstr');
@@ -1641,7 +1651,8 @@ function renderHistory() {
     (!fp   || t.symbol   === fp) &&
     (!fs   || t.side     === fs) &&
     (!fstr || t.strategy === fstr) &&
-    (!fses  || t.session  === fses)
+    (!fses  || t.session  === fses) &&
+    (!facct || t.source_account === facct)
   ).sort((a, b) => new Date(b.date) - new Date(a.date));
 
   // Stats
