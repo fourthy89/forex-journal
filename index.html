@@ -1381,7 +1381,8 @@ function tradeToRow(t) {
     strategy: t.strategy || null,
     pnl: t.pnl || null,
     note: t.note || null,
-    images: t.images && t.images.length ? JSON.stringify(t.images) : null
+    images: t.images && t.images.length ? JSON.stringify(t.images) : null,
+    source_account: t.source_account || null
   };
 }
 
@@ -1910,8 +1911,9 @@ async function saveEdit() {
     updated.images = [...editExistingImgs, ...newImgs];
     await sbUpsert('trades', tradeToRow(updated));
     trades[idx] = updated;
-    closeEdit(); toast('แก้ไขแล้ว!'); renderTable(); renderHistory();
-  } catch { toast('แก้ไขไม่ได้'); }
+    closeEdit(); toast('แก้ไขแล้ว!');
+  } catch(e) { console.error('saveEdit error:', e); toast('แก้ไขไม่ได้: ' + (e?.message || e)); return; }
+  renderTable(); renderHistory();
 }
 function closeEdit() { document.getElementById('edit-modal').classList.remove('open'); editPending = []; editExistingImgs = []; }
 function editBgClick(e) { if (e.target === document.getElementById('edit-modal')) closeEdit(); }
