@@ -824,11 +824,11 @@ async function sbInsert(table, data) {
 async function sbUpdate(table, id, data) {
   const r = await fetch(`${SB_URL}/rest/v1/${table}?id=eq.${id}`, {
     method: 'PATCH', 
-    headers: { ...H, 'Prefer': 'return=representation', 'Content-Profile': 'public' },
+    headers: { ...H, 'Prefer': 'return=minimal', 'Content-Profile': 'public' },
     body: JSON.stringify(data)
   });
   if (!r.ok) { console.error('sbUpdate error', table, r.status, await r.text()); return null; }
-  return r.json();
+  return true;
 }
 async function sbDelete(table, id) {
   const r = await fetch(`${SB_URL}/rest/v1/${table}?id=eq.${id}`, { 
@@ -1873,7 +1873,7 @@ async function saveEdit() {
     pnl: document.getElementById('e-pnl').value || null, note: document.getElementById('e-note').value,
   };
   try {
-    await sbUpdate('trades', editId, tradeToRow(updated));
+    await sbUpsert('trades', tradeToRow(updated));
     trades[idx] = updated;
     closeEdit(); toast('แก้ไขแล้ว!'); renderTable(); renderStats();
   } catch { toast('แก้ไขไม่ได้'); }
