@@ -817,7 +817,7 @@ let settings = {
 };
 
 async function sbGet(table, query='') {
-  const r = await fetch(`${SB_URL}/rest/v1/${table}?${query}`, { headers: H });
+  const r = await fetch(`${SB_URL}/rest/v1/${table}?${query}&limit=10000`, { headers: { ...H, 'Range-Unit': 'items', 'Range': '0-9999' } });
   if (!r.ok) { console.error('sbGet error', table, r.status, await r.text()); return []; }
   const data = await r.json();
   return Array.isArray(data) ? data : [];
