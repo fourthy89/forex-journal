@@ -899,10 +899,7 @@ async function loadAll() {
     // populate stats filters
     const pairs = [...new Set(trades.map(t => t.symbol).filter(Boolean))];
     const strategies = [...new Set(trades.map(t => t.strategy).filter(Boolean))];
-    const pairSel = document.getElementById('stats-filter-pair');
-    const strSel = document.getElementById('stats-filter-strategy');
-    pairSel.innerHTML = '<option value="">ทุกคู่เงิน</option>' + pairs.map(p => `<option>${p}</option>`).join('');
-    strSel.innerHTML = '<option value="">ทุกกลยุทธ์</option>' + strategies.map(s => `<option>${s}</option>`).join('');
+
     // render หน้าที่กำลังแสดงอยู่หลังโหลดเสร็จ
     const activePage = localStorage.getItem('lastPage') || 'add';
     if (activePage === 'overview') renderOverview();
