@@ -333,7 +333,12 @@ tr:hover td{background:rgba(255,255,255,.02)}
       </div>
       <!-- Filters -->
       <div class="filter-row" style="margin-bottom:16px">
-        <select id="hist-fm" onchange="renderHistory()"><option value="">ทุกเดือน</option></select>
+        <div style="display:flex;align-items:center;gap:6px">
+          <input type="date" id="hist-from" onchange="renderHistory()" style="background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);padding:7px 10px;font-size:12px;font-family:'IBM Plex Mono',monospace"/>
+          <span style="color:var(--text3);font-size:12px">—</span>
+          <input type="date" id="hist-to" onchange="renderHistory()" style="background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);padding:7px 10px;font-size:12px;font-family:'IBM Plex Mono',monospace"/>
+          <button onclick="resetHistDateRange()" style="padding:7px 10px;background:transparent;border:1px solid var(--border2);border-radius:var(--radius);color:var(--text2);font-size:11px;cursor:pointer;font-family:'IBM Plex Mono',monospace">รีเซ็ต</button>
+        </div>
         <select id="hist-fp" onchange="renderHistory()"><option value="">ทุกคู่เงิน</option></select>
         <select id="hist-fs" onchange="renderHistory()"><option value="">ทุกทิศทาง</option><option value="BUY">Buy</option><option value="SELL">Sell</option></select>
         <select id="hist-fstr" onchange="renderHistory()"><option value="">ทุกกลยุทธ์</option></select>
@@ -852,7 +857,7 @@ function populateMonthFilters() {
   const start = new Date(2025, 7); // ส.ค. 2025
   const now = new Date();
   const end = new Date(now.getFullYear(), now.getMonth());
-  const ids = ['acc-filter-month', 'hist-fm'];
+  const ids = ['acc-filter-month'];
   ids.forEach(id => {
     const sel = document.getElementById(id);
     if (!sel) return;
@@ -1555,6 +1560,14 @@ async function addTrade() {
 let histPage = 1;
 const HIST_PAGE_SIZE = 20;
 
+function resetHistDateRange() {
+  const f = document.getElementById('hist-from');
+  const t = document.getElementById('hist-to');
+  if (f) f.value = '';
+  if (t) t.value = '';
+  renderHistory();
+}
+
 function changeHistPage(dir) { histPage += dir; renderHistory(); }
 
 function renderSessionBreakdown(trades) {
@@ -1591,7 +1604,8 @@ function renderSessionBreakdown(trades) {
 }
 
 function renderHistory() {
-  const fm   = document.getElementById('hist-fm')?.value   || '';
+  const histFrom = document.getElementById('hist-from')?.value || '';
+  const histTo   = document.getElementById('hist-to')?.value   || '';
   const fp   = document.getElementById('hist-fp')?.value   || '';
   const fs   = document.getElementById('hist-fs')?.value   || '';
   const fstr = document.getElementById('hist-fstr')?.value || '';
@@ -1613,7 +1627,8 @@ function renderHistory() {
 
   const filtered = trades.filter(t =>
     (t.source === 'mt5' || (!t.source && String(t.id).length < 13)) &&
-    (!fm   || (t.date && t.date.startsWith(fm))) &&
+    (!histFrom || (t.date && t.date >= histFrom)) &&
+    (!histTo   || (t.date && t.date <= histTo)) &&
     (!fp   || t.symbol   === fp) &&
     (!fs   || t.side     === fs) &&
     (!fstr || t.strategy === fstr) &&
