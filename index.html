@@ -317,6 +317,8 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <div class="stat-card"><div class="stat-label">Trade ทั้งหมด</div><div class="stat-val" id="hist-total">—</div></div>
         <div class="stat-card"><div class="stat-label">ชนะ / แพ้</div><div class="stat-val" id="hist-wl">—</div></div>
       </div>
+      <!-- Session Breakdown -->
+      <div id="hist-session-breakdown" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px"></div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
         <div style="background:var(--green-bg);border:1px solid rgba(0,217,126,.15);border-radius:var(--radius-lg);padding:14px">
           <div style="font-size:11px;color:var(--green);font-family:'IBM Plex Mono',monospace;font-weight:500;margin-bottom:10px;text-align:center">BUY</div>
@@ -1397,7 +1399,6 @@ function tradeToRow(t) {
     sl: t.sl || null,
     rr: t.rr || null,
     strategy: t.strategy || null,
-    session: t.session || null,
     pnl: t.pnl || null,
     note: t.note || null,
     images: t.images && t.images.length ? JSON.stringify(t.images) : null
@@ -1584,6 +1585,39 @@ const HIST_PAGE_SIZE = 20;
 
 function changeHistPage(dir) { histPage += dir; renderHistory(); }
 
+function renderSessionBreakdown(trades) {
+  const container = document.getElementById('hist-session-breakdown');
+  if (!container) return;
+  const SESSIONS = [
+    { name: 'Asia',     color: '#ff1493', bg: 'rgba(255,20,147,0.08)',  border: 'rgba(255,20,147,0.2)'  },
+    { name: 'London',   color: '#4f8eff', bg: 'rgba(79,142,255,0.08)', border: 'rgba(79,142,255,0.2)'  },
+    { name: 'New York', color: '#ff8c00', bg: 'rgba(255,140,0,0.08)',  border: 'rgba(255,140,0,0.2)'   },
+    { name: 'Overlap',  color: '#a855f7', bg: 'rgba(168,85,247,0.08)', border: 'rgba(168,85,247,0.2)'  },
+  ];
+  container.innerHTML = SESSIONS.map(s => {
+    const t = trades.filter(x => x.session === s.name);
+    const withPnl = t.filter(x => x.pnl !== null && x.pnl !== '');
+    const buys  = t.filter(x => x.side === 'BUY').length;
+    const sells = t.filter(x => x.side === 'SELL').length;
+    const pnl   = withPnl.reduce((a, x) => a + parseFloat(x.pnl || 0), 0);
+    const wins  = withPnl.filter(x => parseFloat(x.pnl) > 0).length;
+    const wr    = withPnl.length ? ((wins / withPnl.length) * 100).toFixed(0) + '%' : '—';
+    const pnlStr = withPnl.length ? (pnl >= 0 ? '+$' : '-$') + Math.abs(pnl).toFixed(2) : '—';
+    const pnlColor = pnl >= 0 ? 'var(--green)' : 'var(--red)';
+    return `<div style="background:${s.bg};border:1px solid ${s.border};border-radius:var(--radius-lg);padding:12px">
+      <div style="font-size:11px;font-weight:500;color:${s.color};text-align:center;font-family:'IBM Plex Mono',monospace;margin-bottom:10px">${s.name}</div>
+      <div style="font-size:18px;font-weight:500;text-align:center;margin-bottom:8px">${t.length} <span style="font-size:11px;color:var(--text2)">trades</span></div>
+      <div style="display:flex;justify-content:center;gap:10px;margin-bottom:8px">
+        <span style="font-size:11px;color:var(--green)">B ${buys}</span>
+        <span style="font-size:11px;color:var(--text3)">|</span>
+        <span style="font-size:11px;color:var(--red)">S ${sells}</span>
+      </div>
+      <div style="text-align:center;font-size:13px;font-weight:500;color:${pnlColor};margin-bottom:4px">${pnlStr}</div>
+      <div style="text-align:center;font-size:11px;color:var(--text2)">Win ${wr}</div>
+    </div>`;
+  }).join('');
+}
+
 function renderHistory() {
   const fm   = document.getElementById('hist-fm')?.value   || '';
   const fp   = document.getElementById('hist-fp')?.value   || '';
@@ -1618,6 +1652,7 @@ function renderHistory() {
   const s = calcStats(filtered);
   const setH = (id, val, cls) => { const el = document.getElementById(id); if (el) { el.textContent = val; if (cls) el.className = 'stat-val ' + cls; } };
   setH('hist-total', filtered.length);
+  renderSessionBreakdown(filtered);
   if (!s) {
     ['hist-wr','hist-pnl','hist-wl',
      'hist-wr-buy','hist-pnl-buy','hist-win-buy','hist-loss-buy',
