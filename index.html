@@ -1448,7 +1448,7 @@ async function addTrade() {
     id: Date.now(),
     date, symbol: sym, side: tradeSide,
     entry: avgEntryVal, exit: document.getElementById('f-ex').value,
-    lot: totalLotVal, lot_per: lotPerEntry, entries: entriesNum, pips: document.getElementById('f-pips').value || null,
+    lot: totalLotVal, lot_per: lotPerEntry, entries: entriesNum, pips: document.getElementById('f-pips')?.value || null,
     sl: document.getElementById('f-sl').value,
     rr: document.getElementById('f-rr').value,
     strategy: document.getElementById('f-str').value,
