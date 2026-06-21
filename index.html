@@ -1875,7 +1875,7 @@ async function saveEdit() {
   try {
     await sbUpsert('trades', tradeToRow(updated));
     trades[idx] = updated;
-    closeEdit(); toast('แก้ไขแล้ว!'); renderTable(); renderStats();
+    closeEdit(); toast('แก้ไขแล้ว!'); renderTable(); renderHistory();
   } catch { toast('แก้ไขไม่ได้'); }
 }
 function closeEdit() { document.getElementById('edit-modal').classList.remove('open'); }
