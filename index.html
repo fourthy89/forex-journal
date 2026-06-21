@@ -1359,7 +1359,6 @@ async function delAccount(id) {
 function tradeToRow(t) {
   return {
     id: t.id,
-    source: 'manual',
     date: t.date || null,
     symbol: t.symbol || null,
     side: t.side || null,
@@ -1367,8 +1366,6 @@ function tradeToRow(t) {
     entry: t.entry || null,
     exit: t.exit || null,
     lot: t.lot || null,
-    lot_per: t.lot_per || null,
-    entries: t.entries || null,
     pips: t.pips || null,
     sl: t.sl || null,
     rr: t.rr || null,
