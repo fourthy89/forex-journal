@@ -214,27 +214,27 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <nav class="nav">
       <div class="nav-item" onclick="showPage('overview')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-        <span>Overview</span>
+        <span data-i18n="nav.overview">Overview</span>
       </div>
       <div class="nav-item" onclick="showPage('history')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="12 8 12 12 14 14"/><path d="M3.05 11a9 9 0 1 1 .5 4"/><polyline points="3 16 3 11 8 11"/></svg>
-        <span>ประวัติการเทรด</span>
+        <span data-i18n="nav.history">ประวัติการเทรด</span>
       </div>
       <div class="nav-item" onclick="showPage('calendar')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-        <span>ปฏิทิน</span>
+        <span data-i18n="nav.calendar">ปฏิทิน</span>
       </div>
       <div class="nav-item" onclick="showPage('missed')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-        <span>Missed Trade</span>
+        <span data-i18n="nav.missed">Missed Trade</span>
       </div>
       <div class="nav-item" onclick="showPage('account')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
-        <span>บัญชี</span>
+        <span data-i18n="nav.account">บัญชี</span>
       </div>
       <div class="nav-item" onclick="showPage('settings')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-        <span>การตั้งค่า</span>
+        <span data-i18n="nav.settings">การตั้งค่า</span>
       </div>
     </nav>
     <div class="sidebar-footer">
@@ -243,57 +243,57 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <div class="sync-dot spin" id="sdot"></div>
         <span id="stxt">connecting...</span>
       </div>
-      <button class="sync-btn" onclick="loadAll()">⟳ Sync</button>
+      <button class="sync-btn" onclick="loadAll()"><span data-i18n="sync.btn">⟳ Sync</span></button>
     </div>
   </aside>
 
   <main class="main">
     <div id="page-overview" class="page">
-      <div class="page-title">Overview</div>
+      <div class="page-title" data-i18n="ov.title">Overview</div>
       <div class="overview-section">
-        <div class="overview-section-title">Result</div>
+        <div class="overview-section-title" data-i18n="ov.result">Result</div>
         <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:16px">
-          <div class="stat-card"><div class="stat-label">ถอนกำไรรวม</div><div class="stat-val pos" id="ov-acc-profit2">—</div><div class="stat-sub" id="ov-acc-profit-thb2">—</div></div>
+          <div class="stat-card"><div class="stat-label" data-i18n="ov.withdrawal">ถอนกำไรรวม</div><div class="stat-val pos" id="ov-acc-profit2">—</div><div class="stat-sub" id="ov-acc-profit-thb2">—</div></div>
           <div class="stat-card"><div class="stat-label">ฝากรวม</div><div class="stat-val neg" id="ov-acc-deposit2">—</div><div class="stat-sub" id="ov-acc-deposit-thb2">—</div></div>
           <div class="stat-card"><div class="stat-label">Net</div><div class="stat-val" id="ov-acc-net2">—</div><div class="stat-sub" id="ov-acc-net-thb2">—</div></div>
         </div>
       </div>
       <div class="overview-section">
-        <div class="overview-section-title">สรุป Trade</div>
+        <div class="overview-section-title" data-i18n="ov.tradesummary">สรุป Trade</div>
         <!-- Overall -->
         <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:14px">
-          <div class="stat-card"><div class="stat-label">Win Rate</div><div class="stat-val" id="ov-wr">—</div></div>
-          <div class="stat-card"><div class="stat-label">P&L รวม ($)</div><div class="stat-val" id="ov-pnl">—</div></div>
-          <div class="stat-card"><div class="stat-label">Trade ทั้งหมด</div><div class="stat-val" id="ov-total">—</div></div>
-          <div class="stat-card"><div class="stat-label">ชนะ / แพ้</div><div class="stat-val" id="ov-wl">—</div></div>
+          <div class="stat-card"><div class="stat-label" data-i18n="stat.winrate">Win Rate</div><div class="stat-val" id="ov-wr">—</div></div>
+          <div class="stat-card"><div class="stat-label" data-i18n="stat.pnl">P&L รวม ($)</div><div class="stat-val" id="ov-pnl">—</div></div>
+          <div class="stat-card"><div class="stat-label" data-i18n="stat.total">Trade ทั้งหมด</div><div class="stat-val" id="ov-total">—</div></div>
+          <div class="stat-card"><div class="stat-label" data-i18n="stat.wl">ชนะ / แพ้</div><div class="stat-val" id="ov-wl">—</div></div>
         </div>
         <!-- BUY / SELL -->
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
           <div style="background:var(--green-bg);border:1px solid rgba(0,217,126,.15);border-radius:var(--radius-lg);padding:14px">
             <div style="font-size:11px;color:var(--green);font-family:'IBM Plex Mono',monospace;font-weight:500;margin-bottom:10px;text-align:center">BUY</div>
             <div class="stats-grid" style="grid-template-columns:1fr 1fr;gap:8px">
-              <div class="stat-card"><div class="stat-label">Win Rate</div><div class="stat-val" id="ov-wr-buy">—</div><div class="stat-sub" id="ov-wl-buy">—</div></div>
-              <div class="stat-card"><div class="stat-label">P&L ($)</div><div class="stat-val" id="ov-pnl-buy">—</div></div>
-              <div class="stat-card"><div class="stat-label">Highest Win</div><div class="stat-val pos" id="ov-win-buy">—</div></div>
-              <div class="stat-card"><div class="stat-label">Highest Loss</div><div class="stat-val neg" id="ov-loss-buy">—</div></div>
+              <div class="stat-card"><div class="stat-label" data-i18n="stat.winrate">Win Rate</div><div class="stat-val" id="ov-wr-buy">—</div><div class="stat-sub" id="ov-wl-buy">—</div></div>
+              <div class="stat-card"><div class="stat-label" data-i18n="stat.pnlshort">P&L ($)</div><div class="stat-val" id="ov-pnl-buy">—</div></div>
+              <div class="stat-card"><div class="stat-label" data-i18n="stat.highwin">Highest Win</div><div class="stat-val pos" id="ov-win-buy">—</div></div>
+              <div class="stat-card"><div class="stat-label" data-i18n="stat.highloss">Highest Loss</div><div class="stat-val neg" id="ov-loss-buy">—</div></div>
             </div>
           </div>
           <div style="background:var(--red-bg);border:1px solid rgba(255,77,106,.15);border-radius:var(--radius-lg);padding:14px">
             <div style="font-size:11px;color:var(--red);font-family:'IBM Plex Mono',monospace;font-weight:500;margin-bottom:10px;text-align:center">SELL</div>
             <div class="stats-grid" style="grid-template-columns:1fr 1fr;gap:8px">
-              <div class="stat-card"><div class="stat-label">Win Rate</div><div class="stat-val" id="ov-wr-sell">—</div><div class="stat-sub" id="ov-wl-sell">—</div></div>
-              <div class="stat-card"><div class="stat-label">P&L ($)</div><div class="stat-val" id="ov-pnl-sell">—</div></div>
-              <div class="stat-card"><div class="stat-label">Highest Win</div><div class="stat-val pos" id="ov-win-sell">—</div></div>
-              <div class="stat-card"><div class="stat-label">Highest Loss</div><div class="stat-val neg" id="ov-loss-sell">—</div></div>
+              <div class="stat-card"><div class="stat-label" data-i18n="stat.winrate">Win Rate</div><div class="stat-val" id="ov-wr-sell">—</div><div class="stat-sub" id="ov-wl-sell">—</div></div>
+              <div class="stat-card"><div class="stat-label" data-i18n="stat.pnlshort">P&L ($)</div><div class="stat-val" id="ov-pnl-sell">—</div></div>
+              <div class="stat-card"><div class="stat-label" data-i18n="stat.highwin">Highest Win</div><div class="stat-val pos" id="ov-win-sell">—</div></div>
+              <div class="stat-card"><div class="stat-label" data-i18n="stat.highloss">Highest Loss</div><div class="stat-val neg" id="ov-loss-sell">—</div></div>
             </div>
           </div>
         </div>
       </div>
       <div class="overview-section">
-        <div class="overview-section-title">กราฟ</div>
+        <div class="overview-section-title" data-i18n="ov.charts">กราฟ</div>
         <div class="stats-grid-2">
-          <div class="chart-half"><div class="chart-half-title">Cumulative P&L</div><canvas id="ov-chart-pnl"></canvas></div>
-          <div class="chart-half"><div class="chart-half-title">P&L แยกตามคู่เงิน</div><canvas id="ov-chart-pair"></canvas></div>
+          <div class="chart-half"><div class="chart-half-title" data-i18n="ov.pnlchart">Cumulative P&L</div><canvas id="ov-chart-pnl"></canvas></div>
+          <div class="chart-half"><div class="chart-half-title" data-i18n="ov.pairchart">P&L แยกตามคู่เงิน</div><canvas id="ov-chart-pair"></canvas></div>
         </div>
 
       </div>
@@ -302,10 +302,10 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <div id="page-history" class="page">
       <!-- Tab bar header -->
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
-        <div class="page-title" style="margin-bottom:0">ประวัติการเทรด</div>
+        <div class="page-title" style="margin-bottom:0" data-i18n="nav.history">ประวัติการเทรด</div>
         <div style="display:flex;border:1px solid var(--border2);border-radius:var(--radius);overflow:hidden">
-          <button id="htab-mt5" onclick="switchHistTab('mt5')" style="padding:7px 18px;background:var(--accent);border:none;color:#fff;font-size:12px;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .15s">MT5</button>
-          <button id="htab-manual" onclick="switchHistTab('manual')" style="padding:7px 18px;background:transparent;border:none;color:var(--text2);font-size:12px;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .15s">Manual</button>
+          <button id="htab-mt5" onclick="switchHistTab('mt5')" style="padding:7px 18px;background:var(--accent);border:none;color:#fff;font-size:12px;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .15s"><span data-i18n="tab.mt5">MT5</span></button>
+          <button id="htab-manual" onclick="switchHistTab('manual')" style="padding:7px 18px;background:transparent;border:none;color:var(--text2);font-size:12px;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .15s"><span data-i18n="tab.manual">Manual</span></button>
         </div>
       </div>
 
@@ -313,10 +313,10 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div id="hist-mt5-panel">
         <!-- Stats -->
         <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:14px">
-          <div class="stat-card"><div class="stat-label">Win Rate</div><div class="stat-val" id="hist-wr">—</div></div>
-          <div class="stat-card"><div class="stat-label">P&L รวม ($)</div><div class="stat-val" id="hist-pnl">—</div></div>
-          <div class="stat-card"><div class="stat-label">Trade ทั้งหมด</div><div class="stat-val" id="hist-total">—</div></div>
-          <div class="stat-card"><div class="stat-label">ชนะ / แพ้</div><div class="stat-val" id="hist-wl">—</div></div>
+          <div class="stat-card"><div class="stat-label" data-i18n="stat.winrate">Win Rate</div><div class="stat-val" id="hist-wr">—</div></div>
+          <div class="stat-card"><div class="stat-label" data-i18n="stat.pnl">P&L รวม ($)</div><div class="stat-val" id="hist-pnl">—</div></div>
+          <div class="stat-card"><div class="stat-label" data-i18n="stat.total">Trade ทั้งหมด</div><div class="stat-val" id="hist-total">—</div></div>
+          <div class="stat-card"><div class="stat-label" data-i18n="stat.wl">ชนะ / แพ้</div><div class="stat-val" id="hist-wl">—</div></div>
         </div>
         <!-- Session Breakdown -->
         <div id="hist-session-breakdown" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px"></div>
@@ -325,18 +325,18 @@ tr:hover td{background:rgba(255,255,255,.02)}
             <div style="font-size:11px;color:var(--green);font-family:'IBM Plex Mono',monospace;font-weight:500;margin-bottom:10px;text-align:center">BUY</div>
             <div class="stats-grid" style="grid-template-columns:1fr 1fr;gap:8px">
               <div class="stat-card"><div class="stat-label">Win Rate</div><div class="stat-val" id="hist-wr-buy">—</div><div class="stat-sub" id="hist-wl-buy">—</div></div>
-              <div class="stat-card"><div class="stat-label">P&L ($)</div><div class="stat-val" id="hist-pnl-buy">—</div></div>
-              <div class="stat-card"><div class="stat-label">Highest Win</div><div class="stat-val pos" id="hist-win-buy">—</div></div>
-              <div class="stat-card"><div class="stat-label">Highest Loss</div><div class="stat-val neg" id="hist-loss-buy">—</div></div>
+              <div class="stat-card"><div class="stat-label" data-i18n="stat.pnlshort">P&L ($)</div><div class="stat-val" id="hist-pnl-buy">—</div></div>
+              <div class="stat-card"><div class="stat-label" data-i18n="stat.highwin">Highest Win</div><div class="stat-val pos" id="hist-win-buy">—</div></div>
+              <div class="stat-card"><div class="stat-label" data-i18n="stat.highloss">Highest Loss</div><div class="stat-val neg" id="hist-loss-buy">—</div></div>
             </div>
           </div>
           <div style="background:var(--red-bg);border:1px solid rgba(255,77,106,.15);border-radius:var(--radius-lg);padding:14px">
             <div style="font-size:11px;color:var(--red);font-family:'IBM Plex Mono',monospace;font-weight:500;margin-bottom:10px;text-align:center">SELL</div>
             <div class="stats-grid" style="grid-template-columns:1fr 1fr;gap:8px">
               <div class="stat-card"><div class="stat-label">Win Rate</div><div class="stat-val" id="hist-wr-sell">—</div><div class="stat-sub" id="hist-wl-sell">—</div></div>
-              <div class="stat-card"><div class="stat-label">P&L ($)</div><div class="stat-val" id="hist-pnl-sell">—</div></div>
-              <div class="stat-card"><div class="stat-label">Highest Win</div><div class="stat-val pos" id="hist-win-sell">—</div></div>
-              <div class="stat-card"><div class="stat-label">Highest Loss</div><div class="stat-val neg" id="hist-loss-sell">—</div></div>
+              <div class="stat-card"><div class="stat-label" data-i18n="stat.pnlshort">P&L ($)</div><div class="stat-val" id="hist-pnl-sell">—</div></div>
+              <div class="stat-card"><div class="stat-label" data-i18n="stat.highwin">Highest Win</div><div class="stat-val pos" id="hist-win-sell">—</div></div>
+              <div class="stat-card"><div class="stat-label" data-i18n="stat.highloss">Highest Loss</div><div class="stat-val neg" id="hist-loss-sell">—</div></div>
             </div>
           </div>
         </div>
@@ -346,13 +346,13 @@ tr:hover td{background:rgba(255,255,255,.02)}
             <input type="date" id="hist-from" onchange="renderHistory()" style="background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);padding:7px 10px;font-size:12px;font-family:'IBM Plex Mono',monospace"/>
             <span style="color:var(--text3);font-size:12px">—</span>
             <input type="date" id="hist-to" onchange="renderHistory()" style="background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);padding:7px 10px;font-size:12px;font-family:'IBM Plex Mono',monospace"/>
-            <button onclick="resetHistDateRange()" style="padding:7px 10px;background:transparent;border:1px solid var(--border2);border-radius:var(--radius);color:var(--text2);font-size:11px;cursor:pointer;font-family:'IBM Plex Mono',monospace">รีเซ็ต</button>
+            <button onclick="resetHistDateRange()" style="padding:7px 10px;background:transparent;border:1px solid var(--border2);border-radius:var(--radius);color:var(--text2);font-size:11px;cursor:pointer;font-family:'IBM Plex Mono',monospace"><span data-i18n="btn.reset">รีเซ็ต</span></button>
           </div>
-          <select id="hist-fp" onchange="renderHistory()"><option value="">ทุกคู่เงิน</option></select>
-          <select id="hist-fs" onchange="renderHistory()"><option value="">ทุกทิศทาง</option><option value="BUY">Buy</option><option value="SELL">Sell</option></select>
-          <select id="hist-fstr" onchange="renderHistory()"><option value="">ทุกกลยุทธ์</option></select>
-          <select id="hist-fses" onchange="renderHistory()"><option value="">ทุก Session</option><option>Asia</option><option>London</option><option>New York</option><option>Overlap</option></select>
-          <select id="hist-facct" onchange="renderHistory()"><option value="">ทุกบัญชี</option></select>
+          <select id="hist-fp" onchange="renderHistory()"><option value="" data-i18n="filter.allpairs">ทุกคู่เงิน</option></select>
+          <select id="hist-fs" onchange="renderHistory()"><option value="" data-i18n="filter.alldir">ทุกทิศทาง</option><option value="BUY">Buy</option><option value="SELL">Sell</option></select>
+          <select id="hist-fstr" onchange="renderHistory()"><option value="" data-i18n="filter.allstrat">ทุกกลยุทธ์</option></select>
+          <select id="hist-fses" onchange="renderHistory()"><option value="" data-i18n="filter.allsession">ทุก Session</option><option>Asia</option><option>London</option><option>New York</option><option>Overlap</option></select>
+          <select id="hist-facct" onchange="renderHistory()"><option value="" data-i18n="filter.allacct">ทุกบัญชี</option></select>
         </div>
         <!-- Table -->
         <div class="table-wrap">
@@ -364,9 +364,9 @@ tr:hover td{background:rgba(255,255,255,.02)}
             </tr></thead>
             <tbody id="hist-tbody"></tbody>
           </table>
-          <div id="hist-empty" class="empty-state" style="display:none">ยังไม่มีข้อมูล</div>
+          <div id="hist-empty" class="empty-state" style="display:none"><span data-i18n="empty.history">ยังไม่มีข้อมูล</span></div>
           <div class="pagination" id="hist-pagination" style="display:none">
-            <button class="pg-btn" id="hist-prev" onclick="changeHistPage(-1)">← ก่อนหน้า</button>
+            <button class="pg-btn" id="hist-prev" onclick="changeHistPage(-1)"><span data-i18n="pg.prev">← ก่อนหน้า</span></button>
             <span class="pg-info" id="hist-info"></span>
             <button class="pg-btn" id="hist-next" onclick="changeHistPage(1)">ถัดไป →</button>
           </div>
@@ -376,38 +376,38 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <!-- ── Manual Panel ── -->
       <div id="hist-manual-panel" style="display:none">
         <div style="display:flex;align-items:center;justify-content:flex-end;margin-bottom:20px">
-          <button id="btn-add-form" onclick="toggleAddForm()" style="padding:8px 16px;background:var(--accent);border:none;border-radius:var(--radius);color:#fff;font-size:13px;cursor:pointer">+ เพิ่ม Trade</button>
+          <button id="btn-add-form" onclick="toggleAddForm()" style="padding:8px 16px;background:var(--accent);border:none;border-radius:var(--radius);color:#fff;font-size:13px;cursor:pointer"><span data-i18n="btn.addtrade">+ เพิ่ม Trade</span></button>
         </div>
         <!-- Add Trade Form -->
         <div id="add-form-section" style="display:none;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-lg);padding:24px;margin-bottom:24px">
           <div class="form-grid">
-            <div class="fg"><label>วันที่</label><input type="date" id="f-date"/></div>
-            <div class="fg"><label>คู่เงิน</label><select id="f-sym"></select></div>
-            <div class="fg"><label>ทิศทาง</label>
+            <div class="fg"><label data-i18n="lbl.date">วันที่</label><input type="date" id="f-date"/></div>
+            <div class="fg"><label data-i18n="lbl.pair">คู่เงิน</label><select id="f-sym"></select></div>
+            <div class="fg"><label data-i18n="lbl.direction">ทิศทาง</label>
               <div class="side-row">
                 <button class="side-btn buy on" id="btn-buy" onclick="setSide('BUY')">↑ Buy</button>
                 <button class="side-btn sell" id="btn-sell" onclick="setSide('SELL')">↓ Sell</button>
               </div>
             </div>
-            <div class="fg"><label>Entry Price</label><input type="number" id="f-en" placeholder="0.00000" step="any" oninput="autoCalc()"/></div>
-            <div class="fg"><label>Take Profit</label><input type="number" id="f-ex" placeholder="0.00000" step="any" oninput="autoCalc()"/></div>
-            <div class="fg"><label>จำนวนไม้</label><input type="number" id="f-entries" placeholder="เช่น 6" min="1" step="1" oninput="updateLotCalc()"/></div>
-            <div class="fg"><label>Lot ต่อไม้</label><input type="number" id="f-lot-per" placeholder="0.01" step="any" oninput="updateLotCalc()"/>
+            <div class="fg"><label data-i18n="lbl.entry">Entry Price</label><input type="number" id="f-en" placeholder="0.00000" step="any" oninput="autoCalc()"/></div>
+            <div class="fg"><label data-i18n="lbl.tp">Take Profit</label><input type="number" id="f-ex" placeholder="0.00000" step="any" oninput="autoCalc()"/></div>
+            <div class="fg"><label data-i18n="lbl.entries">จำนวนไม้</label><input type="number" id="f-entries" placeholder="เช่น 6" min="1" step="1" oninput="updateLotCalc()"/></div>
+            <div class="fg"><label data-i18n="lbl.lotper">Lot ต่อไม้</label><input type="number" id="f-lot-per" placeholder="0.01" step="any" oninput="updateLotCalc()"/>
               <div id="avg-entry-display" style="font-size:11px;color:var(--text2);font-family:'IBM Plex Mono',monospace;margin-top:4px"></div>
             </div>
-            <div class="fg"><label>Stop Loss</label><input type="number" id="f-sl" placeholder="0.00000" step="any" oninput="autoCalc()"/></div>
-            <div class="fg"><label>R:R Ratio (อัตโนมัติ)</label><input type="text" id="f-rr" placeholder="—" readonly/></div>
-            <div class="fg"><label>กลยุทธ์</label><select id="f-str"></select></div>
-            <div class="fg"><label>Session</label><select id="f-session">
+            <div class="fg"><label data-i18n="lbl.sl">Stop Loss</label><input type="number" id="f-sl" placeholder="0.00000" step="any" oninput="autoCalc()"/></div>
+            <div class="fg"><label data-i18n="lbl.rr">R:R Ratio (อัตโนมัติ)</label><input type="text" id="f-rr" placeholder="—" readonly/></div>
+            <div class="fg"><label data-i18n="lbl.strategy">กลยุทธ์</label><select id="f-str"></select></div>
+            <div class="fg"><label data-i18n="lbl.session">Session</label><select id="f-session">
               <option value="">— เลือก —</option>
               <option value="Asia">Asia</option>
               <option value="London">London</option>
               <option value="New York">New York</option>
               <option value="Overlap">Overlap</option>
             </select></div>
-            <div class="fg"><label>กำไร / ขาดทุน ($)</label><input type="number" id="f-pnl" placeholder="เช่น 12.50 หรือ -8.00" step="any"/></div>
+            <div class="fg"><label data-i18n="lbl.pnl">กำไร / ขาดทุน ($)</label><input type="number" id="f-pnl" placeholder="เช่น 12.50 หรือ -8.00" step="any"/></div>
             <div class="fg full">
-              <label>รูป Chart</label>
+              <label data-i18n="lbl.chart">รูป Chart</label>
               <div class="upload-area" onclick="document.getElementById('img-in').click()">
                 <div style="font-size:24px;margin-bottom:6px">↑</div>
                 คลิกเพื่อเลือกรูป หรือลากวาง
@@ -415,14 +415,14 @@ tr:hover td{background:rgba(255,255,255,.02)}
               <input type="file" id="img-in" accept="image/*" multiple style="display:none" onchange="handleImgs(this)"/>
               <div class="preview-row" id="preview-row"></div>
             </div>
-            <div class="fg full"><label>หมายเหตุ</label><textarea id="f-note" placeholder="เหตุผล, สิ่งที่เรียนรู้..."></textarea></div>
-            <div class="fg full"><button class="save-btn" id="savebtn" onclick="addTrade()">บันทึก Trade</button></div>
+            <div class="fg full"><label data-i18n="lbl.note">หมายเหตุ</label><textarea id="f-note" placeholder="เหตุผล, สิ่งที่เรียนรู้..."></textarea></div>
+            <div class="fg full"><button class="save-btn" id="savebtn" onclick="addTrade()"><span data-i18n="btn.savetrade">บันทึก Trade</span></button></div>
           </div>
         </div>
         <!-- Table -->
         <div class="filter-row">
           <input type="text" id="srch" placeholder="ค้นหา pair..." oninput="renderTable()"/>
-          <select id="fs" onchange="renderTable()"><option value="">ทุกทิศทาง</option><option value="BUY">Buy</option><option value="SELL">Sell</option></select>
+          <select id="fs" onchange="renderTable()"><option value="" data-i18n="filter.alldir">ทุกทิศทาง</option><option value="BUY">Buy</option><option value="SELL">Sell</option></select>
         </div>
         <div class="table-wrap">
           <table>
@@ -432,9 +432,9 @@ tr:hover td{background:rgba(255,255,255,.02)}
             </tr></thead>
             <tbody id="tbody"></tbody>
           </table>
-          <div id="empty" class="empty-state" style="display:none">ยังไม่มีข้อมูล — เริ่มบันทึก Trade แรกได้เลย</div>
+          <div id="empty" class="empty-state" style="display:none"><span data-i18n="empty.table">ยังไม่มีข้อมูล — เริ่มบันทึก Trade แรกได้เลย</span></div>
           <div class="pagination" id="pagination" style="display:none">
-            <button class="pg-btn" id="pg-prev" onclick="changePage(-1)">← ก่อนหน้า</button>
+            <button class="pg-btn" id="pg-prev" onclick="changePage(-1)"><span data-i18n="pg.prev">← ก่อนหน้า</span></button>
             <span class="pg-info" id="pg-info"></span>
             <button class="pg-btn" id="pg-next" onclick="changePage(1)">ถัดไป →</button>
           </div>
@@ -444,85 +444,85 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
     <div id="page-missed" class="page">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px">
-        <div class="page-title" style="margin-bottom:0">Missed Trade</div>
-        <button onclick="openMissedModal()" style="padding:8px 16px;background:var(--accent);border:none;border-radius:var(--radius);color:#fff;font-size:13px;cursor:pointer">+ เพิ่มแผน</button>
+        <div class="page-title" style="margin-bottom:0" data-i18n="nav.missed">Missed Trade</div>
+        <button onclick="openMissedModal()" style="padding:8px 16px;background:var(--accent);border:none;border-radius:var(--radius);color:#fff;font-size:13px;cursor:pointer"><span data-i18n="btn.addplan">+ เพิ่มแผน</span></button>
       </div>
       <div class="table-wrap">
         <table>
           <thead><tr>
-            <th>วันที่</th><th>Pair</th><th>Side</th><th>กลยุทธ์</th>
-            <th>Entry Zone</th><th>SL</th><th>TP</th><th>จุด</th><th>หมายเหตุ</th><th></th>
+            <th data-i18n="th.date">วันที่</th><th data-i18n="th.pair">Pair</th><th data-i18n="th.side">Side</th><th data-i18n="th.strategy">กลยุทธ์</th>
+            <th data-i18n="th.zone">Entry Zone</th><th data-i18n="th.slcol">SL</th><th data-i18n="th.tpcol">TP</th><th data-i18n="th.pips">จุด</th><th data-i18n="th.reason">หมายเหตุ</th><th></th>
           </tr></thead>
           <tbody id="missed-tbody"></tbody>
         </table>
-        <div id="missed-empty" class="empty-state" style="display:none">ยังไม่มีMissed Trade</div>
+        <div id="missed-empty" class="empty-state" style="display:none"><span data-i18n="empty.missed">ยังไม่มีMissed Trade</span></div>
       </div>
     </div>
 
     <div id="page-account" class="page">
-      <div class="page-title">บัญชี</div>
+      <div class="page-title" data-i18n="nav.account">บัญชี</div>
       <div class="metrics" id="acc-metrics" style="grid-template-columns:repeat(4,1fr)">
         <div class="metric">
-          <div class="metric-label">กำไรถอนรวม</div>
+          <div class="metric-label" data-i18n="acc.profit">กำไรถอนรวม</div>
           <div class="metric-val pos" id="acc-profit">—</div>
         </div>
         <div class="metric">
-          <div class="metric-label">ฝากรวม</div>
+          <div class="metric-label" data-i18n="acc.deposit">ฝากรวม</div>
           <div class="metric-val neg" id="acc-deposit">—</div>
         </div>
         <div class="metric">
-          <div class="metric-label">Net</div>
+          <div class="metric-label" data-i18n="acc.net">Net</div>
           <div class="metric-val" id="acc-net">—</div>
         </div>
         <div class="metric">
-          <div class="metric-label">รายการทั้งหมด</div>
+          <div class="metric-label" data-i18n="acc.count">รายการทั้งหมด</div>
           <div class="metric-val" id="acc-count">—</div>
         </div>
       </div>
       <div class="metrics" style="grid-template-columns:repeat(3,1fr);margin-bottom:16px">
         <div class="metric">
-          <div class="metric-label">ถอนรวม (฿)</div>
+          <div class="metric-label" data-i18n="acc.profitthb">ถอนรวม (฿)</div>
           <div class="metric-val pos" id="acc-thb-profit">—</div>
         </div>
         <div class="metric">
-          <div class="metric-label">ฝากรวม (฿)</div>
+          <div class="metric-label" data-i18n="acc.depositthb">ฝากรวม (฿)</div>
           <div class="metric-val neg" id="acc-thb-deposit">—</div>
         </div>
         <div class="metric">
-          <div class="metric-label">Net (฿)</div>
+          <div class="metric-label" data-i18n="acc.netthb">Net (฿)</div>
           <div class="metric-val" id="acc-thb-net">—</div>
         </div>
       </div>
       <div class="filter-row">
-        <select id="acc-filter-month" onchange="renderAccount()" style="min-width:130px"><option value="">ทุกเดือน</option></select>
-        <select id="acc-filter-type" onchange="renderAccount()"><option value="">ทุกประเภท</option><option value="Profit">Profit</option><option value="Deposit">Deposit</option></select>
-        <select id="acc-filter-acct" onchange="renderAccount()"><option value="">ทุกบัญชี</option></select>
-        <button onclick="openAddAccount()" style="padding:7px 14px;background:var(--accent);border:none;border-radius:var(--radius);color:#fff;font-size:12px;cursor:pointer;margin-left:auto">+ เพิ่มรายการ</button>
+        <select id="acc-filter-month" onchange="renderAccount()" style="min-width:130px"><option value="" data-i18n="filter.allmonths">ทุกเดือน</option></select>
+        <select id="acc-filter-type" onchange="renderAccount()"><option value="" data-i18n="filter.alltype">ทุกประเภท</option><option value="Profit">Profit</option><option value="Deposit">Deposit</option></select>
+        <select id="acc-filter-acct" onchange="renderAccount()"><option value="" data-i18n="filter.allacct">ทุกบัญชี</option></select>
+        <button onclick="openAddAccount()" style="padding:7px 14px;background:var(--accent);border:none;border-radius:var(--radius);color:#fff;font-size:12px;cursor:pointer;margin-left:auto"><span data-i18n="btn.addrecord">+ เพิ่มรายการ</span></button>
       </div>
       <!-- สรุปเดือนที่เลือก -->
       <div id="acc-month-summary" style="display:none;margin-bottom:1rem;padding:12px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg)">
         <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;font-family:'IBM Plex Mono',monospace;margin-bottom:10px" id="acc-month-label">สรุปเดือน</div>
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
-          <div><div style="font-size:10px;color:var(--text3);font-family:'IBM Plex Mono',monospace;margin-bottom:4px">กำไรถอน ($)</div><div class="mono pos" id="ms-profit" style="font-size:16px;font-weight:500">—</div></div>
-          <div><div style="font-size:10px;color:var(--text3);font-family:'IBM Plex Mono',monospace;margin-bottom:4px">ฝาก ($)</div><div class="mono neg" id="ms-deposit" style="font-size:16px;font-weight:500">—</div></div>
-          <div><div style="font-size:10px;color:var(--text3);font-family:'IBM Plex Mono',monospace;margin-bottom:4px">Net ($)</div><div class="mono" id="ms-net" style="font-size:16px;font-weight:500">—</div></div>
-          <div><div style="font-size:10px;color:var(--text3);font-family:'IBM Plex Mono',monospace;margin-bottom:4px">กำไรถอน (฿)</div><div class="mono pos" id="ms-profit-thb" style="font-size:16px;font-weight:500">—</div></div>
-          <div><div style="font-size:10px;color:var(--text3);font-family:'IBM Plex Mono',monospace;margin-bottom:4px">ฝาก (฿)</div><div class="mono neg" id="ms-deposit-thb" style="font-size:16px;font-weight:500">—</div></div>
-          <div><div style="font-size:10px;color:var(--text3);font-family:'IBM Plex Mono',monospace;margin-bottom:4px">Net (฿)</div><div class="mono" id="ms-net-thb" style="font-size:16px;font-weight:500">—</div></div>
+          <div><div style="font-size:10px;color:var(--text3);font-family:'IBM Plex Mono',monospace;margin-bottom:4px" data-i18n="ms.profit">กำไรถอน ($)</div><div class="mono pos" id="ms-profit" style="font-size:16px;font-weight:500">—</div></div>
+          <div><div style="font-size:10px;color:var(--text3);font-family:'IBM Plex Mono',monospace;margin-bottom:4px" data-i18n="ms.deposit">ฝาก ($)</div><div class="mono neg" id="ms-deposit" style="font-size:16px;font-weight:500">—</div></div>
+          <div><div style="font-size:10px;color:var(--text3);font-family:'IBM Plex Mono',monospace;margin-bottom:4px" data-i18n="ms.net">Net ($)</div><div class="mono" id="ms-net" style="font-size:16px;font-weight:500">—</div></div>
+          <div><div style="font-size:10px;color:var(--text3);font-family:'IBM Plex Mono',monospace;margin-bottom:4px" data-i18n="ms.profitthb">กำไรถอน (฿)</div><div class="mono pos" id="ms-profit-thb" style="font-size:16px;font-weight:500">—</div></div>
+          <div><div style="font-size:10px;color:var(--text3);font-family:'IBM Plex Mono',monospace;margin-bottom:4px" data-i18n="ms.depositthb">ฝาก (฿)</div><div class="mono neg" id="ms-deposit-thb" style="font-size:16px;font-weight:500">—</div></div>
+          <div><div style="font-size:10px;color:var(--text3);font-family:'IBM Plex Mono',monospace;margin-bottom:4px" data-i18n="ms.netthb">Net (฿)</div><div class="mono" id="ms-net-thb" style="font-size:16px;font-weight:500">—</div></div>
         </div>
       </div>
       <div class="table-wrap">
         <table>
           <thead><tr>
-            <th style="cursor:pointer;user-select:none" onclick="sortAccount('date')">วันที่ <span id="sort-date">↕</span></th>
-            <th>ชื่อ</th>
-            <th style="cursor:pointer;user-select:none" onclick="sortAccount('type')">ประเภท <span id="sort-type">↕</span></th>
+            <th style="cursor:pointer;user-select:none" onclick="sortAccount('date')"><span data-i18n="th.date">วันที่</span> <span id="sort-date">↕</span></th>
+            <th data-i18n="th.name">ชื่อ</th>
+            <th style="cursor:pointer;user-select:none" onclick="sortAccount('type')"><span data-i18n="th.type">ประเภท</span> <span id="sort-type">↕</span></th>
             <th>บัญชี</th>
-            <th style="cursor:pointer;user-select:none" onclick="sortAccount('amount_usd')">จำนวน ($) <span id="sort-amount_usd">↕</span></th>
-            <th style="cursor:pointer;user-select:none" onclick="sortAccount('amount_thb')">จำนวน (฿) <span id="sort-amount_thb">↕</span></th>
-            <th>฿/$ ฝาก</th>
-            <th>฿/$ ถอน</th>
-            <th>เหตุผล</th><th>รูป</th><th></th>
+            <th style="cursor:pointer;user-select:none" onclick="sortAccount('amount_usd')"><span data-i18n="th.amtusd">จำนวน ($)</span> <span id="sort-amount_usd">↕</span></th>
+            <th style="cursor:pointer;user-select:none" onclick="sortAccount('amount_thb')"><span data-i18n="th.amtthb">จำนวน (฿)</span> <span id="sort-amount_thb">↕</span></th>
+            <th data-i18n="th.ratedep">฿/$ ฝาก</th>
+            <th data-i18n="th.ratewd">฿/$ ถอน</th>
+            <th data-i18n="th.reasonacc">เหตุผล</th><th data-i18n="th.img">รูป</th><th></th>
           </tr></thead>
           <tbody id="acc-tbody"></tbody>
         </table>
@@ -531,9 +531,9 @@ tr:hover td{background:rgba(255,255,255,.02)}
     </div>
 
     <div id="page-settings" class="page">
-      <div class="page-title">การตั้งค่า</div>
+      <div class="page-title" data-i18n="nav.settings">การตั้งค่า</div>
       <div class="settings-block settings-pairs">
-        <h3>คู่เงิน</h3>
+        <h3 data-i18n="set.pairs">คู่เงิน</h3>
         <div class="tag-list" id="pair-tags"></div>
         <div class="add-row">
           <input type="text" id="new-pair" placeholder="เช่น GBPAUD, EURCAD"/>
@@ -541,7 +541,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
         </div>
       </div>
       <div class="settings-block settings-strategies">
-        <h3>กลยุทธ์</h3>
+        <h3 data-i18n="set.strategies">กลยุทธ์</h3>
         <div class="tag-list" id="strategy-tags"></div>
         <div class="add-row">
           <input type="text" id="new-strategy" placeholder="เช่น ICT, Price Action..."/>
@@ -549,7 +549,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
         </div>
       </div>
       <div class="settings-block">
-        <h3>บัญชีเทรด</h3>
+        <h3 data-i18n="set.accounts">บัญชีเทรด</h3>
         <div class="tag-list" id="account-tags"></div>
         <div class="add-row">
           <input type="text" id="new-account" placeholder="เช่น XM K.MK (82952428)"/>
@@ -557,7 +557,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
         </div>
       </div>
       <div class="settings-block">
-        <h3>ธีมสี</h3>
+        <h3 data-i18n="set.theme">ธีมสี</h3>
         <div class="theme-picker" id="theme-picker">
           <div class="theme-dot active" data-theme="default" style="background:#1a1e25" title="Dark" onclick="setTheme('default')"></div>
           <div class="theme-dot" data-theme="midnight" style="background:#0a0a1a" title="Midnight" onclick="setTheme('midnight')"></div>
@@ -577,17 +577,29 @@ tr:hover td{background:rgba(255,255,255,.02)}
         </div>
         <div style="font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace" id="backup-status">—</div>
       </div>
-      <button class="save-btn settings-save-btn" onclick="saveSettings()">บันทึกการตั้งค่า</button>
+      <div class="settings-block">
+        <h3 data-i18n="set.language">ภาษา / Language</h3>
+        <div style="display:flex;gap:8px">
+          <button id="glang-th" onclick="setGlobalLang('th')" style="padding:8px 20px;background:var(--accent);border:none;border-radius:var(--radius);color:#fff;font-size:13px;cursor:pointer;font-family:'IBM Plex Sans Thai',sans-serif;transition:all .15s">ไทย</button>
+          <button id="glang-en" onclick="setGlobalLang('en')" style="padding:8px 20px;background:transparent;border:1px solid var(--border2);border-radius:var(--radius);color:var(--text2);font-size:13px;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .15s">English</button>
+        </div>
+      </div>
+      <button class="save-btn settings-save-btn" onclick="saveSettings()"><span data-i18n="btn.saveset">บันทึกการตั้งค่า</span></button>
     </div>
 
     <div id="page-calendar" class="page">
-      <div class="page-title" style="margin-bottom:20px">ปฏิทิน</div>
+      <div class="page-title" style="margin-bottom:20px" data-i18n="nav.calendar">ปฏิทิน</div>
       <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden">
         <!-- Calendar Header -->
         <div style="display:flex;align-items:center;padding:11px 16px;border-bottom:1px solid var(--border)">
           <button onclick="changeCalendarMonth(-1)" style="background:none;border:1px solid var(--border2);border-radius:var(--radius);color:var(--text2);width:28px;height:28px;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;line-height:1">&#8249;</button>
           <span id="cal-month-title" style="margin:0 12px;font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:500;min-width:160px;text-align:center">—</span>
           <button onclick="changeCalendarMonth(1)" style="background:none;border:1px solid var(--border2);border-radius:var(--radius);color:var(--text2);width:28px;height:28px;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;line-height:1">&#8250;</button>
+          <div style="display:flex;border:1px solid var(--border2);border-radius:var(--radius);overflow:hidden;margin-left:14px">
+            <button id="cllang-en" onclick="setCalLang('en')" style="padding:5px 10px;background:var(--accent);border:none;color:#fff;font-size:11px;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .15s">EN</button>
+            <button id="cllang-th" onclick="setCalLang('th')" style="padding:5px 10px;background:transparent;border:none;color:var(--text2);font-size:11px;cursor:pointer;font-family:'IBM Plex Sans Thai',sans-serif;transition:all .15s">ไทย</button>
+            <button id="cllang-both" onclick="setCalLang('both')" style="padding:5px 10px;background:transparent;border:none;color:var(--text2);font-size:11px;cursor:pointer;font-family:'IBM Plex Sans Thai',sans-serif;transition:all .15s">TH/EN</button>
+          </div>
           <div style="margin-left:auto;display:flex;align-items:center;gap:22px">
             <div style="display:flex;align-items:baseline;gap:5px">
               <span style="font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace">P/L:</span>
@@ -599,17 +611,8 @@ tr:hover td{background:rgba(255,255,255,.02)}
             </div>
           </div>
         </div>
-        <!-- Day Headers -->
-        <div style="display:grid;grid-template-columns:repeat(7,1fr) 110px;border-bottom:1px solid var(--border)">
-          <div style="padding:7px 10px;font-size:10px;color:var(--text2);font-family:'IBM Plex Mono',monospace;text-align:center;border-right:1px solid var(--border);letter-spacing:.05em">Sun</div>
-          <div style="padding:7px 10px;font-size:10px;color:var(--text2);font-family:'IBM Plex Mono',monospace;text-align:center;border-right:1px solid var(--border);letter-spacing:.05em">Mon</div>
-          <div style="padding:7px 10px;font-size:10px;color:var(--text2);font-family:'IBM Plex Mono',monospace;text-align:center;border-right:1px solid var(--border);letter-spacing:.05em">Tue</div>
-          <div style="padding:7px 10px;font-size:10px;color:var(--text2);font-family:'IBM Plex Mono',monospace;text-align:center;border-right:1px solid var(--border);letter-spacing:.05em">Wed</div>
-          <div style="padding:7px 10px;font-size:10px;color:var(--text2);font-family:'IBM Plex Mono',monospace;text-align:center;border-right:1px solid var(--border);letter-spacing:.05em">Thu</div>
-          <div style="padding:7px 10px;font-size:10px;color:var(--text2);font-family:'IBM Plex Mono',monospace;text-align:center;border-right:1px solid var(--border);letter-spacing:.05em">Fri</div>
-          <div style="padding:7px 10px;font-size:10px;color:var(--text2);font-family:'IBM Plex Mono',monospace;text-align:center;border-right:1px solid var(--border);letter-spacing:.05em">Sat</div>
-          <div style="padding:7px 10px;font-size:10px;color:var(--accent);font-family:'IBM Plex Mono',monospace;text-align:center;letter-spacing:.05em">Summary</div>
-        </div>
+        <!-- Day Headers (dynamic) -->
+        <div id="cal-day-headers" style="display:grid;grid-template-columns:repeat(7,1fr) 110px;border-bottom:1px solid var(--border)"></div>
         <!-- Calendar Grid (built by renderCalendar) -->
         <div id="cal-grid" style="display:grid;grid-template-columns:repeat(7,1fr) 110px"></div>
       </div>
@@ -631,7 +634,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <div class="form-grid">
       <div class="fg"><label>วันที่</label><input type="date" id="m-date"/></div>
       <div class="fg"><label>คู่เงิน</label><select id="m-sym"></select></div>
-      <div class="fg"><label>ทิศทาง</label>
+      <div class="fg"><label data-i18n="lbl.direction">ทิศทาง</label>
         <div class="side-row">
           <button class="side-btn buy" id="m-btn-buy" onclick="setMissedSide('BUY')">↑ Buy</button>
           <button class="side-btn sell" id="m-btn-sell" onclick="setMissedSide('SELL')">↓ Sell</button>
@@ -741,7 +744,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <div class="form-grid">
       <div class="fg"><label>วันที่</label><input type="date" id="e-date"/></div>
       <div class="fg"><label>คู่เงิน</label><select id="e-sym"></select></div>
-      <div class="fg"><label>ทิศทาง</label>
+      <div class="fg"><label data-i18n="lbl.direction">ทิศทาง</label>
         <div class="side-row">
           <button class="side-btn buy" id="e-btn-buy" onclick="setEditSide('BUY')">↑ Buy</button>
           <button class="side-btn sell" id="e-btn-sell" onclick="setEditSide('SELL')">↓ Sell</button>
@@ -861,6 +864,116 @@ let editPending = [], editExistingImgs = [];
 let detailId = null, detailImgs = [], detailIdx = 0;
 let calendarYear = new Date().getFullYear(), calendarMonth = new Date().getMonth();
 let histTab = 'mt5';
+let calLang = 'en';
+let globalLang = 'th';
+
+const I18N = {
+  th: {
+    'nav.overview':'ภาพรวม','nav.history':'ประวัติการเทรด','nav.calendar':'ปฏิทิน',
+    'nav.missed':'เทรดที่พลาด','nav.account':'บัญชี','nav.settings':'การตั้งค่า',
+    'sync.btn':'⟳ Sync',
+    'tab.mt5':'MT5','tab.manual':'บันทึกเอง',
+    'stat.winrate':'อัตราชนะ','stat.pnl':'กำไร/ขาดทุนรวม ($)','stat.pnlshort':'กำไร/ขาดทุน ($)',
+    'stat.total':'เทรดทั้งหมด','stat.wl':'ชนะ / แพ้',
+    'stat.highwin':'ชนะสูงสุด','stat.highloss':'แพ้สูงสุด',
+    'filter.allpairs':'ทุกคู่เงิน','filter.alldir':'ทุกทิศทาง','filter.allstrat':'ทุกกลยุทธ์',
+    'filter.allsession':'ทุกเซสชัน','filter.allacct':'ทุกบัญชี',
+    'filter.allmonths':'ทุกเดือน','filter.alltype':'ทุกประเภท',
+    'btn.reset':'รีเซ็ต','btn.addtrade':'+ เพิ่มเทรด','btn.savetrade':'บันทึกเทรด',
+    'btn.addplan':'+ เพิ่มแผน','btn.addrecord':'+ เพิ่มรายการ',
+    'btn.saveset':'บันทึกการตั้งค่า',
+    'th.date':'วันที่','th.pips':'จุด','th.strategy':'กลยุทธ์','th.img':'รูป',
+    'th.pnl2':'กำไร/ขาดทุน','th.reason':'หมายเหตุ','th.reasonacc':'เหตุผล',
+    'th.name':'ชื่อ','th.type':'ประเภท','th.acct':'บัญชี',
+    'th.amtusd':'จำนวน ($)','th.amtthb':'จำนวน (฿)',
+    'th.ratedep':'฿/$ ฝาก','th.ratewd':'฿/$ ถอน',
+    'lbl.date':'วันที่','lbl.pair':'คู่เงิน','lbl.direction':'ทิศทาง',
+    'lbl.entry':'ราคาเข้า','lbl.tp':'เป้าหมายกำไร','lbl.entries':'จำนวนไม้',
+    'lbl.lotper':'ล็อตต่อไม้','lbl.sl':'จุดตัดขาดทุน','lbl.rr':'อัตรา R:R (อัตโนมัติ)',
+    'lbl.strategy':'กลยุทธ์','lbl.session':'เซสชัน','lbl.pnl':'กำไร / ขาดทุน ($)',
+    'lbl.chart':'รูปกราฟ','lbl.note':'หมายเหตุ',
+    'upload.text':'คลิกเพื่อเลือกรูป หรือลากวาง',
+    'empty.history':'ยังไม่มีข้อมูล',
+    'empty.table':'ยังไม่มีข้อมูล — เริ่มบันทึกเทรดแรกได้เลย',
+    'empty.missed':'ยังไม่มีเทรดที่พลาด',
+    'pg.prev':'← ก่อนหน้า','pg.next':'ถัดไป →',
+    'acc.profit':'กำไรถอนรวม','acc.deposit':'ฝากรวม','acc.net':'สุทธิ',
+    'acc.count':'รายการทั้งหมด','acc.profitthb':'ถอนรวม (฿)',
+    'acc.depositthb':'ฝากรวม (฿)','acc.netthb':'สุทธิ (฿)',
+    'ms.profit':'กำไรถอน ($)','ms.deposit':'ฝาก ($)','ms.net':'สุทธิ ($)',
+    'ms.profitthb':'กำไรถอน (฿)','ms.depositthb':'ฝาก (฿)','ms.netthb':'สุทธิ (฿)',
+    'set.pairs':'คู่เงิน','set.strategies':'กลยุทธ์','set.accounts':'บัญชีเทรด',
+    'set.theme':'ธีมสี','set.backup':'สำรองและส่งออก',
+    'ov.result':'ผลลัพธ์','ov.withdrawal':'ถอนกำไรรวม','ov.tradesummary':'สรุปการเทรด',
+    'ov.charts':'กราฟ','ov.pnlchart':'กำไร/ขาดทุนสะสม','ov.pairchart':'กำไร/ขาดทุนแยกตามคู่เงิน',
+    'th.pair':'คู่เงิน','th.side':'ทิศทาง','th.entry':'ราคาเข้า','th.exit':'ราคาออก',
+    'th.lot':'ล็อต','th.rr':'R:R','th.session':'เซสชัน','th.pnl':'กำไร/ขาดทุน ($)',
+    'th.slcol':'จุดตัดขาดทุน','th.tpcol':'เป้าหมาย','th.zone':'โซนเข้า',
+    'set.language':'ภาษา / Language','ov.title':'ภาพรวม',
+  },
+  en: {
+    'nav.overview':'Overview','nav.history':'Trade History','nav.calendar':'Calendar',
+    'nav.missed':'Missed Trade','nav.account':'Account','nav.settings':'Settings',
+    'sync.btn':'⟳ Sync',
+    'tab.mt5':'MT5','tab.manual':'Manual',
+    'stat.winrate':'Win Rate','stat.pnl':'Total P&L ($)','stat.pnlshort':'P&L ($)',
+    'stat.total':'Total Trades','stat.wl':'Win / Loss',
+    'stat.highwin':'Highest Win','stat.highloss':'Highest Loss',
+    'filter.allpairs':'All Pairs','filter.alldir':'All Directions','filter.allstrat':'All Strategies',
+    'filter.allsession':'All Sessions','filter.allacct':'All Accounts',
+    'filter.allmonths':'All Months','filter.alltype':'All Types',
+    'btn.reset':'Reset','btn.addtrade':'+ Add Trade','btn.savetrade':'Save Trade',
+    'btn.addplan':'+ Add Plan','btn.addrecord':'+ Add Record',
+    'btn.saveset':'Save Settings',
+    'th.date':'Date','th.pips':'Pips','th.strategy':'Strategy','th.img':'Image',
+    'th.pnl2':'Profit/Loss','th.reason':'Note','th.reasonacc':'Reason',
+    'th.name':'Name','th.type':'Type','th.acct':'Account',
+    'th.amtusd':'Amount ($)','th.amtthb':'Amount (฿)',
+    'th.ratedep':'฿/$ Deposit','th.ratewd':'฿/$ Withdrawal',
+    'lbl.date':'Date','lbl.pair':'Pair','lbl.direction':'Direction',
+    'lbl.entry':'Entry Price','lbl.tp':'Take Profit','lbl.entries':'No. of Entries',
+    'lbl.lotper':'Lot per Entry','lbl.sl':'Stop Loss','lbl.rr':'R:R Ratio (auto)',
+    'lbl.strategy':'Strategy','lbl.session':'Session','lbl.pnl':'Profit / Loss ($)',
+    'lbl.chart':'Chart Image','lbl.note':'Note',
+    'upload.text':'Click to select image, or drag and drop',
+    'empty.history':'No data',
+    'empty.table':'No data — start recording your first trade',
+    'empty.missed':'No missed trades',
+    'pg.prev':'← Previous','pg.next':'Next →',
+    'acc.profit':'Total Withdrawal','acc.deposit':'Total Deposit','acc.net':'Net',
+    'acc.count':'Total Records','acc.profitthb':'Withdrawal (฿)',
+    'acc.depositthb':'Deposit (฿)','acc.netthb':'Net (฿)',
+    'ms.profit':'Profit ($)','ms.deposit':'Deposit ($)','ms.net':'Net ($)',
+    'ms.profitthb':'Profit (฿)','ms.depositthb':'Deposit (฿)','ms.netthb':'Net (฿)',
+    'set.pairs':'Currency Pairs','set.strategies':'Strategies','set.accounts':'Trading Accounts',
+    'set.theme':'Color Theme','set.backup':'Backup & Export',
+    'ov.result':'Result','ov.withdrawal':'Total Withdrawal','ov.tradesummary':'Trade Summary',
+    'ov.charts':'Charts','ov.pnlchart':'Cumulative P&L','ov.pairchart':'P&L by Pair',
+    'th.pair':'Pair','th.side':'Side','th.entry':'Entry','th.exit':'Exit',
+    'th.lot':'Lot','th.rr':'R:R','th.session':'Session','th.pnl':'P&L ($)',
+    'th.slcol':'SL','th.tpcol':'TP','th.zone':'Entry Zone',
+    'set.language':'Language','ov.title':'Overview',
+  }
+};
+
+const CAL_L = {
+  en: {
+    days: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
+    months: ['January','February','March','April','May','June','July','August','September','October','November','December'],
+    summary: 'Summary', trades: 'trades'
+  },
+  th: {
+    days: ['อา.','จ.','อ.','พ.','พฤ.','ศ.','ส.'],
+    months: ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'],
+    summary: 'สรุป', trades: 'เทรด'
+  },
+  both: {
+    days: ['Sun<br><span style="font-size:8px;opacity:.6">อา.</span>','Mon<br><span style="font-size:8px;opacity:.6">จ.</span>','Tue<br><span style="font-size:8px;opacity:.6">อ.</span>','Wed<br><span style="font-size:8px;opacity:.6">พ.</span>','Thu<br><span style="font-size:8px;opacity:.6">พฤ.</span>','Fri<br><span style="font-size:8px;opacity:.6">ศ.</span>','Sat<br><span style="font-size:8px;opacity:.6">ส.</span>'],
+    months: ['January','February','March','April','May','June','July','August','September','October','November','December'],
+    monthsTh: ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'],
+    summary: 'Summary<br><span style="font-size:8px;opacity:.6">สรุป</span>', trades: 'trades'
+  }
+};
 let settings = {
   pairs: ['EURUSD','GBPUSD','USDJPY','USDCHF','AUDUSD','NZDUSD','USDCAD','GBPJPY','EURJPY','EURGBP','XAUUSD','XAGUSD'],
   strategies: ['SMC','Trendline','Hybrid Trade'],
@@ -925,7 +1038,7 @@ function populateMonthFilters() {
     const sel = document.getElementById(id);
     if (!sel) return;
     const cur = sel.value;
-    sel.innerHTML = '<option value="">ทุกเดือน</option>';
+    sel.innerHTML = `<option value="">${T('filter.allmonths')}</option>`;
     for (let d = new Date(start); d <= end; d.setMonth(d.getMonth() + 1)) {
       const val = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0');
       const label = thaiMonths[d.getMonth()+1] + ' ' + d.getFullYear();
@@ -1448,17 +1561,17 @@ function applySettings() {
   if (histAcctSel) {
     const accts = [...new Set(trades.filter(t => t.source_account).map(t => t.source_account))];
     const cur = histAcctSel.value;
-    histAcctSel.innerHTML = '<option value="">ทุกบัญชี</option>' + accts.map(a => `<option>${a}</option>`).join('');
+    histAcctSel.innerHTML = `<option value="">${T('filter.allacct')}</option>` + accts.map(a => `<option>${a}</option>`).join('');
     if (cur) histAcctSel.value = cur;
   }
   // sync hist pair dropdown
   const histPairSel = document.getElementById('hist-fp');
-  if (histPairSel) histPairSel.innerHTML = '<option value="">ทุกคู่เงิน</option>' + settings.pairs.map(p => `<option>${p}</option>`).join('');
+  if (histPairSel) histPairSel.innerHTML = `<option value="">${T('filter.allpairs')}</option>` + settings.pairs.map(p => `<option>${p}</option>`).join('');
   // sync account dropdowns จาก settings.accounts_list
   const acctOpts = settings.accounts_list.map(a => `<option>${a}</option>`).join('');
   const acctFilter = document.getElementById('acc-filter-acct');
   const acctModal = document.getElementById('acc-m-acct');
-  if (acctFilter) acctFilter.innerHTML = '<option value="">ทุกบัญชี</option>' + acctOpts;
+  if (acctFilter) acctFilter.innerHTML = `<option value="">${T('filter.allacct')}</option>` + acctOpts;
   if (acctModal) acctModal.innerHTML = acctOpts;
   renderPairTags(); renderStrategyTags(); renderAccountTags();
 }
@@ -1691,7 +1804,7 @@ function renderHistory() {
   const strSel = document.getElementById('hist-fstr');
   if (strSel && strSel.options.length <= 1) {
     const strats = [...new Set(trades.map(t => t.strategy).filter(Boolean))];
-    strSel.innerHTML = '<option value="">ทุกกลยุทธ์</option>' + strats.map(s => `<option>${s}</option>`).join('');
+    strSel.innerHTML = `<option value="">${T('filter.allstrat')}</option>` + strats.map(s => `<option>${s}</option>`).join('');
     if (fstr) strSel.value = fstr;
   }
 
@@ -2141,6 +2254,7 @@ if (IS_VIEW) {
 const _vb = document.getElementById('view-badge');
 if (_vb) _vb.style.display = IS_VIEW ? '' : 'none';
 loadTheme();
+globalLang = localStorage.getItem('lang') || 'th';
 document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
 document.getElementById('new-pair').addEventListener('keydown', e => { if (e.key === 'Enter') addPair(); });
 document.getElementById('new-strategy').addEventListener('keydown', e => { if (e.key === 'Enter') addStrategy(); });
@@ -2148,6 +2262,7 @@ const validPages = ['overview','history','calendar','missed','account','settings
 const _lp = localStorage.getItem('lastPage');
 const lastPage = IS_VIEW ? 'overview' : (validPages.includes(_lp) ? _lp : 'table');
 showPage(lastPage);
+applyLang();
 loadAll();
 // ---- Export & Backup ----
 
@@ -2225,6 +2340,25 @@ function switchHistTab(t) {
 }
 
 // ---- Calendar ----
+function setCalLang(lang) {
+  calLang = lang;
+  ['en','th','both'].forEach(l => {
+    const b = document.getElementById('cllang-' + l);
+    if (!b) return;
+    b.style.background = l === lang ? 'var(--accent)' : 'transparent';
+    b.style.color = l === lang ? '#fff' : 'var(--text2)';
+  });
+  renderCalendar();
+}
+
+function buildCalHeaders() {
+  const L = CAL_L[calLang];
+  const el = document.getElementById('cal-day-headers');
+  if (!el) return;
+  const s = "padding:7px 6px;font-size:10px;color:var(--text2);font-family:'IBM Plex Mono',monospace;text-align:center;border-right:1px solid var(--border);letter-spacing:.04em;line-height:1.5";
+  el.innerHTML = L.days.map(d => `<div style="${s}">${d}</div>`).join('')
+    + `<div style="padding:7px 6px;font-size:10px;color:var(--accent);font-family:'IBM Plex Mono',monospace;text-align:center;letter-spacing:.04em;line-height:1.5">${L.summary}</div>`;
+}
 function changeCalendarMonth(dir) {
   calendarMonth += dir;
   if (calendarMonth > 11) { calendarMonth = 0; calendarYear++; }
@@ -2240,8 +2374,12 @@ function calFmtPnl(val) {
 
 function renderCalendar() {
   const year = calendarYear, month = calendarMonth;
-  const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  document.getElementById('cal-month-title').textContent = MONTHS[month] + '-' + year;
+  const L = CAL_L[calLang];
+  buildCalHeaders();
+
+  let mTitle = L.months[month] + '-' + year;
+  if (calLang === 'both') mTitle = L.months[month] + ' · ' + L.monthsTh[month] + ' ' + year;
+  document.getElementById('cal-month-title').textContent = mTitle;
 
   const monthStr = year + '-' + String(month + 1).padStart(2, '0');
   const mTrades = trades.filter(t => t.date && t.date.startsWith(monthStr) && t.pnl !== null && t.pnl !== '');
@@ -2312,7 +2450,7 @@ function renderCalendar() {
     sumCell.style.cssText = 'border-bottom:1px solid var(--border);padding:8px 10px;min-height:62px;display:flex;flex-direction:column;align-items:flex-end;justify-content:flex-end;background:var(--bg3);box-sizing:border-box';
     if (wCount > 0) {
       const wc = wPnl >= 0 ? 'var(--green)' : 'var(--red)';
-      sumCell.innerHTML = '<div style="font-size:10px;color:var(--text2);margin-bottom:3px">' + wCount + ' trades</div>'
+      sumCell.innerHTML = '<div style="font-size:10px;color:var(--text2);margin-bottom:3px">' + wCount + ' ' + L.trades + '</div>'
         + '<div style="font-size:13px;font-weight:500;color:' + wc + ';font-family:\'IBM Plex Mono\',monospace">' + calFmtPnl(wPnl) + '</div>';
     }
     grid.appendChild(sumCell);
@@ -2320,6 +2458,45 @@ function renderCalendar() {
 }
 
 
+
+// ════════════════════════════════════
+// ── GLOBAL LANGUAGE SYSTEM ──
+// ════════════════════════════════════
+
+function T(key) { return (I18N[globalLang] || I18N.th)[key] || key; }
+
+function applyLang() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const k = el.getAttribute('data-i18n');
+    const v = T(k);
+    if (v !== undefined) el.textContent = v;
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    const v = T(el.getAttribute('data-i18n-ph'));
+    if (v !== undefined) el.placeholder = v;
+  });
+  ['th','en'].forEach(l => {
+    const b = document.getElementById('glang-' + l);
+    if (!b) return;
+    b.style.background = l === globalLang ? 'var(--accent)' : 'transparent';
+    b.style.color = l === globalLang ? '#fff' : 'var(--text2)';
+    b.style.border = l === globalLang ? 'none' : '1px solid var(--border2)';
+  });
+}
+
+function setGlobalLang(lang) {
+  globalLang = lang;
+  localStorage.setItem('lang', lang);
+  applyLang();
+  applySettings();
+  populateMonthFilters();
+  const active = localStorage.getItem('lastPage') || 'table';
+  if (active === 'overview') renderOverview();
+  else if (active === 'history') { if (histTab === 'mt5') renderHistory(); else renderTable(); }
+  else if (active === 'missed') renderMissed();
+  else if (active === 'account') renderAccount();
+  else if (active === 'settings') { renderPairTags(); renderStrategyTags(); renderAccountTags(); }
+}
 
 </script>
 </body>
