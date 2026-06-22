@@ -901,6 +901,7 @@ const H = {
 let trades = [], tradeSide = 'BUY', pending = [], chartInst = null;
 let selectedForAnalysis = [];
 let statsPool = [];
+let delPoolConfirm = null, delPoolTimer = null;
 let editId = null, editSide = 'BUY';
 let editPending = [], editExistingImgs = [];
 let detailId = null, detailImgs = [], detailIdx = 0;
@@ -2699,16 +2700,33 @@ function insertToStats() {
 }
 
 function removeFromPool(id) {
-  statsPool = statsPool.filter(x => x !== id);
-  savePool();
-  updateSelBar();
-  // อัปเดต DOM row ใน history ทันที
-  const row = document.querySelector('#hist-tbody tr[data-trade-id="' + id + '"]');
-  if (row) {
-    const td = row.querySelector('td:first-child');
-    if (td) td.innerHTML = '<input type="checkbox" class="trade-cb" onchange="toggleTradeSel(' + id + ',this.checked)">';
+  const btn = document.querySelector('[data-del-pool="' + id + '"]');
+  if (delPoolConfirm === id) {
+    clearTimeout(delPoolTimer);
+    delPoolConfirm = null;
+    if (btn) { btn.textContent = '✕'; btn.className = 'tbl-btn del'; }
+    statsPool = statsPool.filter(x => x !== id);
+    savePool();
+    updateSelBar();
+    const row = document.querySelector('#hist-tbody tr[data-trade-id="' + id + '"]');
+    if (row) {
+      const td = row.querySelector('td:first-child');
+      if (td) td.innerHTML = '<input type="checkbox" class="trade-cb" onchange="toggleTradeSel(' + id + ',this.checked)">';
+    }
+    renderAnalysis();
+  } else {
+    if (delPoolConfirm !== null) {
+      const prev = document.querySelector('[data-del-pool="' + delPoolConfirm + '"]');
+      if (prev) { prev.textContent = '✕'; prev.className = 'tbl-btn del'; }
+      clearTimeout(delPoolTimer);
+    }
+    delPoolConfirm = id;
+    if (btn) { btn.textContent = 'ยืนยัน?'; btn.className = 'tbl-btn del del-confirm'; }
+    delPoolTimer = setTimeout(() => {
+      delPoolConfirm = null;
+      if (btn) { btn.textContent = '✕'; btn.className = 'tbl-btn del'; }
+    }, 3000);
   }
-  renderAnalysis();
 }
 
 function toggleTradeSel(id, checked) {
@@ -2797,8 +2815,7 @@ function renderAnalysis() {
           + '<td class="mono" style="font-size:11px">' + (t.exit ? parseFloat(t.exit).toFixed(2) : '—') + '</td>'
           + '<td>' + pnlStr + '</td>'
           + '<td class="mono" style="font-size:11px;color:var(--text2)">' + (t.rr || '—') + '</td>'
-          + '<td><button class="tbl-btn del" onclick="removeFromPool(' + t.id + ')" title="' + T('an.remove') + '">✕</button></td>'
-          + '</tr>';
+          + '<td><button class="tbl-btn del" data-del-pool="' + t.id + '" onclick="removeFromPool(' + t.id + ')" title="' + T('an.remove') + '">✕</button></td>''</tr>';
       }).join('')
     + '</tbody></table></div>';
 
