@@ -220,9 +220,9 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="12 8 12 12 14 14"/><path d="M3.05 11a9 9 0 1 1 .5 4"/><polyline points="3 16 3 11 8 11"/></svg>
         <span>ประวัติการเทรด</span>
       </div>
-      <div class="nav-item" onclick="showPage('table')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="9" x2="9" y2="21"/></svg>
-        <span>ตารางข้อมูล</span>
+      <div class="nav-item" onclick="showPage('calendar')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span>ปฏิทิน</span>
       </div>
       <div class="nav-item" onclick="showPage('missed')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
@@ -300,133 +300,144 @@ tr:hover td{background:rgba(255,255,255,.02)}
     </div>
 
     <div id="page-history" class="page">
-      <div class="page-title">ประวัติการเทรด</div>
-      <!-- Stats -->
-      <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:14px">
-        <div class="stat-card"><div class="stat-label">Win Rate</div><div class="stat-val" id="hist-wr">—</div></div>
-        <div class="stat-card"><div class="stat-label">P&L รวม ($)</div><div class="stat-val" id="hist-pnl">—</div></div>
-        <div class="stat-card"><div class="stat-label">Trade ทั้งหมด</div><div class="stat-val" id="hist-total">—</div></div>
-        <div class="stat-card"><div class="stat-label">ชนะ / แพ้</div><div class="stat-val" id="hist-wl">—</div></div>
-      </div>
-      <!-- Session Breakdown -->
-      <div id="hist-session-breakdown" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px"></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
-        <div style="background:var(--green-bg);border:1px solid rgba(0,217,126,.15);border-radius:var(--radius-lg);padding:14px">
-          <div style="font-size:11px;color:var(--green);font-family:'IBM Plex Mono',monospace;font-weight:500;margin-bottom:10px;text-align:center">BUY</div>
-          <div class="stats-grid" style="grid-template-columns:1fr 1fr;gap:8px">
-            <div class="stat-card"><div class="stat-label">Win Rate</div><div class="stat-val" id="hist-wr-buy">—</div><div class="stat-sub" id="hist-wl-buy">—</div></div>
-            <div class="stat-card"><div class="stat-label">P&L ($)</div><div class="stat-val" id="hist-pnl-buy">—</div></div>
-            <div class="stat-card"><div class="stat-label">Highest Win</div><div class="stat-val pos" id="hist-win-buy">—</div></div>
-            <div class="stat-card"><div class="stat-label">Highest Loss</div><div class="stat-val neg" id="hist-loss-buy">—</div></div>
-          </div>
-        </div>
-        <div style="background:var(--red-bg);border:1px solid rgba(255,77,106,.15);border-radius:var(--radius-lg);padding:14px">
-          <div style="font-size:11px;color:var(--red);font-family:'IBM Plex Mono',monospace;font-weight:500;margin-bottom:10px;text-align:center">SELL</div>
-          <div class="stats-grid" style="grid-template-columns:1fr 1fr;gap:8px">
-            <div class="stat-card"><div class="stat-label">Win Rate</div><div class="stat-val" id="hist-wr-sell">—</div><div class="stat-sub" id="hist-wl-sell">—</div></div>
-            <div class="stat-card"><div class="stat-label">P&L ($)</div><div class="stat-val" id="hist-pnl-sell">—</div></div>
-            <div class="stat-card"><div class="stat-label">Highest Win</div><div class="stat-val pos" id="hist-win-sell">—</div></div>
-            <div class="stat-card"><div class="stat-label">Highest Loss</div><div class="stat-val neg" id="hist-loss-sell">—</div></div>
-          </div>
+      <!-- Tab bar header -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+        <div class="page-title" style="margin-bottom:0">ประวัติการเทรด</div>
+        <div style="display:flex;border:1px solid var(--border2);border-radius:var(--radius);overflow:hidden">
+          <button id="htab-mt5" onclick="switchHistTab('mt5')" style="padding:7px 18px;background:var(--accent);border:none;color:#fff;font-size:12px;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .15s">MT5</button>
+          <button id="htab-manual" onclick="switchHistTab('manual')" style="padding:7px 18px;background:transparent;border:none;color:var(--text2);font-size:12px;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .15s">Manual</button>
         </div>
       </div>
-      <!-- Filters -->
-      <div class="filter-row" style="margin-bottom:16px">
-        <div style="display:flex;align-items:center;gap:6px">
-          <input type="date" id="hist-from" onchange="renderHistory()" style="background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);padding:7px 10px;font-size:12px;font-family:'IBM Plex Mono',monospace"/>
-          <span style="color:var(--text3);font-size:12px">—</span>
-          <input type="date" id="hist-to" onchange="renderHistory()" style="background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);padding:7px 10px;font-size:12px;font-family:'IBM Plex Mono',monospace"/>
-          <button onclick="resetHistDateRange()" style="padding:7px 10px;background:transparent;border:1px solid var(--border2);border-radius:var(--radius);color:var(--text2);font-size:11px;cursor:pointer;font-family:'IBM Plex Mono',monospace">รีเซ็ต</button>
-        </div>
-        <select id="hist-fp" onchange="renderHistory()"><option value="">ทุกคู่เงิน</option></select>
-        <select id="hist-fs" onchange="renderHistory()"><option value="">ทุกทิศทาง</option><option value="BUY">Buy</option><option value="SELL">Sell</option></select>
-        <select id="hist-fstr" onchange="renderHistory()"><option value="">ทุกกลยุทธ์</option></select>
-        <select id="hist-fses" onchange="renderHistory()"><option value="">ทุก Session</option><option>Asia</option><option>London</option><option>New York</option><option>Overlap</option></select>
-        <select id="hist-facct" onchange="renderHistory()"><option value="">ทุกบัญชี</option></select>
-      </div>
-      <!-- Table -->
-      <div class="table-wrap">
-        <table>
-          <thead><tr>
-            <th>วันที่</th><th>Pair</th><th>Side</th>
-            <th>Entry</th><th>Exit</th><th>Lot</th><th>จุด</th>
-            <th>P&L ($)</th><th>R:R</th><th>กลยุทธ์</th><th>Session</th><th>รูป</th><th></th>
-          </tr></thead>
-          <tbody id="hist-tbody"></tbody>
-        </table>
-        <div id="hist-empty" class="empty-state" style="display:none">ยังไม่มีข้อมูล</div>
-        <div class="pagination" id="hist-pagination" style="display:none">
-          <button class="pg-btn" id="hist-prev" onclick="changeHistPage(-1)">← ก่อนหน้า</button>
-          <span class="pg-info" id="hist-info"></span>
-          <button class="pg-btn" id="hist-next" onclick="changeHistPage(1)">ถัดไป →</button>
-        </div>
-      </div>
-    </div>
 
-    <div id="page-table" class="page">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px">
-        <div class="page-title" style="margin-bottom:0">ตารางข้อมูล</div>
-        <button id="btn-add-form" onclick="toggleAddForm()" style="padding:8px 16px;background:var(--accent);border:none;border-radius:var(--radius);color:#fff;font-size:13px;cursor:pointer">+ เพิ่ม Trade</button>
-      </div>
-      <!-- Add Trade Form -->
-      <div id="add-form-section" style="display:none;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-lg);padding:24px;margin-bottom:24px">
-        <div class="form-grid">
-          <div class="fg"><label>วันที่</label><input type="date" id="f-date"/></div>
-          <div class="fg"><label>คู่เงิน</label><select id="f-sym"></select></div>
-          <div class="fg"><label>ทิศทาง</label>
-            <div class="side-row">
-              <button class="side-btn buy on" id="btn-buy" onclick="setSide('BUY')">↑ Buy</button>
-              <button class="side-btn sell" id="btn-sell" onclick="setSide('SELL')">↓ Sell</button>
+      <!-- ── MT5 Panel ── -->
+      <div id="hist-mt5-panel">
+        <!-- Stats -->
+        <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:14px">
+          <div class="stat-card"><div class="stat-label">Win Rate</div><div class="stat-val" id="hist-wr">—</div></div>
+          <div class="stat-card"><div class="stat-label">P&L รวม ($)</div><div class="stat-val" id="hist-pnl">—</div></div>
+          <div class="stat-card"><div class="stat-label">Trade ทั้งหมด</div><div class="stat-val" id="hist-total">—</div></div>
+          <div class="stat-card"><div class="stat-label">ชนะ / แพ้</div><div class="stat-val" id="hist-wl">—</div></div>
+        </div>
+        <!-- Session Breakdown -->
+        <div id="hist-session-breakdown" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+          <div style="background:var(--green-bg);border:1px solid rgba(0,217,126,.15);border-radius:var(--radius-lg);padding:14px">
+            <div style="font-size:11px;color:var(--green);font-family:'IBM Plex Mono',monospace;font-weight:500;margin-bottom:10px;text-align:center">BUY</div>
+            <div class="stats-grid" style="grid-template-columns:1fr 1fr;gap:8px">
+              <div class="stat-card"><div class="stat-label">Win Rate</div><div class="stat-val" id="hist-wr-buy">—</div><div class="stat-sub" id="hist-wl-buy">—</div></div>
+              <div class="stat-card"><div class="stat-label">P&L ($)</div><div class="stat-val" id="hist-pnl-buy">—</div></div>
+              <div class="stat-card"><div class="stat-label">Highest Win</div><div class="stat-val pos" id="hist-win-buy">—</div></div>
+              <div class="stat-card"><div class="stat-label">Highest Loss</div><div class="stat-val neg" id="hist-loss-buy">—</div></div>
             </div>
           </div>
-          <div class="fg"><label>Entry Price</label><input type="number" id="f-en" placeholder="0.00000" step="any" oninput="autoCalc()"/></div>
-          <div class="fg"><label>Take Profit</label><input type="number" id="f-ex" placeholder="0.00000" step="any" oninput="autoCalc()"/></div>
-          <div class="fg"><label>จำนวนไม้</label><input type="number" id="f-entries" placeholder="เช่น 6" min="1" step="1" oninput="updateLotCalc()"/></div>
-          <div class="fg"><label>Lot ต่อไม้</label><input type="number" id="f-lot-per" placeholder="0.01" step="any" oninput="updateLotCalc()"/>
-            <div id="avg-entry-display" style="font-size:11px;color:var(--text2);font-family:'IBM Plex Mono',monospace;margin-top:4px"></div>
-          </div>
-          <div class="fg"><label>Stop Loss</label><input type="number" id="f-sl" placeholder="0.00000" step="any" oninput="autoCalc()"/></div>
-          <div class="fg"><label>R:R Ratio (อัตโนมัติ)</label><input type="text" id="f-rr" placeholder="—" readonly/></div>
-          <div class="fg"><label>กลยุทธ์</label><select id="f-str"></select></div>
-          <div class="fg"><label>Session</label><select id="f-session">
-            <option value="">— เลือก —</option>
-            <option value="Asia">Asia</option>
-            <option value="London">London</option>
-            <option value="New York">New York</option>
-            <option value="Overlap">Overlap</option>
-          </select></div>
-          <div class="fg"><label>กำไร / ขาดทุน ($)</label><input type="number" id="f-pnl" placeholder="เช่น 12.50 หรือ -8.00" step="any"/></div>
-          <div class="fg full">
-            <label>รูป Chart</label>
-            <div class="upload-area" onclick="document.getElementById('img-in').click()">
-              <div style="font-size:24px;margin-bottom:6px">↑</div>
-              คลิกเพื่อเลือกรูป หรือลากวาง
+          <div style="background:var(--red-bg);border:1px solid rgba(255,77,106,.15);border-radius:var(--radius-lg);padding:14px">
+            <div style="font-size:11px;color:var(--red);font-family:'IBM Plex Mono',monospace;font-weight:500;margin-bottom:10px;text-align:center">SELL</div>
+            <div class="stats-grid" style="grid-template-columns:1fr 1fr;gap:8px">
+              <div class="stat-card"><div class="stat-label">Win Rate</div><div class="stat-val" id="hist-wr-sell">—</div><div class="stat-sub" id="hist-wl-sell">—</div></div>
+              <div class="stat-card"><div class="stat-label">P&L ($)</div><div class="stat-val" id="hist-pnl-sell">—</div></div>
+              <div class="stat-card"><div class="stat-label">Highest Win</div><div class="stat-val pos" id="hist-win-sell">—</div></div>
+              <div class="stat-card"><div class="stat-label">Highest Loss</div><div class="stat-val neg" id="hist-loss-sell">—</div></div>
             </div>
-            <input type="file" id="img-in" accept="image/*" multiple style="display:none" onchange="handleImgs(this)"/>
-            <div class="preview-row" id="preview-row"></div>
           </div>
-          <div class="fg full"><label>หมายเหตุ</label><textarea id="f-note" placeholder="เหตุผล, สิ่งที่เรียนรู้..."></textarea></div>
-          <div class="fg full"><button class="save-btn" id="savebtn" onclick="addTrade()">บันทึก Trade</button></div>
+        </div>
+        <!-- Filters -->
+        <div class="filter-row" style="margin-bottom:16px">
+          <div style="display:flex;align-items:center;gap:6px">
+            <input type="date" id="hist-from" onchange="renderHistory()" style="background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);padding:7px 10px;font-size:12px;font-family:'IBM Plex Mono',monospace"/>
+            <span style="color:var(--text3);font-size:12px">—</span>
+            <input type="date" id="hist-to" onchange="renderHistory()" style="background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);padding:7px 10px;font-size:12px;font-family:'IBM Plex Mono',monospace"/>
+            <button onclick="resetHistDateRange()" style="padding:7px 10px;background:transparent;border:1px solid var(--border2);border-radius:var(--radius);color:var(--text2);font-size:11px;cursor:pointer;font-family:'IBM Plex Mono',monospace">รีเซ็ต</button>
+          </div>
+          <select id="hist-fp" onchange="renderHistory()"><option value="">ทุกคู่เงิน</option></select>
+          <select id="hist-fs" onchange="renderHistory()"><option value="">ทุกทิศทาง</option><option value="BUY">Buy</option><option value="SELL">Sell</option></select>
+          <select id="hist-fstr" onchange="renderHistory()"><option value="">ทุกกลยุทธ์</option></select>
+          <select id="hist-fses" onchange="renderHistory()"><option value="">ทุก Session</option><option>Asia</option><option>London</option><option>New York</option><option>Overlap</option></select>
+          <select id="hist-facct" onchange="renderHistory()"><option value="">ทุกบัญชี</option></select>
+        </div>
+        <!-- Table -->
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th>วันที่</th><th>Pair</th><th>Side</th>
+              <th>Entry</th><th>Exit</th><th>Lot</th><th>จุด</th>
+              <th>P&L ($)</th><th>R:R</th><th>กลยุทธ์</th><th>Session</th><th>รูป</th><th></th>
+            </tr></thead>
+            <tbody id="hist-tbody"></tbody>
+          </table>
+          <div id="hist-empty" class="empty-state" style="display:none">ยังไม่มีข้อมูล</div>
+          <div class="pagination" id="hist-pagination" style="display:none">
+            <button class="pg-btn" id="hist-prev" onclick="changeHistPage(-1)">← ก่อนหน้า</button>
+            <span class="pg-info" id="hist-info"></span>
+            <button class="pg-btn" id="hist-next" onclick="changeHistPage(1)">ถัดไป →</button>
+          </div>
         </div>
       </div>
-      <!-- Table -->
-      <div class="filter-row">
-        <input type="text" id="srch" placeholder="ค้นหา pair..." oninput="renderTable()"/>
-        <select id="fs" onchange="renderTable()"><option value="">ทุกทิศทาง</option><option value="BUY">Buy</option><option value="SELL">Sell</option></select>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr>
-            <th>วันที่</th><th>Pair</th><th>Side</th>
-            <th>Entry</th><th>Exit</th><th>Lot</th><th>กำไร/ขาดทุน</th><th>R:R</th><th>กลยุทธ์</th><th>Session</th><th>รูป</th><th></th>
-          </tr></thead>
-          <tbody id="tbody"></tbody>
-        </table>
-        <div id="empty" class="empty-state" style="display:none">ยังไม่มีข้อมูล — เริ่มบันทึก Trade แรกได้เลย</div>
-        <div class="pagination" id="pagination" style="display:none">
-          <button class="pg-btn" id="pg-prev" onclick="changePage(-1)">← ก่อนหน้า</button>
-          <span class="pg-info" id="pg-info"></span>
-          <button class="pg-btn" id="pg-next" onclick="changePage(1)">ถัดไป →</button>
+
+      <!-- ── Manual Panel ── -->
+      <div id="hist-manual-panel" style="display:none">
+        <div style="display:flex;align-items:center;justify-content:flex-end;margin-bottom:20px">
+          <button id="btn-add-form" onclick="toggleAddForm()" style="padding:8px 16px;background:var(--accent);border:none;border-radius:var(--radius);color:#fff;font-size:13px;cursor:pointer">+ เพิ่ม Trade</button>
+        </div>
+        <!-- Add Trade Form -->
+        <div id="add-form-section" style="display:none;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-lg);padding:24px;margin-bottom:24px">
+          <div class="form-grid">
+            <div class="fg"><label>วันที่</label><input type="date" id="f-date"/></div>
+            <div class="fg"><label>คู่เงิน</label><select id="f-sym"></select></div>
+            <div class="fg"><label>ทิศทาง</label>
+              <div class="side-row">
+                <button class="side-btn buy on" id="btn-buy" onclick="setSide('BUY')">↑ Buy</button>
+                <button class="side-btn sell" id="btn-sell" onclick="setSide('SELL')">↓ Sell</button>
+              </div>
+            </div>
+            <div class="fg"><label>Entry Price</label><input type="number" id="f-en" placeholder="0.00000" step="any" oninput="autoCalc()"/></div>
+            <div class="fg"><label>Take Profit</label><input type="number" id="f-ex" placeholder="0.00000" step="any" oninput="autoCalc()"/></div>
+            <div class="fg"><label>จำนวนไม้</label><input type="number" id="f-entries" placeholder="เช่น 6" min="1" step="1" oninput="updateLotCalc()"/></div>
+            <div class="fg"><label>Lot ต่อไม้</label><input type="number" id="f-lot-per" placeholder="0.01" step="any" oninput="updateLotCalc()"/>
+              <div id="avg-entry-display" style="font-size:11px;color:var(--text2);font-family:'IBM Plex Mono',monospace;margin-top:4px"></div>
+            </div>
+            <div class="fg"><label>Stop Loss</label><input type="number" id="f-sl" placeholder="0.00000" step="any" oninput="autoCalc()"/></div>
+            <div class="fg"><label>R:R Ratio (อัตโนมัติ)</label><input type="text" id="f-rr" placeholder="—" readonly/></div>
+            <div class="fg"><label>กลยุทธ์</label><select id="f-str"></select></div>
+            <div class="fg"><label>Session</label><select id="f-session">
+              <option value="">— เลือก —</option>
+              <option value="Asia">Asia</option>
+              <option value="London">London</option>
+              <option value="New York">New York</option>
+              <option value="Overlap">Overlap</option>
+            </select></div>
+            <div class="fg"><label>กำไร / ขาดทุน ($)</label><input type="number" id="f-pnl" placeholder="เช่น 12.50 หรือ -8.00" step="any"/></div>
+            <div class="fg full">
+              <label>รูป Chart</label>
+              <div class="upload-area" onclick="document.getElementById('img-in').click()">
+                <div style="font-size:24px;margin-bottom:6px">↑</div>
+                คลิกเพื่อเลือกรูป หรือลากวาง
+              </div>
+              <input type="file" id="img-in" accept="image/*" multiple style="display:none" onchange="handleImgs(this)"/>
+              <div class="preview-row" id="preview-row"></div>
+            </div>
+            <div class="fg full"><label>หมายเหตุ</label><textarea id="f-note" placeholder="เหตุผล, สิ่งที่เรียนรู้..."></textarea></div>
+            <div class="fg full"><button class="save-btn" id="savebtn" onclick="addTrade()">บันทึก Trade</button></div>
+          </div>
+        </div>
+        <!-- Table -->
+        <div class="filter-row">
+          <input type="text" id="srch" placeholder="ค้นหา pair..." oninput="renderTable()"/>
+          <select id="fs" onchange="renderTable()"><option value="">ทุกทิศทาง</option><option value="BUY">Buy</option><option value="SELL">Sell</option></select>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th>วันที่</th><th>Pair</th><th>Side</th>
+              <th>Entry</th><th>Exit</th><th>Lot</th><th>กำไร/ขาดทุน</th><th>R:R</th><th>กลยุทธ์</th><th>Session</th><th>รูป</th><th></th>
+            </tr></thead>
+            <tbody id="tbody"></tbody>
+          </table>
+          <div id="empty" class="empty-state" style="display:none">ยังไม่มีข้อมูล — เริ่มบันทึก Trade แรกได้เลย</div>
+          <div class="pagination" id="pagination" style="display:none">
+            <button class="pg-btn" id="pg-prev" onclick="changePage(-1)">← ก่อนหน้า</button>
+            <span class="pg-info" id="pg-info"></span>
+            <button class="pg-btn" id="pg-next" onclick="changePage(1)">ถัดไป →</button>
+          </div>
         </div>
       </div>
     </div>
@@ -568,6 +579,40 @@ tr:hover td{background:rgba(255,255,255,.02)}
       </div>
       <button class="save-btn settings-save-btn" onclick="saveSettings()">บันทึกการตั้งค่า</button>
     </div>
+
+    <div id="page-calendar" class="page">
+      <div class="page-title" style="margin-bottom:20px">ปฏิทิน</div>
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden">
+        <!-- Calendar Header -->
+        <div style="display:flex;align-items:center;padding:11px 16px;border-bottom:1px solid var(--border)">
+          <button onclick="changeCalendarMonth(-1)" style="background:none;border:1px solid var(--border2);border-radius:var(--radius);color:var(--text2);width:28px;height:28px;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;line-height:1">&#8249;</button>
+          <span id="cal-month-title" style="margin:0 12px;font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:500;min-width:160px;text-align:center">—</span>
+          <button onclick="changeCalendarMonth(1)" style="background:none;border:1px solid var(--border2);border-radius:var(--radius);color:var(--text2);width:28px;height:28px;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;line-height:1">&#8250;</button>
+          <div style="margin-left:auto;display:flex;align-items:center;gap:22px">
+            <div style="display:flex;align-items:baseline;gap:5px">
+              <span style="font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace">P/L:</span>
+              <span id="cal-total-pnl" style="font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:500;color:var(--text2)">—</span>
+            </div>
+            <div style="display:flex;align-items:baseline;gap:5px">
+              <span style="font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace">Trades:</span>
+              <span id="cal-total-trades" style="font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:500;color:var(--text)">0</span>
+            </div>
+          </div>
+        </div>
+        <!-- Day Headers -->
+        <div style="display:grid;grid-template-columns:repeat(5,1fr) 110px;border-bottom:1px solid var(--border)">
+          <div style="padding:7px 10px;font-size:10px;color:var(--text2);font-family:'IBM Plex Mono',monospace;text-align:center;border-right:1px solid var(--border);letter-spacing:.05em">Mon</div>
+          <div style="padding:7px 10px;font-size:10px;color:var(--text2);font-family:'IBM Plex Mono',monospace;text-align:center;border-right:1px solid var(--border);letter-spacing:.05em">Tue</div>
+          <div style="padding:7px 10px;font-size:10px;color:var(--text2);font-family:'IBM Plex Mono',monospace;text-align:center;border-right:1px solid var(--border);letter-spacing:.05em">Wed</div>
+          <div style="padding:7px 10px;font-size:10px;color:var(--text2);font-family:'IBM Plex Mono',monospace;text-align:center;border-right:1px solid var(--border);letter-spacing:.05em">Thu</div>
+          <div style="padding:7px 10px;font-size:10px;color:var(--text2);font-family:'IBM Plex Mono',monospace;text-align:center;border-right:1px solid var(--border);letter-spacing:.05em">Fri</div>
+          <div style="padding:7px 10px;font-size:10px;color:var(--accent);font-family:'IBM Plex Mono',monospace;text-align:center;letter-spacing:.05em">Summary</div>
+        </div>
+        <!-- Calendar Grid (built by renderCalendar) -->
+        <div id="cal-grid" style="display:grid;grid-template-columns:repeat(5,1fr) 110px"></div>
+      </div>
+    </div>
+
   </main>
 </div>
 
@@ -812,6 +857,8 @@ let trades = [], tradeSide = 'BUY', pending = [], chartInst = null;
 let editId = null, editSide = 'BUY';
 let editPending = [], editExistingImgs = [];
 let detailId = null, detailImgs = [], detailIdx = 0;
+let calendarYear = new Date().getFullYear(), calendarMonth = new Date().getMonth();
+let histTab = 'mt5';
 let settings = {
   pairs: ['EURUSD','GBPUSD','USDJPY','USDCHF','AUDUSD','NZDUSD','USDCAD','GBPJPY','EURJPY','EURGBP','XAUUSD','XAGUSD'],
   strategies: ['SMC','Trendline','Hybrid Trade'],
@@ -922,10 +969,10 @@ async function loadAll() {
     // render หน้าที่กำลังแสดงอยู่หลังโหลดเสร็จ
     const activePage = localStorage.getItem('lastPage') || 'add';
     if (activePage === 'overview') renderOverview();
-    if (activePage === 'history') renderHistory();
-    if (activePage === 'table') renderTable();
+    if (activePage === 'history') { if (histTab === 'mt5') renderHistory(); else renderTable(); }
     if (activePage === 'missed') renderMissed();
     if (activePage === 'account') renderAccount();
+    if (activePage === 'calendar') renderCalendar();
     if (activePage === 'settings') { renderPairTags(); renderStrategyTags(); renderAccountTags(); }
   } catch (e) {
     setS('err', 'connection error');
@@ -1472,13 +1519,13 @@ function showPage(n) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
   document.getElementById('page-' + n).classList.add('active');
-  document.querySelectorAll('.nav-item')[{ overview: 0, history: 1, table: 2, missed: 3, account: 4, settings: 5 }[n]].classList.add('active');
+  document.querySelectorAll('.nav-item')[{ overview: 0, history: 1, calendar: 2, missed: 3, account: 4, settings: 5 }[n]].classList.add('active');
   localStorage.setItem('lastPage', n);
   if (n === 'overview') renderOverview();
-  if (n === 'history') renderHistory();
-  if (n === 'table') renderTable();
+  if (n === 'history') { if (histTab === 'mt5') renderHistory(); else renderTable(); }
   if (n === 'missed') renderMissed();
   if (n === 'account') renderAccount();
+  if (n === 'calendar') renderCalendar();
   if (n === 'settings') {
     renderPairTags(); renderStrategyTags(); renderAccountTags();
     const bt = localStorage.getItem('fx_journal_backup_time');
@@ -2095,7 +2142,7 @@ loadTheme();
 document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
 document.getElementById('new-pair').addEventListener('keydown', e => { if (e.key === 'Enter') addPair(); });
 document.getElementById('new-strategy').addEventListener('keydown', e => { if (e.key === 'Enter') addStrategy(); });
-const validPages = ['overview','table','history','missed','account','settings'];
+const validPages = ['overview','history','calendar','missed','account','settings'];
 const _lp = localStorage.getItem('lastPage');
 const lastPage = IS_VIEW ? 'overview' : (validPages.includes(_lp) ? _lp : 'table');
 showPage(lastPage);
@@ -2160,6 +2207,120 @@ function autoBackup() {
     localStorage.setItem('fx_journal_backup_time', new Date().toISOString());
   } catch(e) { console.warn('auto backup failed', e); }
 }
+
+
+// ---- History Tabs ----
+function switchHistTab(t) {
+  histTab = t;
+  document.getElementById('hist-mt5-panel').style.display = t === 'mt5' ? '' : 'none';
+  document.getElementById('hist-manual-panel').style.display = t === 'manual' ? '' : 'none';
+  const btnMt5 = document.getElementById('htab-mt5');
+  const btnManual = document.getElementById('htab-manual');
+  if (btnMt5) { btnMt5.style.background = t === 'mt5' ? 'var(--accent)' : 'transparent'; btnMt5.style.color = t === 'mt5' ? '#fff' : 'var(--text2)'; }
+  if (btnManual) { btnManual.style.background = t === 'manual' ? 'var(--accent)' : 'transparent'; btnManual.style.color = t === 'manual' ? '#fff' : 'var(--text2)'; }
+  if (t === 'mt5') renderHistory();
+  if (t === 'manual') renderTable();
+}
+
+// ---- Calendar ----
+function changeCalendarMonth(dir) {
+  calendarMonth += dir;
+  if (calendarMonth > 11) { calendarMonth = 0; calendarYear++; }
+  if (calendarMonth < 0) { calendarMonth = 11; calendarYear--; }
+  renderCalendar();
+}
+
+function calFmtPnl(val) {
+  const abs = Math.abs(val);
+  const str = abs >= 1000 ? (abs / 1000).toFixed(1) + 'K' : abs.toFixed(1);
+  return val < 0 ? '-' + str : str;
+}
+
+function renderCalendar() {
+  const year = calendarYear, month = calendarMonth;
+  const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('cal-month-title').textContent = MONTHS[month] + '-' + year;
+
+  const monthStr = year + '-' + String(month + 1).padStart(2, '0');
+  const mTrades = trades.filter(t => t.date && t.date.startsWith(monthStr) && t.pnl !== null && t.pnl !== '');
+  const totalPnl = mTrades.reduce((a, t) => a + parseFloat(t.pnl || 0), 0);
+  const totalCount = mTrades.length;
+
+  const pnlEl = document.getElementById('cal-total-pnl');
+  pnlEl.textContent = calFmtPnl(totalPnl);
+  pnlEl.style.color = totalPnl > 0 ? 'var(--green)' : totalPnl < 0 ? 'var(--red)' : 'var(--text2)';
+  document.getElementById('cal-total-trades').textContent = totalCount;
+
+  // Build day map: 'YYYY-MM-DD' → { count, pnl }
+  const dayMap = {};
+  mTrades.forEach(t => {
+    if (!t.date) return;
+    if (!dayMap[t.date]) dayMap[t.date] = { count: 0, pnl: 0 };
+    dayMap[t.date].count++;
+    dayMap[t.date].pnl += parseFloat(t.pnl || 0);
+  });
+
+  const firstDay = new Date(year, month, 1);
+  const lastDay  = new Date(year, month + 1, 0);
+
+  // Find Monday of the week containing the 1st
+  let startMonday = new Date(firstDay);
+  const dow = startMonday.getDay();
+  startMonday.setDate(startMonday.getDate() - (dow === 0 ? 6 : dow - 1));
+
+  const grid = document.getElementById('cal-grid');
+  grid.innerHTML = '';
+
+  let cur = new Date(startMonday);
+
+  while (cur <= lastDay) {
+    let wPnl = 0, wCount = 0;
+
+    // 5 weekday cells (Mon–Fri)
+    for (let d = 0; d < 5; d++) {
+      const ds = cur.getFullYear() + '-' + String(cur.getMonth() + 1).padStart(2, '0') + '-' + String(cur.getDate()).padStart(2, '0');
+      const inMonth = cur.getMonth() === month;
+      const data = dayMap[ds] || null;
+
+      if (inMonth && data) { wPnl += data.pnl; wCount += data.count; }
+
+      const cell = document.createElement('div');
+      let bg = 'transparent';
+      if (inMonth && data) bg = data.pnl > 0 ? 'rgba(0,105,55,0.38)' : 'rgba(115,0,30,0.4)';
+
+      cell.style.cssText = 'background:' + bg + ';border-right:1px solid var(--border);border-bottom:1px solid var(--border);padding:8px 10px;min-height:76px;box-sizing:border-box';
+
+      const dayColor = inMonth ? 'var(--text2)' : 'var(--text3)';
+      let html = '<div style="font-size:11px;color:' + dayColor + ';font-family:\'IBM Plex Mono\',monospace">' + cur.getDate() + '</div>';
+
+      if (inMonth && data) {
+        const pc = data.pnl >= 0 ? 'var(--green)' : 'var(--red)';
+        html += '<div style="text-align:center;padding-top:6px">'
+          + '<div style="font-size:13px;color:' + pc + ';font-family:\'IBM Plex Mono\',monospace;font-weight:500">' + data.count + '</div>'
+          + '<div style="font-size:13px;color:' + pc + ';font-family:\'IBM Plex Mono\',monospace;font-weight:500">' + calFmtPnl(data.pnl) + '</div>'
+          + '</div>';
+      }
+
+      cell.innerHTML = html;
+      grid.appendChild(cell);
+      cur.setDate(cur.getDate() + 1);
+    }
+
+    // Skip Sat + Sun → jump to next Monday
+    cur.setDate(cur.getDate() + 2);
+
+    // Weekly summary cell
+    const sumCell = document.createElement('div');
+    sumCell.style.cssText = 'border-bottom:1px solid var(--border);padding:8px 10px;min-height:76px;display:flex;flex-direction:column;align-items:flex-end;justify-content:flex-end;background:var(--bg3);box-sizing:border-box';
+    if (wCount > 0) {
+      const wc = wPnl >= 0 ? 'var(--green)' : 'var(--red)';
+      sumCell.innerHTML = '<div style="font-size:10px;color:var(--text2);margin-bottom:3px">' + wCount + ' trades</div>'
+        + '<div style="font-size:13px;font-weight:500;color:' + wc + ';font-family:\'IBM Plex Mono\',monospace">' + calFmtPnl(wPnl) + '</div>';
+    }
+    grid.appendChild(sumCell);
+  }
+}
+
 
 
 </script>
