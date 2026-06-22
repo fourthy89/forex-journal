@@ -2233,7 +2233,7 @@ function changeCalendarMonth(dir) {
 function calFmtPnl(val) {
   const abs = Math.abs(val);
   const str = abs >= 1000 ? (abs / 1000).toFixed(1) + 'K' : abs.toFixed(1);
-  return val < 0 ? '-' + str : str;
+  return (val < 0 ? '-' : '') + str + '$';
 }
 
 function renderCalendar() {
@@ -2288,7 +2288,7 @@ function renderCalendar() {
       let bg = 'transparent';
       if (inMonth && data) bg = data.pnl > 0 ? 'rgba(0,105,55,0.38)' : 'rgba(115,0,30,0.4)';
 
-      cell.style.cssText = 'background:' + bg + ';border-right:1px solid var(--border);border-bottom:1px solid var(--border);padding:8px 10px;min-height:76px;box-sizing:border-box';
+      cell.style.cssText = 'background:' + bg + ';border-right:1px solid var(--border);border-bottom:1px solid var(--border);padding:8px 10px;min-height:62px;box-sizing:border-box';
 
       const dayColor = inMonth ? 'var(--text2)' : 'var(--text3)';
       let html = '<div style="font-size:11px;color:' + dayColor + ';font-family:\'IBM Plex Mono\',monospace">' + cur.getDate() + '</div>';
@@ -2311,7 +2311,7 @@ function renderCalendar() {
 
     // Weekly summary cell
     const sumCell = document.createElement('div');
-    sumCell.style.cssText = 'border-bottom:1px solid var(--border);padding:8px 10px;min-height:76px;display:flex;flex-direction:column;align-items:flex-end;justify-content:flex-end;background:var(--bg3);box-sizing:border-box';
+    sumCell.style.cssText = 'border-bottom:1px solid var(--border);padding:8px 10px;min-height:62px;display:flex;flex-direction:column;align-items:flex-end;justify-content:flex-end;background:var(--bg3);box-sizing:border-box';
     if (wCount > 0) {
       const wc = wPnl >= 0 ? 'var(--green)' : 'var(--red)';
       sumCell.innerHTML = '<div style="font-size:10px;color:var(--text2);margin-bottom:3px">' + wCount + ' trades</div>'
