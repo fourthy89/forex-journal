@@ -2286,19 +2286,16 @@ function renderCalendar() {
 
       const cell = document.createElement('div');
       let bg = 'transparent';
-      if (inMonth && data) bg = data.pnl > 0 ? 'rgba(0,105,55,0.38)' : 'rgba(115,0,30,0.4)';
+      if (inMonth && data) bg = data.pnl > 0 ? 'rgba(0,105,55,0.22)' : 'rgba(115,0,30,0.28)';
 
-      cell.style.cssText = 'background:' + bg + ';border-right:1px solid var(--border);border-bottom:1px solid var(--border);padding:8px 10px;min-height:62px;box-sizing:border-box';
+      cell.style.cssText = 'background:' + bg + ';border-right:1px solid var(--border);border-bottom:1px solid var(--border);padding:6px 8px;min-height:54px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between';
 
-      const dayColor = inMonth ? 'var(--text2)' : 'var(--text3)';
-      let html = '<div style="font-size:11px;color:' + dayColor + ';font-family:\'IBM Plex Mono\',monospace">' + cur.getDate() + '</div>';
+      const dayColor = inMonth ? 'var(--text3)' : 'var(--text3)';
+      let html = '<div style="font-size:10px;color:' + dayColor + ';font-family:\'IBM Plex Mono\',monospace">' + cur.getDate() + '</div>';
 
       if (inMonth && data) {
         const pc = data.pnl >= 0 ? 'var(--green)' : 'var(--red)';
-        html += '<div style="text-align:center;padding-top:6px">'
-          + '<div style="font-size:13px;color:' + pc + ';font-family:\'IBM Plex Mono\',monospace;font-weight:500">' + data.count + '</div>'
-          + '<div style="font-size:13px;color:' + pc + ';font-family:\'IBM Plex Mono\',monospace;font-weight:500">' + calFmtPnl(data.pnl) + '</div>'
-          + '</div>';
+        html += '<div style="font-size:12px;font-weight:500;color:' + pc + ';font-family:\'IBM Plex Mono\',monospace;text-align:center;padding-bottom:2px">' + calFmtPnl(data.pnl) + '</div>';
       }
 
       cell.innerHTML = html;
@@ -2311,11 +2308,11 @@ function renderCalendar() {
 
     // Weekly summary cell
     const sumCell = document.createElement('div');
-    sumCell.style.cssText = 'border-bottom:1px solid var(--border);padding:8px 10px;min-height:62px;display:flex;flex-direction:column;align-items:flex-end;justify-content:flex-end;background:var(--bg3);box-sizing:border-box';
+    sumCell.style.cssText = 'border-bottom:1px solid var(--border);padding:6px 8px;min-height:54px;display:flex;flex-direction:column;align-items:flex-end;justify-content:flex-end;background:var(--bg3);box-sizing:border-box';
     if (wCount > 0) {
       const wc = wPnl >= 0 ? 'var(--green)' : 'var(--red)';
-      sumCell.innerHTML = '<div style="font-size:10px;color:var(--text2);margin-bottom:3px">' + wCount + ' trades</div>'
-        + '<div style="font-size:13px;font-weight:500;color:' + wc + ';font-family:\'IBM Plex Mono\',monospace">' + calFmtPnl(wPnl) + '</div>';
+      sumCell.innerHTML = '<div style="font-size:9px;color:var(--text3);margin-bottom:2px;font-family:\'IBM Plex Mono\',monospace">' + wCount + ' trades</div>'
+        + '<div style="font-size:12px;font-weight:500;color:' + wc + ';font-family:\'IBM Plex Mono\',monospace">' + calFmtPnl(wPnl) + '</div>';
     }
     grid.appendChild(sumCell);
   }
