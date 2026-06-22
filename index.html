@@ -2861,7 +2861,7 @@ function renderAnalysis() {
     </div>
 
     <div class="overview-section-title" style="margin-bottom:12px">${T('an.rrsect')}</div>
-    <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:24px">
+    <div class="stats-grid" style="grid-template-columns:repeat(2,1fr);margin-bottom:24px">
       <div class="stat-card">
         <div class="stat-label">${T('an.rractual')}</div>
         <div class="stat-val" style="color:${avgRRA!==null?(avgRRA>=1?'var(--green)':'var(--red)'):'var(--text)'}">${avgRRA!==null ? '1:'+Math.abs(avgRRA).toFixed(2) : '—'}</div>
@@ -2871,11 +2871,6 @@ function renderAnalysis() {
         <div class="stat-label">${T('an.rrplan')}</div>
         <div class="stat-val">${avgRRP!==null ? '1:'+avgRRP.toFixed(2) : '—'}</div>
         <div class="stat-sub">${rrPlanned.length} ${T('an.fromrr')}</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">${T('an.rrcomp')}</div>
-        <div class="stat-val" style="color:${avgRRA!==null&&avgRRP!==null?gc(avgRRA-avgRRP):'var(--text)'}">${avgRRA!==null&&avgRRP!==null?(avgRRA>=avgRRP?T('an.metplan'):T('an.belowplan')):'—'}</div>
-        <div class="stat-sub">${avgRRA!==null&&avgRRP!==null?T('an.actual')+' '+(avgRRA>=0?'1:'+Math.abs(avgRRA).toFixed(2):T('an.loss'))+' / '+T('an.plan')+' 1:'+avgRRP.toFixed(2):T('an.needsl')}</div>
       </div>
     </div>
 
