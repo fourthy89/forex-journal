@@ -207,8 +207,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .sel-bar{position:fixed;top:16px;right:24px;background:var(--bg3);border:1px solid var(--border2);border-radius:40px;padding:10px 20px;display:flex;align-items:center;gap:14px;z-index:500;font-size:13px;box-shadow:0 4px 24px rgba(0,0,0,.5);transition:opacity .2s,transform .2s}
 .sel-bar.hidden{opacity:0;pointer-events:none;transform:translateY(-8px)}
 .trade-cb{width:14px;height:14px;cursor:pointer;accent-color:var(--accent);flex-shrink:0;vertical-align:middle}
-.pool-row{background:rgba(79,142,255,0.07)!important}
-.pool-row:hover td{background:rgba(79,142,255,0.11)!important}
+
 </style>
 </head>
 <body>
@@ -1958,7 +1957,7 @@ function renderHistory() {
       imgCell = `<div class="img-cell">${src ? `<img class="cell-thumb" src="${src}" onclick="openDetail(${t.id})">` : ''}
         <button class="zoom-btn" onclick="openDetail(${t.id})">⊕ ${imgs.length > 1 ? imgs.length + ' รูป' : 'ดูรูป'}</button></div>`;
     }
-    return `<tr data-trade-id="${t.id}"${statsPool.includes(t.id) ? ' class="pool-row"' : ''}>
+    return `<tr data-trade-id="${t.id}">
       <td style="padding:9px 8px;width:36px" onclick="event.stopPropagation()">${statsPool.includes(t.id) ? '<input type="checkbox" class="trade-cb" checked disabled style="opacity:.55;cursor:not-allowed">' : '<input type="checkbox" class="trade-cb" onchange="toggleTradeSel('+t.id+',this.checked)" '+(selectedForAnalysis.includes(t.id)?'checked':'')+'>'}</td>
       <td class="mono" style="font-size:11px;cursor:pointer;color:var(--accent)" onclick="openDetail(${t.id})">${t.date}</td>
       <td style="font-weight:500;cursor:pointer" onclick="openDetail(${t.id})">${t.symbol}</td>
@@ -2690,7 +2689,6 @@ function insertToStats() {
   newIds.forEach(id => {
     const row = document.querySelector('#hist-tbody tr[data-trade-id="' + id + '"]');
     if (!row) return;
-    row.classList.add('pool-row');
     const td = row.querySelector('td:first-child');
     if (td) td.innerHTML = '<input type="checkbox" class="trade-cb" checked disabled style="opacity:.55;cursor:not-allowed">';
   });
@@ -2707,7 +2705,6 @@ function removeFromPool(id) {
   // อัปเดต DOM row ใน history ทันที
   const row = document.querySelector('#hist-tbody tr[data-trade-id="' + id + '"]');
   if (row) {
-    row.classList.remove('pool-row');
     const td = row.querySelector('td:first-child');
     if (td) td.innerHTML = '<input type="checkbox" class="trade-cb" onchange="toggleTradeSel(' + id + ',this.checked)">';
   }
