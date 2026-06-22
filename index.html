@@ -639,8 +639,8 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <div class="page-title" style="margin-bottom:0" data-i18n="nav.analysis">วิเคราะห์</div>
         <div style="display:flex;align-items:center;gap:10px">
           <span id="an-count-badge" style="font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace"></span>
-          <button onclick="clearAnalysisSelection();showPage('history')" style="padding:7px 14px;background:transparent;border:1px solid var(--border2);border-radius:var(--radius);color:var(--text2);font-size:12px;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .15s" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text2)'">✕ ล้างและกลับ</button>
-          <button onclick="showPage('history')" style="padding:7px 14px;background:transparent;border:1px solid var(--border2);border-radius:var(--radius);color:var(--text2);font-size:12px;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .15s" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text2)'">+ เพิ่มเทรด</button>
+          <button onclick="showPage('history')" style="padding:7px 14px;background:transparent;border:1px solid var(--border2);border-radius:var(--radius);color:var(--text2);font-size:12px;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .15s" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text2)'"><span data-i18n="an.back">← กลับ</span></button>
+          <button onclick="clearStatsPool()" style="padding:7px 14px;background:transparent;border:1px solid rgba(255,77,106,.3);border-radius:var(--radius);color:var(--red);font-size:12px;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .15s" onmouseover="this.style.background='var(--red-bg)'" onmouseout="this.style.background='transparent'"><span data-i18n="an.clearpool">🗑 ล้าง pool</span></button>
         </div>
       </div>
       <div id="analysis-empty" class="empty-state" style="display:none"></div>
@@ -810,12 +810,12 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
 
 <div id="sel-bar" class="sel-bar hidden">
-  <span style="color:var(--text2);font-family:'IBM Plex Mono',monospace;font-size:11px">เลือก</span>
+  <span data-i18n="an.sel" style="color:var(--text2);font-family:'IBM Plex Mono',monospace;font-size:11px">เลือก</span>
   <span id="sel-count" style="font-weight:500;color:var(--accent);font-family:'IBM Plex Mono',monospace;min-width:18px;text-align:center">0</span>
-  <span style="color:var(--text2);font-family:'IBM Plex Mono',monospace;font-size:11px">รายการ</span>
+  <span data-i18n="an.items" style="color:var(--text2);font-family:'IBM Plex Mono',monospace;font-size:11px">รายการ</span>
   <div style="width:1px;height:14px;background:var(--border2)"></div>
-  <button onclick="insertToStats()" style="padding:6px 16px;background:var(--accent);border:none;border-radius:20px;color:#fff;font-size:12px;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-weight:500;white-space:nowrap">➕ เพิ่มเข้าสถิติ</button>
-  <button onclick="showPage('analysis')" style="padding:6px 12px;background:transparent;border:1px solid var(--border2);border-radius:20px;color:var(--text2);font-size:12px;cursor:pointer;font-family:'IBM Plex Mono',monospace;white-space:nowrap;transition:all .15s" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text2)'">ดูสถิติ</button>
+  <button onclick="insertToStats()" style="padding:6px 16px;background:var(--accent);border:none;border-radius:20px;color:#fff;font-size:12px;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-weight:500;white-space:nowrap"><span data-i18n="an.insert">➕ เพิ่มเข้าสถิติ</span></button>
+  <button onclick="showPage('analysis')" style="padding:6px 12px;background:transparent;border:1px solid var(--border2);border-radius:20px;color:var(--text2);font-size:12px;cursor:pointer;font-family:'IBM Plex Mono',monospace;white-space:nowrap;transition:all .15s" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text2)'"><span data-i18n="an.viewstats">ดูสถิติ</span></button>
   <button onclick="clearAnalysisSelection()" style="padding:4px 8px;background:transparent;border:none;cursor:pointer;color:var(--text3);font-size:14px;line-height:1;transition:color .15s" onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='var(--text3)'" title="ล้างการเลือก">✕</button>
 </div>
 
@@ -899,6 +899,7 @@ const H = {
 
 let trades = [], tradeSide = 'BUY', pending = [], chartInst = null;
 let selectedForAnalysis = [];
+let statsPool = [];
 let editId = null, editSide = 'BUY';
 let editPending = [], editExistingImgs = [];
 let detailId = null, detailImgs = [], detailIdx = 0;
@@ -912,6 +913,19 @@ const I18N = {
   th: {
     'nav.overview':'ภาพรวม','nav.history':'ประวัติการเทรด','nav.calendar':'ปฏิทิน',
     'nav.missed':'เทรดที่พลาด','nav.account':'บัญชี','nav.settings':'การตั้งค่า','nav.analysis':'วิเคราะห์',
+    'an.sel':'เลือก','an.items':'รายการ','an.insert':'➕ เพิ่มเข้าสถิติ','an.viewstats':'ดูสถิติ',
+    'an.added':'เพิ่มเข้าสถิติแล้ว','an.back':'← กลับ','an.clearpool':'🗑 ล้าง pool',
+    'an.empty':'ยังไม่ได้เพิ่มเทรดเข้าสถิติ',
+    'an.emptysub':'ไปหน้าประวัติ tick เทรดที่ต้องการ แล้วกด "เพิ่มเข้าสถิติ"',
+    'an.gotohist':'← ไปเลือกเทรด','an.poolcount':'รายการใน pool',
+    'an.trades':'เทรด','an.haspl':'มี P/L','an.haspips':'มีจุด',
+    'an.rractual':'Avg R:R จริง','an.rrplan':'Avg R:R แผน','an.rrcomp':'เทียบกับแผน',
+    'an.fromsl':'รายการ (คำนวณจาก SL)','an.fromrr':'รายการ (จาก field R:R)',
+    'an.needsl':'ต้องมีข้อมูล SL','an.metplan':'✓ ได้ตามแผน','an.belowplan':'✗ ต่ำกว่าแผน',
+    'an.actual':'จริง','an.plan':'แผน','an.loss':'ติดลบ',
+    'an.nodata':'ไม่มีข้อมูล','an.nosession':'ไม่มีข้อมูล session',
+    'an.sum':'Summary','an.rrsect':'R:R Actual vs Planned',
+    'an.sessect':'Session Breakdown','an.symsect':'Symbol Breakdown','an.symbol':'Symbol',
     'sync.btn':'⟳ Sync',
     'tab.mt5':'MT5','tab.manual':'บันทึกเอง',
     'stat.winrate':'อัตราชนะ','stat.pnl':'กำไร/ขาดทุนรวม ($)','stat.pnlshort':'กำไร/ขาดทุน ($)',
@@ -955,6 +969,19 @@ const I18N = {
   en: {
     'nav.overview':'Overview','nav.history':'Trade History','nav.calendar':'Calendar',
     'nav.missed':'Missed Trade','nav.account':'Account','nav.settings':'Settings','nav.analysis':'Analysis',
+    'an.sel':'Selected','an.items':'items','an.insert':'➕ Add to Stats','an.viewstats':'View Stats',
+    'an.added':'Added to stats','an.back':'← Back','an.clearpool':'🗑 Clear pool',
+    'an.empty':'No trades in stats pool',
+    'an.emptysub':'Go to History, tick trades you want, then click "Add to Stats"',
+    'an.gotohist':'← Go Select Trades','an.poolcount':'items in pool',
+    'an.trades':'Trades','an.haspl':'have P/L','an.haspips':'have pips',
+    'an.rractual':'Avg Actual R:R','an.rrplan':'Avg Planned R:R','an.rrcomp':'vs Plan',
+    'an.fromsl':'items (calc from SL)','an.fromrr':'items (from R:R field)',
+    'an.needsl':'need SL data','an.metplan':'✓ Met plan','an.belowplan':'✗ Below plan',
+    'an.actual':'actual','an.plan':'plan','an.loss':'in loss',
+    'an.nodata':'No data','an.nosession':'No session data',
+    'an.sum':'Summary','an.rrsect':'R:R Actual vs Planned',
+    'an.sessect':'Session Breakdown','an.symsect':'Symbol Breakdown','an.symbol':'Symbol',
     'sync.btn':'⟳ Sync',
     'tab.mt5':'MT5','tab.manual':'Manual',
     'stat.winrate':'Win Rate','stat.pnl':'Total P&L ($)','stat.pnlshort':'P&L ($)',
@@ -2629,11 +2656,22 @@ function setGlobalLang(lang) {
   else if (active === 'missed') renderMissed();
   else if (active === 'account') renderAccount();
   else if (active === 'settings') { renderPairTags(); renderStrategyTags(); renderAccountTags(); }
+  else if (active === 'analysis') renderAnalysis();
 }
 
 // ═══════════════════════════════════════════════════
 // ── ANALYSIS — checkbox & statistics ──
 // ═══════════════════════════════════════════════════
+
+function insertToStats() {
+  const n = selectedForAnalysis.length;
+  if (!n) return;
+  selectedForAnalysis.forEach(id => { if (!statsPool.includes(id)) statsPool.push(id); });
+  selectedForAnalysis = [];
+  document.querySelectorAll('.trade-cb').forEach(cb => { cb.checked = false; cb.indeterminate = false; });
+  updateSelBar();
+  toast(T('an.added') + ' · pool ' + statsPool.length + ' ' + T('an.items') + ' ✓');
+}
 
 function toggleTradeSel(id, checked) {
   if (checked) { if (!selectedForAnalysis.includes(id)) selectedForAnalysis.push(id); }
@@ -2653,12 +2691,6 @@ function toggleHistSelectAll(cbAll) {
   updateSelBar();
 }
 
-function insertToStats() {
-  const n = selectedForAnalysis.length;
-  if (!n) return;
-  toast('เพิ่ม ' + n + ' รายการเข้าสถิติแล้ว ✓');
-}
-
 function updateSelBar() {
   const bar = document.getElementById('sel-bar');
   const cnt = document.getElementById('sel-count');
@@ -2666,10 +2698,10 @@ function updateSelBar() {
   const navBadge = document.getElementById('analysis-nav-badge');
   if (cnt) cnt.textContent = selectedForAnalysis.length;
   if (bar) bar.classList.toggle('hidden', selectedForAnalysis.length === 0);
-  if (badge) badge.textContent = selectedForAnalysis.length ? selectedForAnalysis.length + ' รายการที่เลือก' : '';
+  if (badge) badge.textContent = selectedForAnalysis.length ? selectedForAnalysis.length + ' ' + T('an.items') : '';
   if (navBadge) {
-    navBadge.textContent = selectedForAnalysis.length || '';
-    navBadge.style.display = selectedForAnalysis.length ? '' : 'none';
+    navBadge.textContent = statsPool.length || '';
+    navBadge.style.display = statsPool.length ? '' : 'none';
   }
 }
 
@@ -2679,15 +2711,25 @@ function clearAnalysisSelection() {
   document.querySelectorAll('.trade-cb').forEach(cb => { cb.checked = false; cb.indeterminate = false; });
 }
 
+function clearStatsPool() {
+  statsPool = [];
+  updateSelBar();
+  if (localStorage.getItem('lastPage') === 'analysis') renderAnalysis();
+}
+
 function renderAnalysis() {
-  const selTrades = trades.filter(t => selectedForAnalysis.includes(t.id));
+  const selTrades = trades.filter(t => statsPool.includes(t.id));
   const emptyEl = document.getElementById('analysis-empty');
   const contentEl = document.getElementById('analysis-content');
   if (!emptyEl || !contentEl) return;
   updateSelBar();
   if (!selTrades.length) {
     contentEl.style.display = 'none'; emptyEl.style.display = '';
-    emptyEl.innerHTML = '<div style="padding:48px 0;text-align:center"><div style="font-size:32px;margin-bottom:12px">&#x1F4CA;</div><div style="font-size:14px;color:var(--text2);margin-bottom:6px">\u0e22\u0e31\u0e07\u0e44\u0e21\u0e48\u0e44\u0e14\u0e49\u0e40\u0e25\u0e37\u0e2d\u0e01\u0e40\u0e17\u0e23\u0e14</div><div style="font-size:12px;color:var(--text3)">\u0e01\u0e25\u0e31\u0e1a\u0e44\u0e1b\u0e2b\u0e19\u0e49\u0e32\u0e1b\u0e23\u0e30\u0e27\u0e31\u0e15\u0e34 \u0e41\u0e25\u0e49\u0e27\u0e15\u0e34\u0e4a\u0e01 \u2713 \u0e40\u0e17\u0e23\u0e14\u0e17\u0e35\u0e48\u0e15\u0e49\u0e2d\u0e07\u0e01\u0e32\u0e23\u0e27\u0e34\u0e40\u0e04\u0e23\u0e32\u0e30\u0e2b\u0e4c</div><button onclick=\"showPage(\'history\')\" style=\"margin-top:16px;padding:8px 18px;background:var(--accent);border:none;border-radius:var(--radius);color:#fff;font-size:13px;cursor:pointer;font-family:\'IBM Plex Sans Thai\',sans-serif\">\u2190 \u0e44\u0e1b\u0e40\u0e25\u0e37\u0e2d\u0e01\u0e40\u0e17\u0e23\u0e14</button></div>';
+    emptyEl.innerHTML = '<div style="padding:48px 0;text-align:center">'
+      + '<div style="font-size:32px;margin-bottom:12px">&#x1F4CA;</div>'
+      + '<div style="font-size:14px;color:var(--text2);margin-bottom:6px">' + T('an.empty') + '</div>'
+      + '<div style="font-size:12px;color:var(--text3)">' + T('an.emptysub') + '</div>'
+      + '<button onclick="showPage(\'history\')" style="margin-top:16px;padding:8px 18px;background:var(--accent);border:none;border-radius:var(--radius);color:#fff;font-size:13px;cursor:pointer;font-family:\'IBM Plex Sans Thai\',sans-serif">' + T('an.gotohist') + '</button></div>';
     return;
   }
   emptyEl.style.display = 'none'; contentEl.style.display = '';
@@ -2739,36 +2781,36 @@ function renderAnalysis() {
   const gc = v => v >= 0 ? 'var(--green)' : 'var(--red)';
 
   contentEl.innerHTML = `
-    <div style="font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace;margin-bottom:16px">${selTrades.length} รายการที่เลือก</div>
+    <div style="font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace;margin-bottom:16px">${selTrades.length} ${T('an.poolcount')}</div>
 
-    <div class="overview-section-title" style="margin-bottom:12px">Summary</div>
+    <div class="overview-section-title" style="margin-bottom:12px">${T('an.sum')}</div>
     <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:24px">
-      <div class="stat-card"><div class="stat-label">เทรด</div><div class="stat-val">${selTrades.length}</div><div class="stat-sub">${wins.length}W · ${losses.length}L</div></div>
-      <div class="stat-card"><div class="stat-label">Win Rate</div><div class="stat-val" style="color:${gc(winRate-50)}">${withPnl.length ? fc(winRate) : '—'}</div><div class="stat-sub">${withPnl.length} มี P/L</div></div>
+      <div class="stat-card"><div class="stat-label">${T('an.trades')}</div><div class="stat-val">${selTrades.length}</div><div class="stat-sub">${wins.length}W · ${losses.length}L</div></div>
+      <div class="stat-card"><div class="stat-label">Win Rate</div><div class="stat-val" style="color:${gc(winRate-50)}">${withPnl.length ? fc(winRate) : '—'}</div><div class="stat-sub">${withPnl.length} ${T('an.haspl')}</div></div>
       <div class="stat-card"><div class="stat-label">Net P&L</div><div class="stat-val" style="color:${gc(netPnl)}">${withPnl.length ? fp(netPnl)+'$' : '—'}</div><div class="stat-sub">Avg ${withPnl.length ? fp(avgPnl)+'$' : '—'}/trade</div></div>
-      <div class="stat-card"><div class="stat-label">Avg Pips</div><div class="stat-val" style="color:${gc(avgPips)}">${withPips.length ? (avgPips>=0?'+':'')+avgPips.toFixed(1) : '—'}</div><div class="stat-sub">${withPips.length} มีจุด</div></div>
+      <div class="stat-card"><div class="stat-label">Avg Pips</div><div class="stat-val" style="color:${gc(avgPips)}">${withPips.length ? (avgPips>=0?'+':'')+avgPips.toFixed(1) : '—'}</div><div class="stat-sub">${withPips.length} ${T('an.haspips')}</div></div>
     </div>
 
-    <div class="overview-section-title" style="margin-bottom:12px">R:R Actual vs Planned</div>
+    <div class="overview-section-title" style="margin-bottom:12px">${T('an.rrsect')}</div>
     <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:24px">
       <div class="stat-card">
-        <div class="stat-label">Avg R:R จริง</div>
+        <div class="stat-label">${T('an.rractual')}</div>
         <div class="stat-val" style="color:${avgRRA!==null?(avgRRA>=1?'var(--green)':'var(--red)'):'var(--text)'}">${avgRRA!==null ? '1:'+Math.abs(avgRRA).toFixed(2) : '—'}</div>
-        <div class="stat-sub">${rrActuals.length} รายการ (คำนวณจาก SL)</div>
+        <div class="stat-sub">${rrActuals.length} ${T('an.fromsl')}</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label">Avg R:R แผน</div>
+        <div class="stat-label">${T('an.rrplan')}</div>
         <div class="stat-val">${avgRRP!==null ? '1:'+avgRRP.toFixed(2) : '—'}</div>
-        <div class="stat-sub">${rrPlanned.length} รายการ (จาก field R:R)</div>
+        <div class="stat-sub">${rrPlanned.length} ${T('an.fromrr')}</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label">เทียบกับแผน</div>
-        <div class="stat-val" style="color:${avgRRA!==null&&avgRRP!==null?gc(avgRRA-avgRRP):'var(--text)'}">${avgRRA!==null&&avgRRP!==null?(avgRRA>=avgRRP?'✓ ได้ตามแผน':'✗ ต่ำกว่าแผน'):'—'}</div>
-        <div class="stat-sub">${avgRRA!==null&&avgRRP!==null?'จริง '+(avgRRA>=0?'1:'+Math.abs(avgRRA).toFixed(2):'ติดลบ')+' / แผน 1:'+avgRRP.toFixed(2):'ต้องมีข้อมูล SL'}</div>
+        <div class="stat-label">${T('an.rrcomp')}</div>
+        <div class="stat-val" style="color:${avgRRA!==null&&avgRRP!==null?gc(avgRRA-avgRRP):'var(--text)'}">${avgRRA!==null&&avgRRP!==null?(avgRRA>=avgRRP?T('an.metplan'):T('an.belowplan')):'—'}</div>
+        <div class="stat-sub">${avgRRA!==null&&avgRRP!==null?T('an.actual')+' '+(avgRRA>=0?'1:'+Math.abs(avgRRA).toFixed(2):T('an.loss'))+' / '+T('an.plan')+' 1:'+avgRRP.toFixed(2):T('an.needsl')}</div>
       </div>
     </div>
 
-    <div class="overview-section-title" style="margin-bottom:12px">Session Breakdown</div>
+    <div class="overview-section-title" style="margin-bottom:12px">${T('an.sessect')}</div>
     ${sesRows.length
       ? '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px">'
         + sesRows.map(s => '<div style="background:'+s.bg+';border:1px solid '+s.bdr+';border-radius:var(--radius-lg);padding:12px">'
@@ -2777,12 +2819,12 @@ function renderAnalysis() {
           + '<div style="text-align:center;font-size:12px;color:'+gc(s.pnl)+';font-family:\'IBM Plex Mono\',monospace;margin-bottom:3px">'+(s.tot?fp(s.pnl)+'$':'—')+'</div>'
           + '<div style="text-align:center;font-size:11px;color:var(--text2)">Win '+(s.tot?fc(s.wins/s.tot*100):'—')+'</div>'
           + '</div>').join('') + '</div>'
-      : '<div class="empty-state" style="margin-bottom:24px;padding:20px 0">ไม่มีข้อมูล session</div>'}
+      : '<div class="empty-state" style="margin-bottom:24px;padding:20px 0">'+T('an.nosession')+'</div>'}
 
-    <div class="overview-section-title" style="margin-bottom:12px">Symbol Breakdown</div>
+    <div class="overview-section-title" style="margin-bottom:12px">${T('an.symsect')}</div>
     <div class="table-wrap" style="margin-bottom:24px">
       <table>
-        <thead><tr><th>Symbol</th><th>เทรด</th><th>Win</th><th>Loss</th><th>Win Rate</th><th>Net P&L ($)</th><th>Avg P&L ($)</th></tr></thead>
+        <thead><tr><th>${T('an.symbol')}</th><th>${T('an.trades')}</th><th>Win</th><th>Loss</th><th>Win Rate</th><th>Net P&L ($)</th><th>Avg P&L ($)</th></tr></thead>
         <tbody>${symRows.length
           ? symRows.map(s => {
               const wr3=s.tot?s.wins/s.tot*100:0, avg3=s.tot?s.pnl/s.tot:0;
@@ -2796,12 +2838,11 @@ function renderAnalysis() {
                 +'<td>'+(s.tot?'<span class="'+(avg3>=0?'pnl-pos':'pnl-neg')+'">'+fp(avg3)+'</span>':'—')+'</td>'
                 +'</tr>';
             }).join('')
-          : '<tr><td colspan="7" style="text-align:center;color:var(--text3);padding:20px 0">ไม่มีข้อมูล</td></tr>'
+          : '<tr><td colspan="7" style="text-align:center;color:var(--text3);padding:20px 0">'+T('an.nodata')+'</td></tr>'
         }</tbody>
       </table>
     </div>`;
 }
-
 </script>
 </body>
 </html>
