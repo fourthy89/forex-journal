@@ -2360,7 +2360,7 @@ function _buildTradeTable(rows, showDate) {
     <table><thead><tr>
       ${dateCol}<th>Pair</th><th>Side</th><th>Lot</th>
       <th>Entry</th><th>Exit</th><th>Pips</th>
-      <th>P&L ($)</th><th>R:R</th><th data-i18n="th.strategy">กลยุทธ์</th>
+      <th>P&L ($)</th><th>R:R</th><th data-i18n="th.strategy">กลยุทธ์</th><th>Session</th>
     </tr></thead><tbody>
     ${rows.map(t => {
       const p = parseFloat(t.pnl);
@@ -2377,6 +2377,7 @@ function _buildTradeTable(rows, showDate) {
         <td>${pStr}</td>
         <td class="mono" style="font-size:11px;color:var(--text2)">${t.rr||'—'}</td>
         <td style="font-size:11px;color:var(--text2)">${t.strategy||'—'}</td>
+        <td>${sessionBadge(t.session)}</td>
       </tr>`;
     }).join('')}
     </tbody></table></div>`;
