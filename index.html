@@ -2815,7 +2815,7 @@ function renderAnalysis() {
           + '<td class="mono" style="font-size:11px">' + (t.exit ? parseFloat(t.exit).toFixed(2) : '—') + '</td>'
           + '<td>' + pnlStr + '</td>'
           + '<td class="mono" style="font-size:11px;color:var(--text2)">' + (t.rr || '—') + '</td>'
-          + '<td><button class="tbl-btn del" data-del-pool="' + t.id + '" onclick="removeFromPool(' + t.id + ')" title="' + T('an.remove') + '">✕</button></td>''</tr>';
+          + '<td><button class="tbl-btn del" data-del-pool="' + t.id + '" onclick="removeFromPool(' + t.id + ')" title="' + T('an.remove') + '">✕</button></td>' + '</tr>';
       }).join('')
     + '</tbody></table></div>';
 
