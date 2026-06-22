@@ -925,7 +925,7 @@ const I18N = {
     'an.actual':'จริง','an.plan':'แผน','an.loss':'ติดลบ',
     'an.nodata':'ไม่มีข้อมูล','an.nosession':'ไม่มีข้อมูล session',
     'an.sum':'Summary','an.rrsect':'R:R Actual vs Planned',
-    'an.sessect':'Session Breakdown','an.symsect':'Symbol Breakdown','an.symbol':'Symbol',
+    'an.sessect':'Session Breakdown','an.symsect':'Symbol Breakdown','an.symbol':'Symbol','an.poollist':'เทรดใน pool','an.remove':'ลบออก',
     'sync.btn':'⟳ Sync',
     'tab.mt5':'MT5','tab.manual':'บันทึกเอง',
     'stat.winrate':'อัตราชนะ','stat.pnl':'กำไร/ขาดทุนรวม ($)','stat.pnlshort':'กำไร/ขาดทุน ($)',
@@ -981,7 +981,7 @@ const I18N = {
     'an.actual':'actual','an.plan':'plan','an.loss':'in loss',
     'an.nodata':'No data','an.nosession':'No session data',
     'an.sum':'Summary','an.rrsect':'R:R Actual vs Planned',
-    'an.sessect':'Session Breakdown','an.symsect':'Symbol Breakdown','an.symbol':'Symbol',
+    'an.sessect':'Session Breakdown','an.symsect':'Symbol Breakdown','an.symbol':'Symbol','an.poollist':'Trades in pool','an.remove':'Remove',
     'sync.btn':'⟳ Sync',
     'tab.mt5':'MT5','tab.manual':'Manual',
     'stat.winrate':'Win Rate','stat.pnl':'Total P&L ($)','stat.pnlshort':'P&L ($)',
@@ -2333,10 +2333,11 @@ const _vb = document.getElementById('view-badge');
 if (_vb) _vb.style.display = IS_VIEW ? '' : 'none';
 loadTheme();
 globalLang = localStorage.getItem('lang') || 'th';
+loadPool();
 document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
 document.getElementById('new-pair').addEventListener('keydown', e => { if (e.key === 'Enter') addPair(); });
 document.getElementById('new-strategy').addEventListener('keydown', e => { if (e.key === 'Enter') addStrategy(); });
-const validPages = ['overview','history','calendar','missed','account','settings'];
+const validPages = ['overview','history','calendar','missed','account','settings','analysis'];
 const _lp = localStorage.getItem('lastPage');
 const lastPage = IS_VIEW ? 'overview' : (validPages.includes(_lp) ? _lp : 'table');
 showPage(lastPage);
@@ -2663,14 +2664,34 @@ function setGlobalLang(lang) {
 // ── ANALYSIS — checkbox & statistics ──
 // ═══════════════════════════════════════════════════
 
+function savePool() {
+  localStorage.setItem('statsPool', JSON.stringify(statsPool));
+}
+
+function loadPool() {
+  try {
+    const saved = localStorage.getItem('statsPool');
+    if (saved) statsPool = JSON.parse(saved);
+  } catch(e) { statsPool = []; }
+  updateSelBar();
+}
+
 function insertToStats() {
   const n = selectedForAnalysis.length;
   if (!n) return;
   selectedForAnalysis.forEach(id => { if (!statsPool.includes(id)) statsPool.push(id); });
   selectedForAnalysis = [];
   document.querySelectorAll('.trade-cb').forEach(cb => { cb.checked = false; cb.indeterminate = false; });
+  savePool();
   updateSelBar();
   toast(T('an.added') + ' · pool ' + statsPool.length + ' ' + T('an.items') + ' ✓');
+}
+
+function removeFromPool(id) {
+  statsPool = statsPool.filter(x => x !== id);
+  savePool();
+  updateSelBar();
+  renderAnalysis();
 }
 
 function toggleTradeSel(id, checked) {
@@ -2713,6 +2734,7 @@ function clearAnalysisSelection() {
 
 function clearStatsPool() {
   statsPool = [];
+  savePool();
   updateSelBar();
   if (localStorage.getItem('lastPage') === 'analysis') renderAnalysis();
 }
@@ -2734,6 +2756,36 @@ function renderAnalysis() {
   }
   emptyEl.style.display = 'none'; contentEl.style.display = '';
 
+  // ── Trade List ──
+  const tradeListHTML = '<div class="overview-section-title" style="margin-bottom:12px;display:flex;justify-content:space-between;align-items:center">'
+    + '<span>' + T('an.poollist') + '</span>'
+    + '<span style="font-size:11px;font-weight:400;color:var(--text3);font-family:\'IBM Plex Mono\',monospace">' + selTrades.length + ' ' + T('an.items') + '</span>'
+    + '</div>'
+    + '<div class="table-wrap" style="margin-bottom:24px"><table>'
+    + '<thead><tr>'
+    + '<th>' + T('th.date') + '</th><th>Pair</th><th>Side</th>'
+    + '<th>' + T('th.entry') + '</th><th>' + T('th.exit') + '</th>'
+    + '<th>P&L ($)</th><th>R:R</th><th></th>'
+    + '</tr></thead><tbody>'
+    + selTrades.map(t => {
+        const pnl = parseFloat(t.pnl);
+        const pnlStr = (t.pnl !== null && t.pnl !== '')
+          ? (pnl >= 0 ? '<span class="pnl-pos">+' + pnl.toFixed(2) + '</span>' : '<span class="pnl-neg">' + pnl.toFixed(2) + '</span>')
+          : '—';
+        return '<tr>'
+          + '<td class="mono" style="font-size:11px">' + (t.date || '—') + '</td>'
+          + '<td style="font-weight:500">' + (t.symbol || '—') + '</td>'
+          + '<td><span class="badge badge-' + (t.side || 'buy').toLowerCase() + '">' + (t.side || '—') + '</span></td>'
+          + '<td class="mono" style="font-size:11px">' + (t.entry ? parseFloat(t.entry).toFixed(2) : '—') + '</td>'
+          + '<td class="mono" style="font-size:11px">' + (t.exit ? parseFloat(t.exit).toFixed(2) : '—') + '</td>'
+          + '<td>' + pnlStr + '</td>'
+          + '<td class="mono" style="font-size:11px;color:var(--text2)">' + (t.rr || '—') + '</td>'
+          + '<td><button class="tbl-btn del" onclick="removeFromPool(' + t.id + ')" title="' + T('an.remove') + '">✕</button></td>'
+          + '</tr>';
+      }).join('')
+    + '</tbody></table></div>';
+
+  // ── Stats ──
   const withPnl = selTrades.filter(t => t.pnl !== null && t.pnl !== '' && !isNaN(parseFloat(t.pnl)));
   const wins = withPnl.filter(t => parseFloat(t.pnl) > 0);
   const losses = withPnl.filter(t => parseFloat(t.pnl) <= 0);
@@ -2781,7 +2833,7 @@ function renderAnalysis() {
   const gc = v => v >= 0 ? 'var(--green)' : 'var(--red)';
 
   contentEl.innerHTML = `
-    <div style="font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace;margin-bottom:16px">${selTrades.length} ${T('an.poolcount')}</div>
+    ${tradeListHTML}
 
     <div class="overview-section-title" style="margin-bottom:12px">${T('an.sum')}</div>
     <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:24px">
