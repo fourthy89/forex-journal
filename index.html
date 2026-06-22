@@ -2354,56 +2354,69 @@ function closeDayPanel() {
   document.querySelectorAll('.cal-day-active').forEach(el => el.classList.remove('cal-day-active'));
 }
 
-function showDayTrades(date) {
-  const panel = document.getElementById('cal-day-panel');
-  if (selectedCalDay === date) { closeDayPanel(); return; }
-  selectedCalDay = date;
+function _buildTradeTable(rows, showDate) {
+  const dateCol = showDate ? '<th data-i18n="th.date">วันที่</th>' : '';
+  return `<div class="table-wrap">
+    <table><thead><tr>
+      ${dateCol}<th>Pair</th><th>Side</th><th>Lot</th>
+      <th>Entry</th><th>Exit</th><th>Pips</th>
+      <th>P&L ($)</th><th>R:R</th><th data-i18n="th.strategy">กลยุทธ์</th>
+    </tr></thead><tbody>
+    ${rows.map(t => {
+      const p = parseFloat(t.pnl);
+      const pStr = isNaN(p) ? '—' : (p >= 0 ? `<span class="pnl-pos">+${p.toFixed(2)}</span>` : `<span class="pnl-neg">${p.toFixed(2)}</span>`);
+      const dateCell = showDate ? `<td class="mono" style="font-size:11px;color:var(--accent)">${t.date||'—'}</td>` : '';
+      return `<tr>
+        ${dateCell}
+        <td style="font-weight:500">${t.symbol||'—'}</td>
+        <td><span class="badge badge-${(t.side||'buy').toLowerCase()}">${t.side||'—'}</span></td>
+        <td class="mono" style="font-size:11px">${t.lot||'—'}</td>
+        <td class="mono" style="font-size:11px">${t.entry?parseFloat(t.entry).toFixed(2):'—'}</td>
+        <td class="mono" style="font-size:11px">${t.exit?parseFloat(t.exit).toFixed(2):'—'}</td>
+        <td class="mono" style="font-size:11px">${t.pips||'—'}</td>
+        <td>${pStr}</td>
+        <td class="mono" style="font-size:11px;color:var(--text2)">${t.rr||'—'}</td>
+        <td style="font-size:11px;color:var(--text2)">${t.strategy||'—'}</td>
+      </tr>`;
+    }).join('')}
+    </tbody></table></div>`;
+}
 
-  document.querySelectorAll('.cal-day-active').forEach(el => el.classList.remove('cal-day-active'));
-  const activeCell = document.querySelector(`[data-cal-date="${date}"]`);
-  if (activeCell) activeCell.classList.add('cal-day-active');
-
-  const dayTrades = trades.filter(t => t.date === date && t.pnl !== null && t.pnl !== '');
-  if (!dayTrades.length) { closeDayPanel(); return; }
-
-  const totalPnl = dayTrades.reduce((a, t) => a + parseFloat(t.pnl || 0), 0);
+function _showPanel(label, count, totalPnl, rows, showDate) {
   const pnlColor = totalPnl >= 0 ? 'var(--green)' : 'var(--red)';
-
-  document.getElementById('cal-day-panel-date').textContent = date;
-  document.getElementById('cal-day-panel-count').textContent = dayTrades.length + ' trades';
+  document.getElementById('cal-day-panel-date').textContent = label;
+  document.getElementById('cal-day-panel-count').textContent = count + ' trades';
   const pnlEl = document.getElementById('cal-day-panel-pnl');
   pnlEl.textContent = calFmtPnl(totalPnl);
   pnlEl.style.color = pnlColor;
+  document.getElementById('cal-day-panel-table').innerHTML = _buildTradeTable(rows, showDate);
+  document.getElementById('cal-day-panel').style.display = '';
+}
 
-  document.getElementById('cal-day-panel-table').innerHTML = `
-    <div class="table-wrap">
-      <table>
-        <thead><tr>
-          <th>Pair</th><th>Side</th><th>Lot</th>
-          <th>Entry</th><th>Exit</th><th>Pips</th>
-          <th>P&L ($)</th><th>R:R</th><th>กลยุทธ์</th>
-        </tr></thead>
-        <tbody>
-          ${dayTrades.map(t => {
-            const p = parseFloat(t.pnl);
-            const pStr = isNaN(p) ? '—' : (p >= 0 ? `<span class="pnl-pos">+${p.toFixed(2)}</span>` : `<span class="pnl-neg">${p.toFixed(2)}</span>`);
-            return `<tr>
-              <td style="font-weight:500">${t.symbol||'—'}</td>
-              <td><span class="badge badge-${(t.side||'buy').toLowerCase()}">${t.side||'—'}</span></td>
-              <td class="mono" style="font-size:11px">${t.lot||'—'}</td>
-              <td class="mono" style="font-size:11px">${t.entry?parseFloat(t.entry).toFixed(2):'—'}</td>
-              <td class="mono" style="font-size:11px">${t.exit?parseFloat(t.exit).toFixed(2):'—'}</td>
-              <td class="mono" style="font-size:11px">${t.pips||'—'}</td>
-              <td>${pStr}</td>
-              <td class="mono" style="font-size:11px;color:var(--text2)">${t.rr||'—'}</td>
-              <td style="font-size:11px;color:var(--text2)">${t.strategy||'—'}</td>
-            </tr>`;
-          }).join('')}
-        </tbody>
-      </table>
-    </div>`;
+function showDayTrades(date) {
+  if (selectedCalDay === date) { closeDayPanel(); return; }
+  selectedCalDay = date;
+  document.querySelectorAll('.cal-day-active').forEach(el => el.classList.remove('cal-day-active'));
+  const activeCell = document.querySelector(`[data-cal-date="${date}"]`);
+  if (activeCell) activeCell.classList.add('cal-day-active');
+  const dayTrades = trades.filter(t => t.date === date && t.pnl !== null && t.pnl !== '');
+  if (!dayTrades.length) { closeDayPanel(); return; }
+  const totalPnl = dayTrades.reduce((a, t) => a + parseFloat(t.pnl || 0), 0);
+  _showPanel(date, dayTrades.length, totalPnl, dayTrades, false);
+}
 
-  panel.style.display = '';
+function showWeekTrades(dates) {
+  const key = 'week:' + dates[0];
+  if (selectedCalDay === key) { closeDayPanel(); return; }
+  selectedCalDay = key;
+  document.querySelectorAll('.cal-day-active').forEach(el => el.classList.remove('cal-day-active'));
+  const weekTrades = trades
+    .filter(t => t.date && dates.includes(t.date) && t.pnl !== null && t.pnl !== '')
+    .sort((a, b) => a.date.localeCompare(b.date));
+  if (!weekTrades.length) { closeDayPanel(); return; }
+  const totalPnl = weekTrades.reduce((a, t) => a + parseFloat(t.pnl || 0), 0);
+  const label = dates[0] + ' – ' + dates[dates.length - 1];
+  _showPanel(label, weekTrades.length, totalPnl, weekTrades, true);
 }
 
 // ---- Calendar ----
@@ -2482,6 +2495,7 @@ function renderCalendar() {
 
   while (cur <= lastDay) {
     let wPnl = 0, wCount = 0;
+    const weekDates = [];
 
     // 7 days: Sun–Sat
     for (let d = 0; d < 7; d++) {
@@ -2489,6 +2503,7 @@ function renderCalendar() {
       const inMonth = cur.getMonth() === month;
       const data = dayMap[ds] || null;
 
+      if (inMonth) weekDates.push(ds);
       if (inMonth && data) { wPnl += data.pnl; wCount += data.count; }
 
       const cell = document.createElement('div');
@@ -2518,11 +2533,14 @@ function renderCalendar() {
 
     // Weekly summary cell
     const sumCell = document.createElement('div');
-    sumCell.style.cssText = 'border-bottom:1px solid var(--border);padding:8px 10px;min-height:62px;display:flex;flex-direction:column;align-items:flex-end;justify-content:flex-end;background:var(--bg3);box-sizing:border-box';
+    sumCell.className = 'cal-day-cell';
+    sumCell.style.cssText = 'border-bottom:1px solid var(--border);padding:8px 10px;min-height:62px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--bg3);box-sizing:border-box' + (wCount > 0 ? ';cursor:pointer' : '');
     if (wCount > 0) {
       const wc = wPnl >= 0 ? 'var(--green)' : 'var(--red)';
-      sumCell.innerHTML = '<div style="font-size:10px;color:var(--text2);margin-bottom:3px">' + wCount + ' ' + L.trades + '</div>'
-        + '<div style="font-size:13px;font-weight:500;color:' + wc + ';font-family:\'IBM Plex Mono\',monospace">' + calFmtPnl(wPnl) + '</div>';
+      sumCell.innerHTML = '<div style="font-size:10px;color:var(--text2);margin-bottom:3px;text-align:center">' + wCount + ' ' + L.trades + '</div>'
+        + '<div style="font-size:13px;font-weight:500;color:' + wc + ';font-family:\'IBM Plex Mono\',monospace;text-align:center">' + calFmtPnl(wPnl) + '</div>';
+      const captured = weekDates.slice();
+      sumCell.onclick = () => showWeekTrades(captured);
     }
     grid.appendChild(sumCell);
   }
