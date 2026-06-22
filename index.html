@@ -641,7 +641,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <div style="display:flex;align-items:center;gap:10px">
           <span id="an-count-badge" style="font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace"></span>
           <button onclick="showPage('history')" style="padding:7px 14px;background:transparent;border:1px solid var(--border2);border-radius:var(--radius);color:var(--text2);font-size:12px;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .15s" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text2)'"><span data-i18n="an.back">← กลับ</span></button>
-          <button onclick="clearStatsPool()" style="padding:7px 14px;background:transparent;border:1px solid rgba(255,77,106,.3);border-radius:var(--radius);color:var(--red);font-size:12px;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .15s" onmouseover="this.style.background='var(--red-bg)'" onmouseout="this.style.background='transparent'"><span data-i18n="an.clearpool">🗑 ล้าง pool</span></button>
+          <button id="btn-clear-pool" onclick="clearStatsPool(this)" style="padding:7px 14px;background:transparent;border:1px solid rgba(255,77,106,.3);border-radius:var(--radius);color:var(--red);font-size:12px;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .15s" onmouseover="this.style.background='var(--red-bg)'" onmouseout="this.style.background='transparent'"><span data-i18n="an.clearpool">🗑 ล้าง pool</span></button>
         </div>
       </div>
       <div id="analysis-empty" class="empty-state" style="display:none"></div>
@@ -902,6 +902,7 @@ let trades = [], tradeSide = 'BUY', pending = [], chartInst = null;
 let selectedForAnalysis = [];
 let statsPool = [];
 let delPoolConfirm = null, delPoolTimer = null;
+let delClearConfirm = false, delClearTimer = null;
 let editId = null, editSide = 'BUY';
 let editPending = [], editExistingImgs = [];
 let detailId = null, detailImgs = [], detailIdx = 0;
@@ -2699,12 +2700,10 @@ function insertToStats() {
   toast(T('an.added') + ' · pool ' + statsPool.length + ' ' + T('an.items') + ' ✓');
 }
 
-function removeFromPool(id) {
-  const btn = document.querySelector('[data-del-pool="' + id + '"]');
+function removeFromPool(id, btnEl) {
   if (delPoolConfirm === id) {
     clearTimeout(delPoolTimer);
     delPoolConfirm = null;
-    if (btn) { btn.textContent = '✕'; btn.className = 'tbl-btn del'; }
     statsPool = statsPool.filter(x => x !== id);
     savePool();
     updateSelBar();
@@ -2716,15 +2715,15 @@ function removeFromPool(id) {
     renderAnalysis();
   } else {
     if (delPoolConfirm !== null) {
-      const prev = document.querySelector('[data-del-pool="' + delPoolConfirm + '"]');
-      if (prev) { prev.textContent = '✕'; prev.className = 'tbl-btn del'; }
+      const prevBtn = document.querySelector('[data-del-pool-confirm]');
+      if (prevBtn) { prevBtn.textContent = '✕'; prevBtn.className = 'tbl-btn del'; prevBtn.removeAttribute('data-del-pool-confirm'); }
       clearTimeout(delPoolTimer);
     }
     delPoolConfirm = id;
-    if (btn) { btn.textContent = 'ยืนยัน?'; btn.className = 'tbl-btn del del-confirm'; }
+    if (btnEl) { btnEl.textContent = 'ยืนยัน?'; btnEl.className = 'tbl-btn del del-confirm'; btnEl.setAttribute('data-del-pool-confirm', '1'); }
     delPoolTimer = setTimeout(() => {
       delPoolConfirm = null;
-      if (btn) { btn.textContent = '✕'; btn.className = 'tbl-btn del'; }
+      if (btnEl) { btnEl.textContent = '✕'; btnEl.className = 'tbl-btn del'; btnEl.removeAttribute('data-del-pool-confirm'); }
     }, 3000);
   }
 }
@@ -2767,11 +2766,23 @@ function clearAnalysisSelection() {
   document.querySelectorAll('.trade-cb').forEach(cb => { cb.checked = false; cb.indeterminate = false; });
 }
 
-function clearStatsPool() {
-  statsPool = [];
-  savePool();
-  updateSelBar();
-  if (localStorage.getItem('lastPage') === 'analysis') renderAnalysis();
+function clearStatsPool(btnEl) {
+  if (delClearConfirm) {
+    clearTimeout(delClearTimer);
+    delClearConfirm = false;
+    if (btnEl) { btnEl.innerHTML = '<span data-i18n="an.clearpool">🗑 ล้าง pool</span>'; btnEl.style.background = 'transparent'; applyLang(); }
+    statsPool = [];
+    savePool();
+    updateSelBar();
+    renderAnalysis();
+  } else {
+    delClearConfirm = true;
+    if (btnEl) { btnEl.textContent = 'ยืนยัน?'; btnEl.style.background = 'var(--red-bg)'; }
+    delClearTimer = setTimeout(() => {
+      delClearConfirm = false;
+      if (btnEl) { btnEl.innerHTML = '<span data-i18n="an.clearpool">🗑 ล้าง pool</span>'; btnEl.style.background = 'transparent'; applyLang(); }
+    }, 3000);
+  }
 }
 
 function renderAnalysis() {
@@ -2815,7 +2826,7 @@ function renderAnalysis() {
           + '<td class="mono" style="font-size:11px">' + (t.exit ? parseFloat(t.exit).toFixed(2) : '—') + '</td>'
           + '<td>' + pnlStr + '</td>'
           + '<td class="mono" style="font-size:11px;color:var(--text2)">' + (t.rr || '—') + '</td>'
-          + '<td><button class="tbl-btn del" data-del-pool="' + t.id + '" onclick="removeFromPool(' + t.id + ')" title="' + T('an.remove') + '">✕</button></td>' + '</tr>';
+          + '<td><button class="tbl-btn del" onclick="removeFromPool(' + t.id + ', this)" title="' + T('an.remove') + '">✕</button></td>' + '</tr>';
       }).join('')
     + '</tbody></table></div>';
 
