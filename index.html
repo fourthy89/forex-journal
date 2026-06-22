@@ -193,6 +193,8 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
 .toast{position:fixed;bottom:24px;right:24px;background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:10px 18px;border-radius:var(--radius);font-size:12px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:9999;font-family:'IBM Plex Mono',monospace}
 .toast.show{opacity:1}
+.cal-day-cell:hover{filter:brightness(1.15)}
+.cal-day-cell.cal-day-active{outline:2px solid var(--accent);outline-offset:-2px;z-index:1;position:relative}
 @media(max-width:640px){
   .sidebar{width:56px}
   .logo-text,.logo-sub,.nav-item span,.sync-status span,.sync-btn{display:none}
@@ -595,11 +597,6 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <button onclick="changeCalendarMonth(-1)" style="background:none;border:1px solid var(--border2);border-radius:var(--radius);color:var(--text2);width:28px;height:28px;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;line-height:1">&#8249;</button>
           <span id="cal-month-title" style="margin:0 12px;font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:500;min-width:160px;text-align:center">—</span>
           <button onclick="changeCalendarMonth(1)" style="background:none;border:1px solid var(--border2);border-radius:var(--radius);color:var(--text2);width:28px;height:28px;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;line-height:1">&#8250;</button>
-          <div style="display:flex;border:1px solid var(--border2);border-radius:var(--radius);overflow:hidden;margin-left:14px">
-            <button id="cllang-en" onclick="setCalLang('en')" style="padding:5px 10px;background:var(--accent);border:none;color:#fff;font-size:11px;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .15s">EN</button>
-            <button id="cllang-th" onclick="setCalLang('th')" style="padding:5px 10px;background:transparent;border:none;color:var(--text2);font-size:11px;cursor:pointer;font-family:'IBM Plex Sans Thai',sans-serif;transition:all .15s">ไทย</button>
-            <button id="cllang-both" onclick="setCalLang('both')" style="padding:5px 10px;background:transparent;border:none;color:var(--text2);font-size:11px;cursor:pointer;font-family:'IBM Plex Sans Thai',sans-serif;transition:all .15s">TH/EN</button>
-          </div>
           <div style="margin-left:auto;display:flex;align-items:center;gap:22px">
             <div style="display:flex;align-items:baseline;gap:5px">
               <span style="font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace">P/L:</span>
@@ -615,6 +612,16 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <div id="cal-day-headers" style="display:grid;grid-template-columns:repeat(7,1fr) 110px;border-bottom:1px solid var(--border)"></div>
         <!-- Calendar Grid (built by renderCalendar) -->
         <div id="cal-grid" style="display:grid;grid-template-columns:repeat(7,1fr) 110px"></div>
+        <!-- Day Trades Panel -->
+        <div id="cal-day-panel" style="display:none;border-top:1px solid var(--border);padding:16px 20px">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+            <span id="cal-day-panel-date" style="font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;color:var(--text)"></span>
+            <span id="cal-day-panel-count" style="font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace"></span>
+            <span id="cal-day-panel-pnl" style="font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500"></span>
+            <button onclick="closeDayPanel()" style="margin-left:auto;background:none;border:none;color:var(--text3);cursor:pointer;font-size:16px;line-height:1;padding:2px 6px;border-radius:4px;transition:color .15s" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text3)'">✕</button>
+          </div>
+          <div id="cal-day-panel-table"></div>
+        </div>
       </div>
     </div>
 
@@ -866,6 +873,7 @@ let calendarYear = new Date().getFullYear(), calendarMonth = new Date().getMonth
 let histTab = 'mt5';
 let calLang = 'en';
 let globalLang = 'th';
+let selectedCalDay = null;
 
 const I18N = {
   th: {
@@ -2339,6 +2347,65 @@ function switchHistTab(t) {
   if (t === 'manual') renderTable();
 }
 
+// ---- Calendar Day Panel ----
+function closeDayPanel() {
+  selectedCalDay = null;
+  document.getElementById('cal-day-panel').style.display = 'none';
+  document.querySelectorAll('.cal-day-active').forEach(el => el.classList.remove('cal-day-active'));
+}
+
+function showDayTrades(date) {
+  const panel = document.getElementById('cal-day-panel');
+  if (selectedCalDay === date) { closeDayPanel(); return; }
+  selectedCalDay = date;
+
+  document.querySelectorAll('.cal-day-active').forEach(el => el.classList.remove('cal-day-active'));
+  const activeCell = document.querySelector(`[data-cal-date="${date}"]`);
+  if (activeCell) activeCell.classList.add('cal-day-active');
+
+  const dayTrades = trades.filter(t => t.date === date && t.pnl !== null && t.pnl !== '');
+  if (!dayTrades.length) { closeDayPanel(); return; }
+
+  const totalPnl = dayTrades.reduce((a, t) => a + parseFloat(t.pnl || 0), 0);
+  const pnlColor = totalPnl >= 0 ? 'var(--green)' : 'var(--red)';
+
+  document.getElementById('cal-day-panel-date').textContent = date;
+  document.getElementById('cal-day-panel-count').textContent = dayTrades.length + ' trades';
+  const pnlEl = document.getElementById('cal-day-panel-pnl');
+  pnlEl.textContent = calFmtPnl(totalPnl);
+  pnlEl.style.color = pnlColor;
+
+  document.getElementById('cal-day-panel-table').innerHTML = `
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>Pair</th><th>Side</th><th>Lot</th>
+          <th>Entry</th><th>Exit</th><th>Pips</th>
+          <th>P&L ($)</th><th>R:R</th><th>กลยุทธ์</th>
+        </tr></thead>
+        <tbody>
+          ${dayTrades.map(t => {
+            const p = parseFloat(t.pnl);
+            const pStr = isNaN(p) ? '—' : (p >= 0 ? `<span class="pnl-pos">+${p.toFixed(2)}</span>` : `<span class="pnl-neg">${p.toFixed(2)}</span>`);
+            return `<tr>
+              <td style="font-weight:500">${t.symbol||'—'}</td>
+              <td><span class="badge badge-${(t.side||'buy').toLowerCase()}">${t.side||'—'}</span></td>
+              <td class="mono" style="font-size:11px">${t.lot||'—'}</td>
+              <td class="mono" style="font-size:11px">${t.entry?parseFloat(t.entry).toFixed(2):'—'}</td>
+              <td class="mono" style="font-size:11px">${t.exit?parseFloat(t.exit).toFixed(2):'—'}</td>
+              <td class="mono" style="font-size:11px">${t.pips||'—'}</td>
+              <td>${pStr}</td>
+              <td class="mono" style="font-size:11px;color:var(--text2)">${t.rr||'—'}</td>
+              <td style="font-size:11px;color:var(--text2)">${t.strategy||'—'}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>`;
+
+  panel.style.display = '';
+}
+
 // ---- Calendar ----
 function setCalLang(lang) {
   calLang = lang;
@@ -2409,6 +2476,7 @@ function renderCalendar() {
 
   const grid = document.getElementById('cal-grid');
   grid.innerHTML = '';
+  closeDayPanel();
 
   let cur = new Date(startSunday);
 
@@ -2424,10 +2492,13 @@ function renderCalendar() {
       if (inMonth && data) { wPnl += data.pnl; wCount += data.count; }
 
       const cell = document.createElement('div');
+      cell.className = 'cal-day-cell';
+      cell.setAttribute('data-cal-date', ds);
+      if (inMonth) cell.onclick = () => showDayTrades(ds);
       let bg = 'transparent';
       if (inMonth && data) bg = data.pnl > 0 ? 'rgba(0,105,55,0.38)' : 'rgba(115,0,30,0.4)';
 
-      cell.style.cssText = 'background:' + bg + ';border-right:1px solid var(--border);border-bottom:1px solid var(--border);padding:8px 10px;min-height:62px;box-sizing:border-box';
+      cell.style.cssText = 'background:' + bg + ';border-right:1px solid var(--border);border-bottom:1px solid var(--border);padding:8px 10px;min-height:62px;box-sizing:border-box' + (inMonth ? ';cursor:pointer' : '');
 
       const dayColor = inMonth ? 'var(--text2)' : 'var(--text3)';
       let html = '<div style="font-size:11px;color:' + dayColor + ';font-family:\'IBM Plex Mono\',monospace">' + cur.getDate() + '</div>';
