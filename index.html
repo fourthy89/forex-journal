@@ -600,16 +600,18 @@ tr:hover td{background:rgba(255,255,255,.02)}
           </div>
         </div>
         <!-- Day Headers -->
-        <div style="display:grid;grid-template-columns:repeat(5,1fr) 110px;border-bottom:1px solid var(--border)">
+        <div style="display:grid;grid-template-columns:repeat(7,1fr) 110px;border-bottom:1px solid var(--border)">
+          <div style="padding:7px 10px;font-size:10px;color:var(--text2);font-family:'IBM Plex Mono',monospace;text-align:center;border-right:1px solid var(--border);letter-spacing:.05em">Sun</div>
           <div style="padding:7px 10px;font-size:10px;color:var(--text2);font-family:'IBM Plex Mono',monospace;text-align:center;border-right:1px solid var(--border);letter-spacing:.05em">Mon</div>
           <div style="padding:7px 10px;font-size:10px;color:var(--text2);font-family:'IBM Plex Mono',monospace;text-align:center;border-right:1px solid var(--border);letter-spacing:.05em">Tue</div>
           <div style="padding:7px 10px;font-size:10px;color:var(--text2);font-family:'IBM Plex Mono',monospace;text-align:center;border-right:1px solid var(--border);letter-spacing:.05em">Wed</div>
           <div style="padding:7px 10px;font-size:10px;color:var(--text2);font-family:'IBM Plex Mono',monospace;text-align:center;border-right:1px solid var(--border);letter-spacing:.05em">Thu</div>
           <div style="padding:7px 10px;font-size:10px;color:var(--text2);font-family:'IBM Plex Mono',monospace;text-align:center;border-right:1px solid var(--border);letter-spacing:.05em">Fri</div>
+          <div style="padding:7px 10px;font-size:10px;color:var(--text2);font-family:'IBM Plex Mono',monospace;text-align:center;border-right:1px solid var(--border);letter-spacing:.05em">Sat</div>
           <div style="padding:7px 10px;font-size:10px;color:var(--accent);font-family:'IBM Plex Mono',monospace;text-align:center;letter-spacing:.05em">Summary</div>
         </div>
         <!-- Calendar Grid (built by renderCalendar) -->
-        <div id="cal-grid" style="display:grid;grid-template-columns:repeat(5,1fr) 110px"></div>
+        <div id="cal-grid" style="display:grid;grid-template-columns:repeat(7,1fr) 110px"></div>
       </div>
     </div>
 
@@ -2263,21 +2265,20 @@ function renderCalendar() {
   const firstDay = new Date(year, month, 1);
   const lastDay  = new Date(year, month + 1, 0);
 
-  // Find Monday of the week containing the 1st
-  let startMonday = new Date(firstDay);
-  const dow = startMonday.getDay();
-  startMonday.setDate(startMonday.getDate() - (dow === 0 ? 6 : dow - 1));
+  // Find Sunday of the week containing the 1st
+  let startSunday = new Date(firstDay);
+  startSunday.setDate(startSunday.getDate() - startSunday.getDay());
 
   const grid = document.getElementById('cal-grid');
   grid.innerHTML = '';
 
-  let cur = new Date(startMonday);
+  let cur = new Date(startSunday);
 
   while (cur <= lastDay) {
     let wPnl = 0, wCount = 0;
 
-    // 5 weekday cells (Mon–Fri)
-    for (let d = 0; d < 5; d++) {
+    // 7 days: Sun–Sat
+    for (let d = 0; d < 7; d++) {
       const ds = cur.getFullYear() + '-' + String(cur.getMonth() + 1).padStart(2, '0') + '-' + String(cur.getDate()).padStart(2, '0');
       const inMonth = cur.getMonth() === month;
       const data = dayMap[ds] || null;
@@ -2305,9 +2306,6 @@ function renderCalendar() {
       grid.appendChild(cell);
       cur.setDate(cur.getDate() + 1);
     }
-
-    // Skip Sat + Sun → jump to next Monday
-    cur.setDate(cur.getDate() + 2);
 
     // Weekly summary cell
     const sumCell = document.createElement('div');
