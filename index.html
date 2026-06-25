@@ -228,7 +228,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
   <aside class="sidebar">
     <div class="logo">
       <div class="logo-text">FX JOURNAL</div>
-      <div class="logo-sub">v5.0</div>
+      
     </div>
     <nav class="nav">
       <div class="nav-item" data-page="overview" onclick="showPage('overview')">
@@ -300,7 +300,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
         </div>
         <!-- BUY / SELL -->
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-          <div style="background:var(--green-bg);border:1px solid rgba(0,217,126,.15);border-radius:var(--radius-lg);padding:14px">
+          <div style="background:var(--green-bg);border:1px solid var(--green-bg);border-radius:var(--radius-lg);padding:14px">
             <div style="font-size:11px;color:var(--green);font-family:'IBM Plex Mono',monospace;font-weight:500;margin-bottom:10px;text-align:center">BUY</div>
             <div class="stats-grid" style="grid-template-columns:1fr 1fr;gap:8px">
               <div class="stat-card"><div class="stat-label" data-i18n="stat.winrate">Win Rate</div><div class="stat-val" id="ov-wr-buy">—</div><div class="stat-sub" id="ov-wl-buy">—</div></div>
@@ -309,7 +309,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
               <div class="stat-card"><div class="stat-label" data-i18n="stat.highloss">Highest Loss</div><div class="stat-val neg" id="ov-loss-buy">—</div></div>
             </div>
           </div>
-          <div style="background:var(--red-bg);border:1px solid rgba(255,77,106,.15);border-radius:var(--radius-lg);padding:14px">
+          <div style="background:var(--red-bg);border:1px solid var(--red-bg);border-radius:var(--radius-lg);padding:14px">
             <div style="font-size:11px;color:var(--red);font-family:'IBM Plex Mono',monospace;font-weight:500;margin-bottom:10px;text-align:center">SELL</div>
             <div class="stats-grid" style="grid-template-columns:1fr 1fr;gap:8px">
               <div class="stat-card"><div class="stat-label" data-i18n="stat.winrate">Win Rate</div><div class="stat-val" id="ov-wr-sell">—</div><div class="stat-sub" id="ov-wl-sell">—</div></div>
@@ -352,7 +352,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <!-- Session Breakdown -->
         <div id="hist-session-breakdown" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px"></div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
-          <div style="background:var(--green-bg);border:1px solid rgba(0,217,126,.15);border-radius:var(--radius-lg);padding:14px">
+          <div style="background:var(--green-bg);border:1px solid var(--green-bg);border-radius:var(--radius-lg);padding:14px">
             <div style="font-size:11px;color:var(--green);font-family:'IBM Plex Mono',monospace;font-weight:500;margin-bottom:10px;text-align:center">BUY</div>
             <div class="stats-grid" style="grid-template-columns:1fr 1fr;gap:8px">
               <div class="stat-card"><div class="stat-label">Win Rate</div><div class="stat-val" id="hist-wr-buy">—</div><div class="stat-sub" id="hist-wl-buy">—</div></div>
@@ -361,7 +361,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
               <div class="stat-card"><div class="stat-label" data-i18n="stat.highloss">Highest Loss</div><div class="stat-val neg" id="hist-loss-buy">—</div></div>
             </div>
           </div>
-          <div style="background:var(--red-bg);border:1px solid rgba(255,77,106,.15);border-radius:var(--radius-lg);padding:14px">
+          <div style="background:var(--red-bg);border:1px solid var(--red-bg);border-radius:var(--radius-lg);padding:14px">
             <div style="font-size:11px;color:var(--red);font-family:'IBM Plex Mono',monospace;font-weight:500;margin-bottom:10px;text-align:center">SELL</div>
             <div class="stats-grid" style="grid-template-columns:1fr 1fr;gap:8px">
               <div class="stat-card"><div class="stat-label">Win Rate</div><div class="stat-val" id="hist-wr-sell">—</div><div class="stat-sub" id="hist-wl-sell">—</div></div>
@@ -867,15 +867,19 @@ const THEMES = {
     '--text':'#e8eaf0','--text2':'#7c8494','--text3':'#4a5060',
     '--green':'#00d97e','--green-bg':'rgba(0,217,126,0.08)',
     '--red':'#ff4d6a','--red-bg':'rgba(255,77,106,0.08)',
-    '--accent':'#4f8eff','--accent-bg':'rgba(79,142,255,0.1)'
+    '--accent':'#4f8eff','--accent-bg':'rgba(79,142,255,0.1)',
+    '--cal-pos-bg':'rgba(0,105,55,0.38)','--cal-neg-bg':'rgba(115,0,30,0.4)',
+    '--chart-grid':'rgba(255,255,255,0.05)','--chart-tick':'#4a5060'
   },
   light: {
     '--bg':'#f0f2f5','--bg2':'#ffffff','--bg3':'#e8ecf0',
     '--border':'rgba(0,0,0,0.08)','--border2':'rgba(0,0,0,0.14)',
     '--text':'#1a2030','--text2':'#5a6478','--text3':'#9aa0b0',
-    '--green':'#00a860','--green-bg':'rgba(0,168,96,0.08)',
-    '--red':'#e02040','--red-bg':'rgba(224,32,64,0.08)',
-    '--accent':'#2060e0','--accent-bg':'rgba(32,96,224,0.08)'
+    '--green':'#00a860','--green-bg':'rgba(0,168,96,0.05)',
+    '--red':'#e02040','--red-bg':'rgba(224,32,64,0.05)',
+    '--accent':'#2060e0','--accent-bg':'rgba(32,96,224,0.08)',
+    '--cal-pos-bg':'rgba(0,168,96,0.15)','--cal-neg-bg':'rgba(224,32,64,0.13)',
+    '--chart-grid':'rgba(0,0,0,0.06)','--chart-tick':'#9aa0b0'
   }
 };
 
@@ -2262,8 +2266,8 @@ function makeChart(canvasId, type, labels, datasets, opts={}) {
     options: { responsive: true, maintainAspectRatio: false,
       plugins: { legend: { labels: { color: '#7c8494', font: { size: 10 }, boxWidth: 10 } }, ...opts.plugins },
       scales: opts.scales || {
-        x: { ticks: { display: false }, grid: { color: 'rgba(255,255,255,0.04)' } },
-        y: { ticks: { color: '#4a5060', font: { size: 10 } }, grid: { color: 'rgba(255,255,255,0.04)' } }
+        x: { ticks: { display: false }, grid: { color: getComputedStyle(document.documentElement).getPropertyValue('--chart-grid').trim() } },
+        y: { ticks: { color: getComputedStyle(document.documentElement).getPropertyValue('--chart-tick').trim(), font: { size: 10 } }, grid: { color: getComputedStyle(document.documentElement).getPropertyValue('--chart-grid').trim() } }
       },
       datasets: type === 'bar' ? { bar: { maxBarThickness: 40 } } : {}
     }
@@ -2618,7 +2622,7 @@ function renderCalendar() {
       cell.setAttribute('data-cal-date', ds);
       if (inMonth) cell.onclick = () => showDayTrades(ds);
       let bg = 'transparent';
-      if (inMonth && data) bg = data.pnl > 0 ? 'rgba(0,105,55,0.38)' : 'rgba(115,0,30,0.4)';
+      if (inMonth && data) bg = data.pnl > 0 ? 'var(--cal-pos-bg)' : 'var(--cal-neg-bg)';
 
       cell.style.cssText = 'background:' + bg + ';border-right:1px solid var(--border);border-bottom:1px solid var(--border);padding:8px 10px;min-height:62px;box-sizing:border-box' + (inMonth ? ';cursor:pointer' : '');
 
