@@ -98,7 +98,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
 .stats-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
 .stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px 16px}
-.stat-label{font-size:10px;color:var(--text);text-transform:uppercase;letter-spacing:.07em;font-family:"IBM Plex Mono",monospace;margin-bottom:6px;opacity:.7}
+.stat-label{font-size:11px;color:var(--text);text-transform:uppercase;letter-spacing:.07em;font-family:"IBM Plex Mono",monospace;margin-bottom:6px;opacity:.85}
 .stat-val{font-size:20px;font-weight:500;font-family:"IBM Plex Mono",monospace;color:var(--text)}
 .stat-val.pos{color:var(--green)}.stat-val.neg{color:var(--red)}
 .stat-sub{font-size:11px;color:var(--text3);font-family:"IBM Plex Mono",monospace;margin-top:3px}
@@ -300,7 +300,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
         </div>
         <!-- BUY / SELL -->
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-          <div style="background:var(--green-bg);border:1px solid var(--green-bg);border-radius:var(--radius-lg);padding:14px">
+          <div style="background:var(--buy-box-bg);border:1px solid var(--buy-box-bdr);border-radius:var(--radius-lg);padding:14px">
             <div style="font-size:11px;color:var(--green);font-family:'IBM Plex Mono',monospace;font-weight:500;margin-bottom:10px;text-align:center">BUY</div>
             <div class="stats-grid" style="grid-template-columns:1fr 1fr;gap:8px">
               <div class="stat-card"><div class="stat-label" data-i18n="stat.winrate">Win Rate</div><div class="stat-val" id="ov-wr-buy">—</div><div class="stat-sub" id="ov-wl-buy">—</div></div>
@@ -309,7 +309,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
               <div class="stat-card"><div class="stat-label" data-i18n="stat.highloss">Highest Loss</div><div class="stat-val neg" id="ov-loss-buy">—</div></div>
             </div>
           </div>
-          <div style="background:var(--red-bg);border:1px solid var(--red-bg);border-radius:var(--radius-lg);padding:14px">
+          <div style="background:var(--sell-box-bg);border:1px solid var(--sell-box-bdr);border-radius:var(--radius-lg);padding:14px">
             <div style="font-size:11px;color:var(--red);font-family:'IBM Plex Mono',monospace;font-weight:500;margin-bottom:10px;text-align:center">SELL</div>
             <div class="stats-grid" style="grid-template-columns:1fr 1fr;gap:8px">
               <div class="stat-card"><div class="stat-label" data-i18n="stat.winrate">Win Rate</div><div class="stat-val" id="ov-wr-sell">—</div><div class="stat-sub" id="ov-wl-sell">—</div></div>
@@ -352,7 +352,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <!-- Session Breakdown -->
         <div id="hist-session-breakdown" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px"></div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
-          <div style="background:var(--green-bg);border:1px solid var(--green-bg);border-radius:var(--radius-lg);padding:14px">
+          <div style="background:var(--buy-box-bg);border:1px solid var(--buy-box-bdr);border-radius:var(--radius-lg);padding:14px">
             <div style="font-size:11px;color:var(--green);font-family:'IBM Plex Mono',monospace;font-weight:500;margin-bottom:10px;text-align:center">BUY</div>
             <div class="stats-grid" style="grid-template-columns:1fr 1fr;gap:8px">
               <div class="stat-card"><div class="stat-label">Win Rate</div><div class="stat-val" id="hist-wr-buy">—</div><div class="stat-sub" id="hist-wl-buy">—</div></div>
@@ -361,7 +361,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
               <div class="stat-card"><div class="stat-label" data-i18n="stat.highloss">Highest Loss</div><div class="stat-val neg" id="hist-loss-buy">—</div></div>
             </div>
           </div>
-          <div style="background:var(--red-bg);border:1px solid var(--red-bg);border-radius:var(--radius-lg);padding:14px">
+          <div style="background:var(--sell-box-bg);border:1px solid var(--sell-box-bdr);border-radius:var(--radius-lg);padding:14px">
             <div style="font-size:11px;color:var(--red);font-family:'IBM Plex Mono',monospace;font-weight:500;margin-bottom:10px;text-align:center">SELL</div>
             <div class="stats-grid" style="grid-template-columns:1fr 1fr;gap:8px">
               <div class="stat-card"><div class="stat-label">Win Rate</div><div class="stat-val" id="hist-wr-sell">—</div><div class="stat-sub" id="hist-wl-sell">—</div></div>
@@ -869,7 +869,9 @@ const THEMES = {
     '--red':'#ff4d6a','--red-bg':'rgba(255,77,106,0.08)',
     '--accent':'#4f8eff','--accent-bg':'rgba(79,142,255,0.1)',
     '--cal-pos-bg':'rgba(0,105,55,0.38)','--cal-neg-bg':'rgba(115,0,30,0.4)',
-    '--chart-grid':'rgba(255,255,255,0.05)','--chart-tick':'#4a5060'
+    '--chart-grid':'rgba(255,255,255,0.05)','--chart-tick':'#4a5060',
+    '--buy-box-bg':'rgba(0,217,126,0.08)','--buy-box-bdr':'rgba(0,217,126,0.22)',
+    '--sell-box-bg':'rgba(255,77,106,0.08)','--sell-box-bdr':'rgba(255,77,106,0.22)'
   },
   light: {
     '--bg':'#f0f2f5','--bg2':'#ffffff','--bg3':'#e8ecf0',
@@ -878,8 +880,10 @@ const THEMES = {
     '--green':'#00a860','--green-bg':'rgba(0,168,96,0.05)',
     '--red':'#e02040','--red-bg':'rgba(224,32,64,0.05)',
     '--accent':'#2060e0','--accent-bg':'rgba(32,96,224,0.08)',
-    '--cal-pos-bg':'rgba(0,168,96,0.15)','--cal-neg-bg':'rgba(224,32,64,0.13)',
-    '--chart-grid':'rgba(0,0,0,0.06)','--chart-tick':'#9aa0b0'
+    '--cal-pos-bg':'rgba(0,168,96,0.18)','--cal-neg-bg':'rgba(224,32,64,0.15)',
+    '--chart-grid':'rgba(0,0,0,0.08)','--chart-tick':'#5a6478',
+    '--buy-box-bg':'rgba(0,168,96,0.12)','--buy-box-bdr':'rgba(0,168,96,0.40)',
+    '--sell-box-bg':'rgba(224,32,64,0.10)','--sell-box-bdr':'rgba(224,32,64,0.35)'
   }
 };
 
