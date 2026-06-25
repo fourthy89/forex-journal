@@ -208,6 +208,19 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .sel-bar.hidden{opacity:0;pointer-events:none;transform:translateY(-8px)}
 .trade-cb{width:14px;height:14px;cursor:pointer;accent-color:var(--accent);flex-shrink:0;vertical-align:middle}
 
+
+#app-loader{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:9999;transition:opacity .35s,visibility .35s}
+#app-loader.hidden{opacity:0;visibility:hidden}
+.loader-spinner{width:38px;height:38px;border:3px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:loaderSpin .7s linear infinite}
+@keyframes loaderSpin{to{transform:rotate(360deg)}}
+.loader-text{font-size:12px;color:var(--text3);font-family:'IBM Plex Mono',monospace;letter-spacing:.06em}
+.nav-group-header{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;color:var(--text2);font-size:13px;transition:all .15s;border-left:2px solid transparent;user-select:none}
+.nav-group-header:hover{color:var(--text);background:var(--bg3)}
+.nav-group-header svg{width:16px;height:16px;flex-shrink:0}
+.nav-group-chevron{margin-left:auto;width:13px!important;height:13px!important;transition:transform .22s;flex-shrink:0;opacity:.6}
+.nav-group-body{overflow:hidden;max-height:0;transition:max-height .28s ease}
+.nav-group-body.open{max-height:300px}
+.nav-sub{padding-left:34px!important}
 </style>
 </head>
 <body>
@@ -218,34 +231,41 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div class="logo-sub">v3.0 · supabase</div>
     </div>
     <nav class="nav">
-      <div class="nav-item" onclick="showPage('overview')">
+      <div class="nav-item" data-page="overview" onclick="showPage('overview')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-        <span data-i18n="nav.overview">Overview</span>
+        <span data-i18n="nav.overview">ภาพรวม</span>
       </div>
-      <div class="nav-item" onclick="showPage('history')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="12 8 12 12 14 14"/><path d="M3.05 11a9 9 0 1 1 .5 4"/><polyline points="3 16 3 11 8 11"/></svg>
-        <span data-i18n="nav.history">ประวัติการเทรด</span>
+      <div class="nav-group-header" onclick="toggleNavGroup()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        <span>Dashboard</span>
+        <svg id="nav-group-chevron" class="nav-group-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
       </div>
-      <div class="nav-item" onclick="showPage('calendar')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-        <span data-i18n="nav.calendar">ปฏิทิน</span>
+      <div class="nav-group-body" id="nav-group-body">
+        <div class="nav-item nav-sub" data-page="history" onclick="showPage('history')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="12 8 12 12 14 14"/><path d="M3.05 11a9 9 0 1 1 .5 4"/><polyline points="3 16 3 11 8 11"/></svg>
+          <span data-i18n="nav.history">ประวัติการเทรด</span>
+        </div>
+        <div class="nav-item nav-sub" data-page="calendar" onclick="showPage('calendar')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <span data-i18n="nav.calendar">ปฏิทิน</span>
+        </div>
+        <div class="nav-item nav-sub" data-page="missed" onclick="showPage('missed')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+          <span data-i18n="nav.missed">Missed Trade</span>
+        </div>
+        <div class="nav-item nav-sub" data-page="analysis" onclick="showPage('analysis')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          <span data-i18n="nav.analysis">วิเคราะห์</span>
+          <span id="analysis-nav-badge" style="display:none;margin-left:auto;background:var(--accent);color:#fff;font-size:10px;font-family:'IBM Plex Mono',monospace;font-weight:500;padding:1px 7px;border-radius:20px;min-width:18px;text-align:center"></span>
+        </div>
       </div>
-      <div class="nav-item" onclick="showPage('missed')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-        <span data-i18n="nav.missed">Missed Trade</span>
-      </div>
-      <div class="nav-item" onclick="showPage('account')">
+      <div class="nav-item" data-page="account" onclick="showPage('account')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
         <span data-i18n="nav.account">บัญชี</span>
       </div>
-      <div class="nav-item" onclick="showPage('settings')">
+      <div class="nav-item" data-page="settings" onclick="showPage('settings')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
         <span data-i18n="nav.settings">การตั้งค่า</span>
-      </div>
-      <div class="nav-item" onclick="showPage('analysis')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-        <span data-i18n="nav.analysis">วิเคราะห์</span>
-        <span id="analysis-nav-badge" style="display:none;margin-left:auto;background:var(--accent);color:#fff;font-size:10px;font-family:'IBM Plex Mono',monospace;font-weight:500;padding:1px 7px;border-radius:20px;min-width:18px;text-align:center"></span>
       </div>
     </nav>
     <div class="sidebar-footer">
@@ -572,10 +592,6 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <h3 data-i18n="set.theme">ธีมสี</h3>
         <div class="theme-picker" id="theme-picker">
           <div class="theme-dot active" data-theme="default" style="background:#1a1e25" title="Dark" onclick="setTheme('default')"></div>
-          <div class="theme-dot" data-theme="midnight" style="background:#0a0a1a" title="Midnight" onclick="setTheme('midnight')"></div>
-          <div class="theme-dot" data-theme="forest" style="background:#0d1a12" title="Forest" onclick="setTheme('forest')"></div>
-          <div class="theme-dot" data-theme="slate" style="background:#1e2433" title="Slate" onclick="setTheme('slate')"></div>
-          <div class="theme-dot" data-theme="purple" style="background:#1e1538" title="Purple" onclick="setTheme('purple')"></div>
           <div class="theme-dot" data-theme="light" style="background:#f0f2f5;border-color:#ccc" title="Light" onclick="setTheme('light')"></div>
         </div>
         <div style="font-size:11px;color:var(--text2);font-family:'IBM Plex Mono',monospace">กดวงกลมเพื่อเปลี่ยนธีม — จำค่าไว้อัตโนมัติ</div>
@@ -832,38 +848,6 @@ const THEMES = {
     '--red':'#ff4d6a','--red-bg':'rgba(255,77,106,0.08)',
     '--accent':'#4f8eff','--accent-bg':'rgba(79,142,255,0.1)'
   },
-  midnight: {
-    '--bg':'#07071a','--bg2':'#0d0d2b','--bg3':'#12123a',
-    '--border':'rgba(255,255,255,0.06)','--border2':'rgba(255,255,255,0.11)',
-    '--text':'#e0e4ff','--text2':'#6b75aa','--text3':'#3d4470',
-    '--green':'#00e5a0','--green-bg':'rgba(0,229,160,0.08)',
-    '--red':'#ff4d8a','--red-bg':'rgba(255,77,138,0.08)',
-    '--accent':'#7b6fff','--accent-bg':'rgba(123,111,255,0.1)'
-  },
-  forest: {
-    '--bg':'#080f0a','--bg2':'#0d1a10','--bg3':'#122218',
-    '--border':'rgba(255,255,255,0.06)','--border2':'rgba(255,255,255,0.11)',
-    '--text':'#d8eed0','--text2':'#6a8a70','--text3':'#3a5040',
-    '--green':'#00e07a','--green-bg':'rgba(0,224,122,0.08)',
-    '--red':'#ff5252','--red-bg':'rgba(255,82,82,0.08)',
-    '--accent':'#4ecf8a','--accent-bg':'rgba(78,207,138,0.1)'
-  },
-  slate: {
-    '--bg':'#111622','--bg2':'#181f2e','--bg3':'#1f2940',
-    '--border':'rgba(255,255,255,0.07)','--border2':'rgba(255,255,255,0.13)',
-    '--text':'#dce6f0','--text2':'#6a7d99','--text3':'#3d5066',
-    '--green':'#00d4aa','--green-bg':'rgba(0,212,170,0.08)',
-    '--red':'#ff6b6b','--red-bg':'rgba(255,107,107,0.08)',
-    '--accent':'#4fa3ff','--accent-bg':'rgba(79,163,255,0.1)'
-  },
-  purple: {
-    '--bg':'#0f0a1a','--bg2':'#160f2a','--bg3':'#1e1538',
-    '--border':'rgba(255,255,255,0.07)','--border2':'rgba(200,180,255,0.15)',
-    '--text':'#ede0ff','--text2':'#9b80cc','--text3':'#5a4480',
-    '--green':'#a0e080','--green-bg':'rgba(160,224,128,0.08)',
-    '--red':'#ff80b0','--red-bg':'rgba(255,128,176,0.08)',
-    '--accent':'#c080ff','--accent-bg':'rgba(192,128,255,0.12)'
-  },
   light: {
     '--bg':'#f0f2f5','--bg2':'#ffffff','--bg3':'#e8ecf0',
     '--border':'rgba(0,0,0,0.08)','--border2':'rgba(0,0,0,0.14)',
@@ -885,7 +869,7 @@ function setTheme(name) {
 
 function loadTheme() {
   const saved = localStorage.getItem('theme') || 'default';
-  setTheme(saved);
+  setTheme(THEMES[saved] ? saved : 'default');
 }
 
 const SB_URL = 'https://onxgkdnjtkfmlxydmxkr.supabase.co';
@@ -1164,6 +1148,12 @@ async function loadAll() {
   } catch (e) {
     setS('err', 'connection error');
     toast('เชื่อมต่อ Supabase ไม่ได้');
+  } finally {
+    const ldr = document.getElementById('app-loader');
+    if (ldr) {
+      ldr.classList.add('hidden');
+      setTimeout(() => { ldr.style.display = 'none'; }, 380);
+    }
   }
 }
 
@@ -1702,11 +1692,31 @@ async function saveSettings() {
   } catch { toast('บันทึกไม่ได้'); }
 }
 
+function openNavGroup() {
+  const body = document.getElementById('nav-group-body');
+  const chev = document.getElementById('nav-group-chevron');
+  if (body) body.classList.add('open');
+  if (chev) chev.style.transform = 'rotate(90deg)';
+}
+function toggleNavGroup() {
+  const body = document.getElementById('nav-group-body');
+  const chev = document.getElementById('nav-group-chevron');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  chev.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(90deg)';
+  localStorage.setItem('navGroupOpen', isOpen ? '0' : '1');
+}
+function loadNavGroup() {
+  const saved = localStorage.getItem('navGroupOpen');
+  if (saved !== '0') openNavGroup();
+}
 function showPage(n) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
   document.getElementById('page-' + n).classList.add('active');
-  document.querySelectorAll('.nav-item')[{ overview: 0, history: 1, calendar: 2, missed: 3, account: 4, settings: 5, analysis: 6 }[n]].classList.add('active');
+  const navEl = document.querySelector('.nav-item[data-page="'+n+'"]');
+  if (navEl) { navEl.classList.add('active'); }
+  if (['history','calendar','missed','analysis'].includes(n)) openNavGroup();
   localStorage.setItem('lastPage', n);
   if (n === 'overview') renderOverview();
   if (n === 'history') { if (histTab === 'mt5') renderHistory(); else renderTable(); }
@@ -2335,6 +2345,7 @@ if (IS_VIEW) {
 const _vb = document.getElementById('view-badge');
 if (_vb) _vb.style.display = IS_VIEW ? '' : 'none';
 loadTheme();
+loadNavGroup();
 globalLang = localStorage.getItem('lang') || 'th';
 loadPool();
 document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
@@ -2936,5 +2947,9 @@ function renderAnalysis() {
     </div>`;
 }
 </script>
+<div id="app-loader">
+  <div class="loader-spinner"></div>
+  <div class="loader-text">กำลังโหลดข้อมูล...</div>
+</div>
 </body>
 </html>
