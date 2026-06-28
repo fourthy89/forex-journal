@@ -649,16 +649,19 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <label data-i18n="calc.risk">ความเสี่ยง %</label>
           <input type="number" id="calc-risk-input" placeholder="1" min="0.01" max="100" step="0.1">
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px">
-          <div class="fg">
-            <label data-i18n="calc.entry">ราคาเข้า</label>
-            <input type="number" id="calc-entry" placeholder="0" step="any">
+        <div style="margin-bottom:6px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+            <label style="font-size:11px;color:var(--text2);letter-spacing:.04em;font-family:-apple-system,BlinkMacSystemFont,sans-serif" id="calc-sl-label">SL Distance (pip)</label>
+            <div style="display:flex;gap:4px">
+              <button id="calc-unit-pip" onclick="calcSetUnit('pip')" style="padding:5px 12px;border-radius:var(--radius);border:1px solid var(--border2);background:transparent;cursor:pointer;font-size:11px;font-weight:500;font-family:-apple-system,BlinkMacSystemFont,sans-serif;transition:all .15s;color:#fff;background:var(--accent);border-color:var(--accent)">Pip</button>
+              <button id="calc-unit-pt"  onclick="calcSetUnit('pt')"  style="padding:5px 12px;border-radius:var(--radius);border:1px solid var(--border2);background:transparent;cursor:pointer;font-size:11px;font-weight:500;font-family:-apple-system,BlinkMacSystemFont,sans-serif;transition:all .15s;color:var(--text2)">Point</button>
+            </div>
           </div>
-          <div class="fg">
-            <label data-i18n="calc.sl">Stop Loss</label>
-            <input type="number" id="calc-sl" placeholder="0" step="any">
-          </div>
+          <span id="calc-pip-info" style="display:block;font-size:11px;color:var(--text3);font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin-bottom:8px"></span>
+          <input type="number" id="calc-sl-pips" placeholder="50" min="0" step="1" style="background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);padding:9px 12px;font-size:13px;font-family:-apple-system,BlinkMacSystemFont,sans-serif;width:100%;outline:none;box-sizing:border-box">
+          <div id="calc-sl-presets" style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap"></div>
         </div>
+        <div style="height:16px"></div>
         <div style="background:var(--bg2);border:1px solid var(--card-bdr);border-radius:var(--radius-lg);padding:20px 20px 16px">
           <div style="text-align:center;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border)">
             <div class="stat-label" style="margin-bottom:8px" data-i18n="calc.lotsize">Lot Size</div>
@@ -2418,11 +2421,11 @@ function makeChart(canvasId, type, labels, datasets, opts={}) {
 }
 
 const CALC_SYMS = {
-  'XAUUSD':{ pip:0.01,   ppv:1,  unit:'pip' },
-  'EURUSD':{ pip:0.0001, ppv:10, unit:'pip' },
-  'GBPUSD':{ pip:0.0001, ppv:10, unit:'pip' },
-  'NAS100':{ pip:1,      ppv:1,  unit:'pt'  },
-  'BTCUSD':{ pip:1,      ppv:1,  unit:'pt'  },
+  'XAUUSD':{ pip:1,      ppv:100, unit:'pip', pts:100 },
+  'EURUSD':{ pip:0.0001, ppv:10,  unit:'pip', pts:10  },
+  'GBPUSD':{ pip:0.0001, ppv:10,  unit:'pip', pts:10  },
+  'NAS100':{ pip:1,      ppv:1,   unit:'pt',  pts:1   },
+  'BTCUSD':{ pip:1,      ppv:1,   unit:'pt',  pts:1   },
 };
 function renderCalculator() {
   const symEl = document.getElementById('calc-sym-btns');
@@ -2444,10 +2447,24 @@ function renderCalculator() {
     riskInp.addEventListener('input', () => { localStorage.setItem('calc_risk', riskInp.value); calcUpdate(); });
     riskInp.dataset.init = '1';
   }
-  ['calc-entry','calc-sl'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el && !el.dataset.init) { el.addEventListener('input', calcUpdate); el.dataset.init = '1'; }
-  });
+  const slPipsEl = document.getElementById('calc-sl-pips');
+  if (slPipsEl && !slPipsEl.dataset.init) {
+    slPipsEl.addEventListener('input', calcUpdate);
+    slPipsEl.dataset.init = '1';
+  }
+  const slPresetsEl = document.getElementById('calc-sl-presets');
+  if (slPresetsEl && !slPresetsEl.dataset.init) {
+    [10,15,20,25,30,50,75,100].forEach(v => {
+      const btn = document.createElement('button');
+      btn.textContent = v;
+      btn.style.cssText = 'padding:4px 10px;border-radius:var(--radius);border:1px solid var(--border2);background:transparent;cursor:pointer;font-size:11px;color:var(--text2);font-family:-apple-system,BlinkMacSystemFont,sans-serif;transition:all .15s';
+      btn.onmouseover = () => { btn.style.borderColor='var(--accent)'; btn.style.color='var(--accent)'; };
+      btn.onmouseout  = () => { btn.style.borderColor='var(--border2)'; btn.style.color='var(--text2)'; };
+      btn.onclick = () => { const el=document.getElementById('calc-sl-pips'); if(el){el.value=v; calcUpdate();} };
+      slPresetsEl.appendChild(btn);
+    });
+    slPresetsEl.dataset.init = '1';
+  }
   calcSetSym(localStorage.getItem('calc_sym') || 'XAUUSD');
 }
 function calcSetSym(s) {
@@ -2461,38 +2478,83 @@ function calcSetSym(s) {
     btn.style.color = on ? '#fff' : 'var(--text2)';
     btn.style.borderColor = on ? 'var(--accent)' : 'var(--border2)';
   });
+  calcUpdateLabel();
   calcUpdate();
 }
 
+function calcUpdateLabel() {
+  const sym  = localStorage.getItem('calc_sym') || 'XAUUSD';
+  const unit = localStorage.getItem('calc_unit') || 'pip';
+  const spec = CALC_SYMS[sym];
+  if (!spec) return;
+  const pipExamples = {
+    'XAUUSD':'1 pip = $1 · 10 pips = 1000 points',
+    'EURUSD':'0.0001 = 1 pip · 10 points/pip',
+    'GBPUSD':'0.0001 = 1 pip · 10 points/pip',
+    'NAS100':'1 index point = 1 pt',
+    'BTCUSD':'$1 move = 1 pt',
+  };
+  const ptExamples = {
+    'XAUUSD':'1 point = $0.01 · 100 points/pip',
+    'EURUSD':'1 point = 0.00001 (pipette) · 10/pip',
+    'GBPUSD':'1 point = 0.00001 (pipette) · 10/pip',
+    'NAS100':'= pip (indices ไม่แยก)',
+    'BTCUSD':'= pip (BTC ไม่แยก)',
+  };
+  const isPoint  = unit === 'pt' && spec.pts > 1;
+  const unitLabel = isPoint ? 'point' : spec.unit;
+  const ppvDisp   = isPoint ? (spec.ppv / spec.pts) + '$' : spec.ppv + '$';
+  const lbl  = document.getElementById('calc-sl-label');
+  const info = document.getElementById('calc-pip-info');
+  if (lbl)  lbl.textContent  = 'SL Distance (' + unitLabel + ')';
+  if (info) info.textContent = (isPoint ? ptExamples[sym] : pipExamples[sym]) + ' · ' + ppvDisp + '/' + unitLabel + '/lot';
+  ['pip','pt'].forEach(u => {
+    const btn = document.getElementById('calc-unit-' + u);
+    if (!btn) return;
+    const on = u === unit;
+    btn.style.background  = on ? 'var(--accent)' : 'transparent';
+    btn.style.color       = on ? '#fff' : 'var(--text2)';
+    btn.style.borderColor = on ? 'var(--accent)' : 'var(--border2)';
+  });
+}
+function calcSetUnit(u) {
+  localStorage.setItem('calc_unit', u);
+  calcUpdateLabel();
+  calcUpdate();
+}
 function calcUpdate() {
   const sym = localStorage.getItem('calc_sym') || 'XAUUSD';
   const spec = CALC_SYMS[sym];
   if (!spec) return;
   const balance  = parseFloat(document.getElementById('calc-balance')?.value) || 0;
   const riskPct  = parseFloat(document.getElementById('calc-risk-input')?.value) || 0;
-  const entry    = parseFloat(document.getElementById('calc-entry')?.value) || 0;
-  const sl       = parseFloat(document.getElementById('calc-sl')?.value) || 0;
+  const unit    = localStorage.getItem('calc_unit') || 'pip';
+  const slVal   = parseFloat(document.getElementById('calc-sl-pips')?.value) || 0;
+  const slPips  = (unit === 'pt' && spec.pts > 1) ? slVal / spec.pts : slVal;
   const riskAmt  = balance * (riskPct / 100);
   const riskAmtEl = document.getElementById('calc-risk-amt');
   const slDistEl  = document.getElementById('calc-sl-dist');
   const pipValEl  = document.getElementById('calc-pip-val');
   const lotEl     = document.getElementById('calc-lot');
-  if (riskAmtEl) riskAmtEl.textContent = balance > 0 ? riskAmt.toFixed(2) + '$' : '—';
-  if (pipValEl)  pipValEl.textContent  = spec.ppv + '$';
-  if (!balance || !entry || !sl || entry === sl) {
-    if (lotEl)   lotEl.textContent = '—';
+  if (riskAmtEl) riskAmtEl.textContent = balance > 0 && riskPct > 0 ? riskAmt.toFixed(2) + '$' : '—';
+  const unit0   = localStorage.getItem('calc_unit') || 'pip';
+  const ppvDisp = (unit0 === 'pt' && spec.pts > 1) ? (spec.ppv / spec.pts) + '$' : spec.ppv + '$';
+  if (pipValEl)  pipValEl.textContent  = ppvDisp;
+  if (!balance || !riskPct || !slPips) {
+    if (lotEl)    lotEl.textContent = '—';
     if (slDistEl) slDistEl.textContent = '—';
     return;
   }
-  const priceDist  = Math.abs(entry - sl);
-  const slPips     = Math.round(priceDist / spec.pip);
   const riskPerLot = slPips * spec.ppv;
   const lot        = riskAmt / riskPerLot;
   if (lotEl) {
     lotEl.textContent = (lot > 0 && lot < 1000) ? lot.toFixed(2) : '—';
     lotEl.style.color = 'var(--accent)';
   }
-  if (slDistEl) slDistEl.textContent = slPips + ' ' + spec.unit;
+  const unit2   = localStorage.getItem('calc_unit') || 'pip';
+  const dispUnit = unit2 === 'pt' && spec.pts > 1 ? 'pt' : spec.unit;
+  const dispVal  = unit2 === 'pt' && spec.pts > 1 ? slVal : slPips;
+  if (slDistEl) slDistEl.textContent = dispVal + ' ' + dispUnit;
 }
 
 function normalizePair(sym) {
