@@ -281,7 +281,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <div id="page-overview" class="page">
       <div class="page-title" data-i18n="ov.title">Overview</div>
       <div class="overview-section">
-        <div class="overview-section-title" data-i18n="ov.result">Result</div>
+        <div class="overview-section-title" data-i18n="ov.result">Account</div>
         <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:16px">
           <div class="stat-card"><div class="stat-label" data-i18n="ov.withdrawal">ถอนกำไรรวม</div><div class="stat-val pos" id="ov-acc-profit2">—</div><div class="stat-sub" id="ov-acc-profit-thb2">—</div></div>
           <div class="stat-card"><div class="stat-label" data-i18n="ov.deposit">ฝากรวม</div><div class="stat-val neg" id="ov-acc-deposit2">—</div><div class="stat-sub" id="ov-acc-deposit-thb2">—</div></div>
@@ -321,8 +321,8 @@ tr:hover td{background:rgba(255,255,255,.02)}
       </div>
       <div class="overview-section">
         <div class="overview-section-title" data-i18n="ov.charts">กราฟ</div>
-        <div class="stats-grid-2">
-          <div class="chart-half"><div class="chart-half-title" data-i18n="ov.pnlchart">Cumulative P&L</div><canvas id="ov-chart-pnl"></canvas></div>
+        <div class="stats-grid-2" style="grid-template-columns:minmax(0,1fr)">
+          <div class="chart-half" style="height:auto;overflow:hidden;width:100%;box-sizing:border-box;min-width:0"><div class="chart-half-title" id="ov-week-cal-title">สัปดาห์นี้</div><div id="ov-week-cal" style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr)) 52px;gap:4px;overflow:hidden;width:100%;box-sizing:border-box"></div></div>
           <div class="chart-half"><div class="chart-half-title" data-i18n="ov.pairchart">P&L แยกตามคู่เงิน</div><canvas id="ov-chart-pair"></canvas></div>
         </div>
 
@@ -574,11 +574,28 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div class="settings-block">
         <h3 style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;letter-spacing:.03em">Version</h3>
         <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:12px">
-          <span style="font-size:20px;font-weight:500;font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:var(--accent)">v5.3</span>
+          <span style="font-size:20px;font-weight:500;font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:var(--accent)">v5.5</span>
           <span style="font-size:11px;color:var(--text3);font-family:-apple-system,BlinkMacSystemFont,sans-serif">FX Journal</span>
         </div>
         <div style="display:flex;flex-direction:column;gap:6px">
           <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--accent);font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin-bottom:2px">
+            <span style="font-size:10px">✦</span>
+            <span style="font-weight:500">v5.5</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);font-family:-apple-system,BlinkMacSystemFont,sans-serif">
+            <span style="color:var(--text3);font-size:10px">·</span>
+            <span>Calendar — เพิ่มขนาด font: header 10→11px, เลขวัน 11→13px, trade count 12→13px, P&L 13→15px, summary P&L 16→18px</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);font-family:-apple-system,BlinkMacSystemFont,sans-serif">
+            <span style="color:var(--text3);font-size:10px">·</span>
+            <span>Calendar — เพิ่มความสว่าง text: เลขวัน, trade count สัปดาห์ ใช้ --text แทน --text2/text3</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);font-family:-apple-system,BlinkMacSystemFont,sans-serif">
+            <span style="color:var(--text3);font-size:10px">·</span>
+            <span>Calendar header — label P/L: และ Trades: สว่างขึ้น (--text3 → --text2)</span>
+          </div>
+          <div style="margin:8px 0 6px;border-top:1px solid var(--border)"></div>
+<div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--accent);font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin-bottom:2px">
             <span style="font-size:10px">✦</span>
             <span style="font-weight:500">v5.3</span>
           </div>
@@ -613,11 +630,11 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <button onclick="changeCalendarMonth(1)" style="background:none;border:1px solid var(--border2);border-radius:var(--radius);color:var(--text2);width:28px;height:28px;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;line-height:1">&#8250;</button>
           <div style="margin-left:auto;display:flex;align-items:center;gap:22px">
             <div style="display:flex;align-items:baseline;gap:5px">
-              <span style="font-size:11px;color:var(--text3);font-family:-apple-system,BlinkMacSystemFont,sans-serif">P/L:</span>
+              <span style="font-size:11px;color:var(--text2);font-family:-apple-system,BlinkMacSystemFont,sans-serif">P/L:</span>
               <span id="cal-total-pnl" style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;font-weight:500;color:var(--text2)">—</span>
             </div>
             <div style="display:flex;align-items:baseline;gap:5px">
-              <span style="font-size:11px;color:var(--text3);font-family:-apple-system,BlinkMacSystemFont,sans-serif">Trades:</span>
+              <span style="font-size:11px;color:var(--text2);font-family:-apple-system,BlinkMacSystemFont,sans-serif">Trades:</span>
               <span id="cal-total-trades" style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;font-weight:500;color:var(--text)">0</span>
             </div>
           </div>
@@ -991,7 +1008,7 @@ const I18N = {
     'ms.profitthb':'กำไรถอน (฿)','ms.depositthb':'ฝาก (฿)','ms.netthb':'สุทธิ (฿)',
     'set.pairs':'คู่เงิน','set.strategies':'กลยุทธ์','set.accounts':'บัญชีเทรด',
     'set.theme':'ธีมสี','set.backup':'สำรองและส่งออก',
-    'ov.result':'ผลลัพธ์','ov.withdrawal':'ถอนกำไรรวม','ov.tradesummary':'สรุปการเทรด',
+    'ov.result':'Account','ov.withdrawal':'ถอนกำไรรวม','ov.tradesummary':'สรุปการเทรด',
     'ov.charts':'กราฟ','ov.pnlchart':'กำไร/ขาดทุนสะสม','ov.pairchart':'กำไร/ขาดทุนแยกตามคู่เงิน',
     'th.pair':'คู่เงิน','th.side':'ทิศทาง','th.entry':'ราคาเข้า','th.exit':'ราคาออก',
     'th.lot':'ล็อต','th.rr':'R:R','th.session':'เซสชัน','th.pnl':'กำไร/ขาดทุน',
@@ -1091,7 +1108,7 @@ const I18N = {
     'ms.profitthb':'Profit (฿)','ms.depositthb':'Deposit (฿)','ms.netthb':'Net (฿)',
     'set.pairs':'Currency Pairs','set.strategies':'Strategies','set.accounts':'Trading Accounts',
     'set.theme':'Color Theme','set.backup':'Backup & Export',
-    'ov.result':'Result','ov.withdrawal':'Total Withdrawal','ov.tradesummary':'Trade Summary',
+    'ov.result':'Account','ov.withdrawal':'Total Withdrawal','ov.tradesummary':'Trade Summary',
     'ov.charts':'Charts','ov.pnlchart':'Cumulative P&L','ov.pairchart':'P&L by Pair',
     'th.pair':'Pair','th.side':'Side','th.entry':'Entry','th.exit':'Exit',
     'th.lot':'Lot','th.rr':'R:R','th.session':'Session','th.pnl':'P&L',
@@ -2389,6 +2406,90 @@ function makeChart(canvasId, type, labels, datasets, opts={}) {
   });
 }
 
+function normalizePair(sym) {
+  if (!sym) return sym;
+  const s = sym.toUpperCase().trim();
+  const ALIAS = {
+    'XAUUSD': ['GOLD','XAUUSD'],
+    'XAGUSD': ['SILVER','XAGUSD'],
+    'NAS100': ['NASDAQ100','NASDAQ','US100','USTEC','USTECH','NDX','NQ','NAS100'],
+    'SP500':  ['SPX500','USA500','US500','SPX','SP500'],
+    'US30':   ['DOW30','DJ30','DJIA','DOW','US30'],
+    'DAX':    ['GER40','GER30','DAX'],
+    'UK100':  ['FTSE100','GBR100','FTSE','UK100'],
+    'XTIUSD': ['USOIL','CRUDE','WTI','OIL','XTIUSD'],
+    'XBRUSD': ['UKOIL','BRENT','XBRUSD'],
+    'BTCUSD': ['XBTUSD','BITCOIN','BTC','BTCUSD'],
+    'ETHUSD': ['ETHEREUM','ETH','ETHUSD'],
+  };
+  for (const [canonical, aliases] of Object.entries(ALIAS)) {
+    if (aliases.includes(s)) return canonical;
+    if (s.startsWith(canonical) && s.length > canonical.length) return canonical;
+    for (const alias of aliases) {
+      if (s.startsWith(alias) && s.length > alias.length) return canonical;
+    }
+  }
+  if (/^[A-Z]{6}/.test(s) && s.length > 6) return s.slice(0, 6);
+  return s;
+}
+
+function renderOverviewWeekCal() {
+  const calEl = document.getElementById('ov-week-cal');
+  const titleEl = document.getElementById('ov-week-cal-title');
+  if (!calEl) return;
+  const today = new Date();
+  const todayStr = today.toISOString().split('T')[0];
+  const sun = new Date(today);
+  sun.setDate(today.getDate() - today.getDay());
+  const DAY_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const days = [];
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(sun);
+    d.setDate(sun.getDate() + i);
+    const ds = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+    days.push({ ds, d, name: DAY_NAMES[i] });
+  }
+  if (titleEl) {
+    const fmt = d => d.getDate() + '/' + (d.getMonth()+1);
+    titleEl.textContent = 'สัปดาห์นี้  ' + fmt(days[0].d) + ' \u2013 ' + fmt(days[6].d);
+  }
+  const dayMap = {};
+  trades.forEach(t => {
+    if (!t.date || t.pnl === null || t.pnl === '') return;
+    if (!dayMap[t.date]) dayMap[t.date] = { count: 0, pnl: 0 };
+    dayMap[t.date].count++;
+    dayMap[t.date].pnl += parseFloat(t.pnl || 0);
+  });
+  let wPnl = 0, wCount = 0;
+  days.forEach(({ ds }) => { if (dayMap[ds]) { wPnl += dayMap[ds].pnl; wCount += dayMap[ds].count; } });
+  const cellBase = 'border-radius:6px;padding:8px 3px;display:flex;flex-direction:column;align-items:center;gap:3px;min-height:116px;min-width:0;overflow:hidden;box-sizing:border-box';
+  const dayCells = days.map(({ ds, d, name }) => {
+    const data = dayMap[ds];
+    const isToday = ds === todayStr;
+    const bg = data ? (data.pnl >= 0 ? 'var(--cal-pos-bg)' : 'var(--cal-neg-bg)') : 'var(--bg3)';
+    const pc = data ? (data.pnl >= 0 ? 'var(--green)' : 'var(--red)') : '';
+    const dateStyle = isToday
+      ? 'font-size:13px;font-weight:600;color:var(--accent);background:var(--accent-bg);border-radius:4px;padding:0 4px;line-height:1.7'
+      : 'font-size:13px;font-weight:500;color:var(--text);line-height:1.7';
+    return '<div style="background:' + bg + ';' + cellBase + '">'
+      + '<div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.04em;margin-top:2px">' + name + '</div>'
+      + '<div style="' + dateStyle + '">' + d.getDate() + '</div>'
+      + (data
+          ? '<div style="font-size:10px;color:var(--text2);margin-top:2px">' + data.count + ' tr</div>'
+          + '<div style="font-size:11px;font-weight:500;color:' + pc + '">' + calFmtPnl(data.pnl) + '</div>'
+          : '')
+      + '</div>';
+  }).join('');
+  const sumCell = '<div style="background:var(--bg2);border:1px solid var(--border2);border-radius:6px;padding:8px 3px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:116px;min-width:0;box-sizing:border-box">'
+    + '<div style="font-size:9px;color:var(--text2);text-transform:uppercase;letter-spacing:.04em">\u03a3</div>'
+    + (wCount
+        ? '<div style="font-size:10px;color:var(--text2)">' + wCount + ' tr</div>'
+        + '<div style="font-size:12px;font-weight:600;color:' + (wPnl >= 0 ? 'var(--green)' : 'var(--red)') + '">' + calFmtPnl(wPnl) + '</div>'
+        : '<div style="font-size:13px;color:var(--text3)">\u2014</div>')
+    + '</div>';
+  calEl.innerHTML = dayCells + sumCell;
+}
+
 function renderOverview() {
   const mt5Trades = trades.filter(t => t.source === 'mt5' || (!t.source && String(t.id).length < 13));
   const s = calcStats(mt5Trades);
@@ -2439,18 +2540,14 @@ function renderOverview() {
     setEl('ov-loss-buy',  buyMaxLoss < 0 ? buyMaxLoss.toFixed(2) + '$'        : '—');
     setEl('ov-win-sell',  sellMaxWin > 0 ? '+' + sellMaxWin.toFixed(2) + '$' : '—');
     setEl('ov-loss-sell', sellMaxLoss< 0 ? sellMaxLoss.toFixed(2) + '$'       : '—');
-    // Chart P&L
-    let cum2=0; const rev2=s.withPnl.slice().reverse();
-    makeChart('ov-chart-pnl','line', rev2.map((t,i)=>t.symbol+'#'+(i+1)),
-      [{data:rev2.map(t=>{cum2+=parseFloat(t.pnl||0);return parseFloat(cum2.toFixed(2));}),borderColor:s.total>=0?'#00d97e':'#ff4d6a',backgroundColor:s.total>=0?'rgba(0,217,126,0.06)':'rgba(255,77,106,0.06)',fill:true,tension:0.3,pointRadius:2,borderWidth:2,label:'P&L'}]);
-
     // Chart คู่เงิน
     const pairMap = {};
-    mt5Trades.filter(t=>t.symbol&&t.pnl).forEach(t=>{if(!pairMap[t.symbol])pairMap[t.symbol]=0;pairMap[t.symbol]+=parseFloat(t.pnl||0);});
+    mt5Trades.filter(t=>t.symbol&&t.pnl).forEach(t=>{const ps=normalizePair(t.symbol);if(!pairMap[ps])pairMap[ps]=0;pairMap[ps]+=parseFloat(t.pnl||0);});
     const pairLabels=Object.keys(pairMap).sort((a,b)=>Math.abs(pairMap[b])-Math.abs(pairMap[a])).slice(0,8);
     makeChart('ov-chart-pair','bar',pairLabels,[{data:pairLabels.map(k=>pairMap[k]),backgroundColor:pairLabels.map(k=>pairMap[k]>=0?'rgba(0,217,126,0.6)':'rgba(255,77,106,0.6)'),borderRadius:4,label:'P&L'}]);
 
   }
+  renderOverviewWeekCal();
   // บัญชี
   const ap=accounts.filter(a=>a.type==='Profit').reduce((s,a)=>s+(parseFloat(a.amount_usd)||0),0);
   const ad=accounts.filter(a=>a.type==='Deposit').reduce((s,a)=>s+(parseFloat(a.amount_usd)||0),0);
@@ -2661,7 +2758,7 @@ function buildCalHeaders() {
   const L = CAL_L[calLang];
   const el = document.getElementById('cal-day-headers');
   if (!el) return;
-  const s = "padding:7px 6px;font-size:10px;color:var(--text2);font-family:-apple-system,BlinkMacSystemFont,sans-serif;text-align:center;border-right:1px solid var(--border);letter-spacing:.04em;line-height:1.5";
+  const s = "padding:7px 6px;font-size:11px;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,sans-serif;text-align:center;border-right:1px solid var(--border);letter-spacing:.04em;line-height:1.5";
   el.innerHTML = L.days.map(d => `<div style="${s}">${d}</div>`).join('')
     + `<div style="padding:7px 6px;font-size:10px;color:var(--accent);font-family:-apple-system,BlinkMacSystemFont,sans-serif;text-align:center;letter-spacing:.04em;line-height:1.5">${L.summary}</div>`;
 }
@@ -2742,16 +2839,16 @@ function renderCalendar() {
 
       cell.style.cssText = 'background:' + bg + ';border-right:1px solid var(--border);border-bottom:1px solid var(--border);padding:8px 10px;aspect-ratio:2;box-sizing:border-box;position:relative;display:flex;align-items:center;justify-content:center' + (inMonth ? ';cursor:pointer' : '');
 
-      const dayColor = inMonth ? 'var(--text2)' : 'var(--text3)';
+      const dayColor = inMonth ? 'var(--text)' : 'var(--text3)';
       const isToday = ds === todayStr;
-      let html = '<div style="position:absolute;top:6px;left:8px;font-size:11px;color:' + dayColor + ';font-family:-apple-system,BlinkMacSystemFont,sans-serif;display:flex;align-items:center;gap:5px">' + cur.getDate() + (isToday ? ' <span style="font-size:9px;background:var(--accent);color:#fff;padding:1px 5px;border-radius:3px;font-weight:500">Today</span>' : '') + '</div>';
+      let html = '<div style="position:absolute;top:6px;left:8px;font-size:13px;color:' + dayColor + ';font-family:-apple-system,BlinkMacSystemFont,sans-serif;display:flex;align-items:center;gap:5px">' + cur.getDate() + (isToday ? ' <span style="font-size:9px;background:var(--accent);color:#fff;padding:1px 5px;border-radius:3px;font-weight:500">Today</span>' : '') + '</div>';
 
       if (inMonth && data) {
         const pc = data.pnl >= 0 ? 'var(--green)' : 'var(--red)';
         const tradeLabel = data.count === 1 ? 'trade' : 'trades';
         html += '<div style="text-align:center">'
-          + '<div style="font-size:12px;color:' + pc + ';font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-weight:500">' + data.count + ' ' + tradeLabel + '</div>'
-          + '<div style="font-size:13px;color:' + pc + ';font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-weight:500">' + calFmtPnl(data.pnl) + '</div>'
+          + '<div style="font-size:13px;color:' + pc + ';font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-weight:500">' + data.count + ' ' + tradeLabel + '</div>'
+          + '<div style="font-size:15px;color:' + pc + ';font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-weight:500">' + calFmtPnl(data.pnl) + '</div>'
           + '</div>';
       }
 
@@ -2766,8 +2863,8 @@ function renderCalendar() {
     sumCell.style.cssText = 'border-bottom:1px solid var(--border);padding:8px 10px;min-height:62px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--bg3);box-sizing:border-box' + (wCount > 0 ? ';cursor:pointer' : '');
     if (wCount > 0) {
       const wc = wPnl >= 0 ? 'var(--green)' : 'var(--red)';
-      sumCell.innerHTML = '<div style="font-size:12px;color:var(--text2);margin-bottom:4px;text-align:center;font-family:-apple-system,BlinkMacSystemFont,sans-serif">' + wCount + ' ' + L.trades + '</div>'
-        + '<div style="font-size:16px;font-weight:500;color:' + wc + ';font-family:-apple-system,BlinkMacSystemFont,sans-serif;text-align:center">' + calFmtPnl(wPnl) + '</div>';
+      sumCell.innerHTML = '<div style="font-size:13px;color:var(--text);margin-bottom:4px;text-align:center;font-family:-apple-system,BlinkMacSystemFont,sans-serif">' + wCount + ' ' + L.trades + '</div>'
+        + '<div style="font-size:18px;font-weight:500;color:' + wc + ';font-family:-apple-system,BlinkMacSystemFont,sans-serif;text-align:center">' + calFmtPnl(wPnl) + '</div>';
       const captured = weekDates.slice();
       sumCell.onclick = () => showWeekTrades(captured);
     }
