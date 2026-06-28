@@ -645,13 +645,9 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <label data-i18n="calc.balance">ทุนในบัญชี ($)</label>
           <input type="number" id="calc-balance" placeholder="10000" min="0" step="100">
         </div>
-        <div style="margin-bottom:20px">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-            <label style="font-size:11px;color:var(--text2);letter-spacing:.04em;font-family:-apple-system,BlinkMacSystemFont,sans-serif" data-i18n="calc.risk">ความเสี่ยง %</label>
-            <span id="calc-risk-val" style="font-size:14px;font-weight:500;color:var(--accent);font-family:-apple-system,BlinkMacSystemFont,sans-serif">1.0%</span>
-          </div>
-          <input type="range" id="calc-risk-slider" min="0.1" max="5" step="0.1" value="1" style="width:100%;accent-color:var(--accent);cursor:pointer">
-          <div id="calc-presets" style="display:flex;gap:6px;margin-top:10px"></div>
+        <div class="fg" style="margin-bottom:18px">
+          <label data-i18n="calc.risk">ความเสี่ยง %</label>
+          <input type="number" id="calc-risk-input" placeholder="1" min="0.01" max="100" step="0.1">
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px">
           <div class="fg">
@@ -2436,31 +2432,17 @@ function renderCalculator() {
     ).join('');
     symEl.dataset.init = '1';
   }
-  const presEl = document.getElementById('calc-presets');
-  if (presEl && !presEl.dataset.init) {
-    presEl.innerHTML = ['0.5','1','1.5','2','3'].map(v =>
-      '<button onclick="calcSetRisk('+v+')" style="flex:1;padding:6px 0;border-radius:var(--radius);border:1px solid var(--border2);background:transparent;cursor:pointer;font-size:11px;color:var(--text2);font-family:-apple-system,BlinkMacSystemFont,sans-serif;transition:all .15s">'+v+'%</button>'
-    ).join('');
-    presEl.dataset.init = '1';
-  }
   const balEl = document.getElementById('calc-balance');
   if (balEl && !balEl.dataset.init) {
     balEl.value = localStorage.getItem('calc_balance') || '';
     balEl.addEventListener('input', () => { localStorage.setItem('calc_balance', balEl.value); calcUpdate(); });
     balEl.dataset.init = '1';
   }
-  const slider = document.getElementById('calc-risk-slider');
-  const riskValEl = document.getElementById('calc-risk-val');
-  if (slider && !slider.dataset.init) {
-    const sv = localStorage.getItem('calc_risk') || '1';
-    slider.value = sv;
-    if (riskValEl) riskValEl.textContent = parseFloat(sv).toFixed(1) + '%';
-    slider.addEventListener('input', () => {
-      if (riskValEl) riskValEl.textContent = parseFloat(slider.value).toFixed(1) + '%';
-      localStorage.setItem('calc_risk', slider.value);
-      calcUpdate();
-    });
-    slider.dataset.init = '1';
+  const riskInp = document.getElementById('calc-risk-input');
+  if (riskInp && !riskInp.dataset.init) {
+    riskInp.value = localStorage.getItem('calc_risk') || '1';
+    riskInp.addEventListener('input', () => { localStorage.setItem('calc_risk', riskInp.value); calcUpdate(); });
+    riskInp.dataset.init = '1';
   }
   ['calc-entry','calc-sl'].forEach(id => {
     const el = document.getElementById(id);
@@ -2481,20 +2463,13 @@ function calcSetSym(s) {
   });
   calcUpdate();
 }
-function calcSetRisk(v) {
-  const slider = document.getElementById('calc-risk-slider');
-  const riskValEl = document.getElementById('calc-risk-val');
-  if (slider) slider.value = v;
-  if (riskValEl) riskValEl.textContent = parseFloat(v).toFixed(1) + '%';
-  localStorage.setItem('calc_risk', String(v));
-  calcUpdate();
-}
+
 function calcUpdate() {
   const sym = localStorage.getItem('calc_sym') || 'XAUUSD';
   const spec = CALC_SYMS[sym];
   if (!spec) return;
   const balance  = parseFloat(document.getElementById('calc-balance')?.value) || 0;
-  const riskPct  = parseFloat(document.getElementById('calc-risk-slider')?.value) || 1;
+  const riskPct  = parseFloat(document.getElementById('calc-risk-input')?.value) || 0;
   const entry    = parseFloat(document.getElementById('calc-entry')?.value) || 0;
   const sl       = parseFloat(document.getElementById('calc-sl')?.value) || 0;
   const riskAmt  = balance * (riskPct / 100);
