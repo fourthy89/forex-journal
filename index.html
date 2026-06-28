@@ -4,31 +4,30 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Forex Journal</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Thai:wght@300;400;500&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 :root{--bg:#0d0f12;--bg2:#13161b;--bg3:#1a1e25;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);--text:#e8eaf0;--text2:#7c8494;--text3:#4a5060;--green:#00d97e;--green-bg:rgba(0,217,126,0.08);--red:#ff4d6a;--red-bg:rgba(255,77,106,0.08);--accent:#4f8eff;--accent-bg:rgba(79,142,255,0.1);--radius:8px;--radius-lg:12px}
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;background:var(--bg);color:var(--text);font-family:'IBM Plex Sans Thai',sans-serif;font-size:14px}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px}
 .shell{display:flex;height:100vh;overflow:hidden}
-.sidebar{width:200px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column}
+.sidebar{width:240px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column}
 .main{flex:1;overflow-y:auto}
 .logo{padding:20px 16px 16px;border-bottom:1px solid var(--border)}
-.logo-text{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;letter-spacing:.05em}
-.logo-sub{font-size:10px;color:var(--text3);margin-top:2px;font-family:'IBM Plex Mono',monospace}
+.logo-text{font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:13px;font-weight:500;letter-spacing:.05em}
+.logo-sub{font-size:10px;color:var(--text3);margin-top:2px;font-family:-apple-system,BlinkMacSystemFont,sans-serif}
 .nav{flex:1;padding:8px 0}
 .nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;color:var(--text2);font-size:13px;transition:all .15s;border-left:2px solid transparent}
 .nav-item:hover{color:var(--text);background:var(--bg3)}
 .nav-item.active{color:var(--text);background:var(--bg3);border-left-color:var(--accent)}
 .nav-item svg{width:16px;height:16px;flex-shrink:0}
 .sidebar-footer{padding:12px 16px;border-top:1px solid var(--border)}
-.sync-status{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace}
+.sync-status{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--text3);font-family:-apple-system,BlinkMacSystemFont,sans-serif}
 .sync-dot{width:6px;height:6px;border-radius:50%;background:var(--text3);flex-shrink:0}
 .sync-dot.ok{background:var(--green);box-shadow:0 0 6px var(--green)}
 .sync-dot.err{background:var(--red)}
 .sync-dot.spin{background:#f5a623;animation:blink 1s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-.sync-btn{margin-top:8px;width:100%;padding:6px;background:transparent;border:1px solid var(--border2);border-radius:var(--radius);color:var(--text2);font-size:11px;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .15s}
+.sync-btn{margin-top:8px;width:100%;padding:6px;background:transparent;border:1px solid var(--border2);border-radius:var(--radius);color:var(--text2);font-size:11px;cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,sans-serif;transition:all .15s}
 .sync-btn:hover{border-color:var(--accent);color:var(--accent)}
 .page{display:none;padding:28px 32px}
 .page.active{display:block}
@@ -36,14 +35,14 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'IBM Pl
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:680px}
 .fg{display:flex;flex-direction:column;gap:6px}
 .fg.full{grid-column:1/-1}
-.fg label{font-size:11px;color:var(--text2);letter-spacing:.04em;font-family:'IBM Plex Mono',monospace}
-.fg input,.fg select,.fg textarea{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);padding:9px 12px;font-size:13px;font-family:'IBM Plex Sans Thai',sans-serif;transition:border-color .15s;outline:none;width:100%}
+.fg label{font-size:11px;color:var(--text2);letter-spacing:.04em;font-family:-apple-system,BlinkMacSystemFont,sans-serif}
+.fg input,.fg select,.fg textarea{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);padding:9px 12px;font-size:13px;font-family:-apple-system,BlinkMacSystemFont,sans-serif;transition:border-color .15s;outline:none;width:100%}
 .fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--accent)}
 .fg select option{background:var(--bg3);color:var(--text)}
 .fg textarea{resize:vertical;min-height:72px}
 .fg input[readonly]{color:var(--text2);cursor:default}
 .side-row{display:flex;gap:8px}
-.side-btn{flex:1;padding:9px;border-radius:var(--radius);border:1px solid var(--border2);background:transparent;cursor:pointer;font-size:13px;font-weight:500;color:var(--text2);transition:all .15s;font-family:'IBM Plex Sans Thai',sans-serif}
+.side-btn{flex:1;padding:9px;border-radius:var(--radius);border:1px solid var(--border2);background:transparent;cursor:pointer;font-size:13px;font-weight:500;color:var(--text2);transition:all .15s;font-family:-apple-system,BlinkMacSystemFont,sans-serif}
 .side-btn.buy.on{background:var(--green-bg);color:var(--green);border-color:var(--green)}
 .side-btn.sell.on{background:var(--red-bg);color:var(--red);border-color:var(--red)}
 .upload-area{border:1px dashed var(--border2);border-radius:var(--radius);padding:20px;text-align:center;cursor:pointer;color:var(--text3);font-size:12px;transition:all .15s}
@@ -52,8 +51,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'IBM Pl
 .thumb{position:relative;width:72px;height:56px}
 .thumb img{width:100%;height:100%;object-fit:cover;border-radius:6px;border:1px solid var(--border2)}
 .thumb-rm{position:absolute;top:-5px;right:-5px;background:var(--red);color:#fff;border:none;border-radius:50%;width:16px;height:16px;cursor:pointer;font-size:10px;display:flex;align-items:center;justify-content:center}
-.save-btn{padding:11px 28px;background:var(--accent);border:none;border-radius:var(--radius);color:#fff;font-size:13px;font-weight:500;cursor:pointer;font-family:'IBM Plex Sans Thai',sans-serif;transition:opacity .15s}
-.export-btn{padding:9px 18px;border:none;border-radius:var(--radius);font-size:13px;font-weight:500;cursor:pointer;font-family:'IBM Plex Sans Thai',sans-serif;transition:opacity .15s}
+.save-btn{padding:11px 28px;background:var(--accent);border:none;border-radius:var(--radius);color:#fff;font-size:13px;font-weight:500;cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,sans-serif;transition:opacity .15s}
+.export-btn{padding:9px 18px;border:none;border-radius:var(--radius);font-size:13px;font-weight:500;cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,sans-serif;transition:opacity .15s}
 .export-btn:hover{opacity:.85}
 .export-btn.primary{background:var(--accent);color:#fff}
 .export-btn.secondary{background:var(--bg3);border:1px solid var(--border2);color:var(--text2)}
@@ -61,101 +60,101 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'IBM Pl
 .save-btn:disabled{opacity:.4;cursor:not-allowed}
 .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
 .metric{background:var(--bg2);border:1px solid var(--card-bdr);border-radius:var(--radius-lg);padding:16px 18px}
-.metric-label{font-size:12px;color:var(--text);letter-spacing:.04em;font-family:'IBM Plex Mono',monospace;margin-bottom:6px;opacity:.75}
-.metric-val{font-size:22px;font-weight:500;font-family:'IBM Plex Mono',monospace}
+.metric-label{font-size:12px;color:var(--text);letter-spacing:.04em;font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin-bottom:6px;opacity:.75}
+.metric-val{font-size:22px;font-weight:500;font-family:-apple-system,BlinkMacSystemFont,sans-serif}
 .metric-val.pos{color:var(--green)}
 .metric-val.neg{color:var(--red)}
 .filter-row{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
-.filter-row input,.filter-row select{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);padding:8px 12px;font-size:12px;outline:none;font-family:'IBM Plex Sans Thai',sans-serif;transition:border-color .15s}
+.filter-row input,.filter-row select{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);padding:8px 12px;font-size:12px;outline:none;font-family:-apple-system,BlinkMacSystemFont,sans-serif;transition:border-color .15s}
 .filter-row input{flex:1;min-width:160px}
 .filter-row input:focus,.filter-row select:focus{border-color:var(--accent)}
 .filter-row select option{background:var(--bg3);color:var(--text)}
 .table-wrap{overflow-x:auto;background:var(--bg2);border:1px solid var(--card-bdr);border-radius:var(--radius-lg)}
 table{width:100%;border-collapse:collapse;font-size:12px}
-th{padding:10px 12px;text-align:left;font-size:11px;color:var(--text);text-transform:uppercase;letter-spacing:.07em;font-family:'IBM Plex Mono',monospace;border-bottom:1px solid var(--border);white-space:nowrap;font-weight:500}
+th{padding:10px 12px;text-align:left;font-size:11px;color:var(--text);text-transform:uppercase;letter-spacing:.07em;font-family:-apple-system,BlinkMacSystemFont,sans-serif;border-bottom:1px solid var(--border);white-space:nowrap;font-weight:500}
 td{padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle}
 tr:last-child td{border-bottom:none}
 tr:hover td{background:rgba(255,255,255,.02)}
-.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:500;font-family:'IBM Plex Mono',monospace}
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:500;font-family:-apple-system,BlinkMacSystemFont,sans-serif}
 .badge-buy{background:var(--green-bg);color:var(--green);border:1px solid rgba(0,217,126,.2)}
 .badge-sell{background:var(--red-bg);color:var(--red);border:1px solid rgba(255,77,106,.2)}
-.mono{font-family:'IBM Plex Mono',monospace}
-.pnl-pos{color:var(--green);font-family:'IBM Plex Mono',monospace;font-size:11px}
-.pnl-neg{color:var(--red);font-family:'IBM Plex Mono',monospace;font-size:11px}
+.mono{font-family:-apple-system,BlinkMacSystemFont,sans-serif}
+.pnl-pos{color:var(--green);font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:11px}
+.pnl-neg{color:var(--red);font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:11px}
 .tbl-btn{background:none;border:none;cursor:pointer;color:var(--text3);padding:3px 5px;border-radius:4px;transition:all .15s;font-size:13px;line-height:1}
 .tbl-btn.edit:hover{color:var(--accent);background:var(--accent-bg)}
 .tbl-btn.del:hover{color:var(--red);background:var(--red-bg)}
 .img-cell{display:flex;align-items:center;gap:6px}
 .cell-thumb{width:36px;height:28px;object-fit:cover;border-radius:4px;border:1px solid var(--border2);cursor:pointer;transition:opacity .15s;flex-shrink:0}
 .cell-thumb:hover{opacity:.75}
-.zoom-btn{display:flex;align-items:center;gap:4px;background:transparent;border:1px solid var(--border2);border-radius:4px;cursor:pointer;color:var(--text2);padding:3px 7px;font-size:11px;white-space:nowrap;transition:all .15s;font-family:'IBM Plex Mono',monospace}
+.zoom-btn{display:flex;align-items:center;gap:4px;background:transparent;border:1px solid var(--border2);border-radius:4px;cursor:pointer;color:var(--text2);padding:3px 7px;font-size:11px;white-space:nowrap;transition:all .15s;font-family:-apple-system,BlinkMacSystemFont,sans-serif}
 .zoom-btn:hover{border-color:var(--accent);color:var(--accent)}
 .pagination{display:flex;align-items:center;gap:8px;justify-content:center;padding:14px;border-top:1px solid var(--border)}
-.pg-btn{padding:5px 12px;border:1px solid var(--border2);border-radius:var(--radius);background:transparent;color:var(--text2);font-size:12px;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .15s}
+.pg-btn{padding:5px 12px;border:1px solid var(--border2);border-radius:var(--radius);background:transparent;color:var(--text2);font-size:12px;cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,sans-serif;transition:all .15s}
 .pg-btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
 .pg-btn:disabled{opacity:.3;cursor:not-allowed}
-.pg-info{font-size:11px;color:var(--text2);font-family:'IBM Plex Mono',monospace}
+.pg-info{font-size:11px;color:var(--text2);font-family:-apple-system,BlinkMacSystemFont,sans-serif}
 .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
 .stats-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
 .stat-card{background:var(--bg2);border:1px solid var(--card-bdr);border-radius:var(--radius-lg);padding:14px 16px}
-.stat-label{font-size:11px;color:var(--text);text-transform:uppercase;letter-spacing:.07em;font-family:"IBM Plex Mono",monospace;margin-bottom:6px;opacity:.85}
-.stat-val{font-size:20px;font-weight:500;font-family:"IBM Plex Mono",monospace;color:var(--text)}
+.stat-label{font-size:11px;color:var(--text);text-transform:uppercase;letter-spacing:.07em;font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin-bottom:6px;opacity:.85}
+.stat-val{font-size:20px;font-weight:500;font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:var(--text)}
 .stat-val.pos{color:var(--green)}.stat-val.neg{color:var(--red)}
-.stat-sub{font-size:11px;color:var(--text3);font-family:"IBM Plex Mono",monospace;margin-top:3px}
+.stat-sub{font-size:11px;color:var(--text3);font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin-top:3px}
 .chart-half{background:var(--bg2);border:1px solid var(--card-bdr);border-radius:var(--radius-lg);padding:16px;height:220px;position:relative}
-.chart-half-title{font-size:11px;color:var(--text2);font-family:"IBM Plex Mono",monospace;margin-bottom:10px;text-transform:uppercase;letter-spacing:.06em}
+.chart-half-title{font-size:11px;color:var(--text2);font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin-bottom:10px;text-transform:uppercase;letter-spacing:.06em}
 .filter-month-wrap{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
 .filter-month-wrap select{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);padding:7px 12px;font-size:12px;outline:none}
 .overview-section{margin-bottom:24px}
-.overview-section-title{font-size:12px;color:var(--text2);text-transform:uppercase;letter-spacing:.07em;font-family:"IBM Plex Mono",monospace;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.overview-section-title{font-size:12px;color:var(--text2);text-transform:uppercase;letter-spacing:.07em;font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
 .tag-chip{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;border:1px solid var(--border2);background:var(--bg3);color:var(--text2);margin:3px}
 .emotion-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
 .emotion-btn{padding:6px 14px;border-radius:20px;border:1px solid var(--border2);background:transparent;cursor:pointer;font-size:12px;color:var(--text2);transition:all .15s}
 .emotion-btn:hover{border-color:var(--accent);color:var(--accent)}
 .emotion-btn.selected{background:var(--accent-bg);color:var(--accent);border-color:var(--accent)}
 .entry-row{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;margin-bottom:8px}
-.entry-row-num{font-size:11px;color:var(--text3);font-family:"IBM Plex Mono",monospace;width:20px;text-align:right}
+.entry-row-num{font-size:11px;color:var(--text3);font-family:-apple-system,BlinkMacSystemFont,sans-serif;width:20px;text-align:right}
 .entry-rows-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;margin-top:6px}
 .add-entry-btn{padding:6px 12px;background:transparent;border:1px dashed var(--border2);border-radius:var(--radius);color:var(--text2);font-size:12px;cursor:pointer;width:100%;margin-top:8px;transition:all .15s}
 .add-entry-btn:hover{border-color:var(--accent);color:var(--accent)}
 .rm-entry-btn{background:none;border:none;cursor:pointer;color:var(--text3);font-size:14px;padding:2px 4px;border-radius:4px}
 .rm-entry-btn:hover{color:var(--red)}
-.avg-entry-display{font-size:11px;color:var(--text2);font-family:"IBM Plex Mono",monospace;margin-top:6px;padding:6px 10px;background:var(--bg2);border-radius:var(--radius);border:1px solid var(--border)}
-.missed-badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:500;font-family:"IBM Plex Mono",monospace;background:rgba(245,166,35,0.1);color:#f5a623;border:1px solid rgba(245,166,35,0.3)}
+.avg-entry-display{font-size:11px;color:var(--text2);font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin-top:6px;padding:6px 10px;background:var(--bg2);border-radius:var(--radius);border:1px solid var(--border)}
+.missed-badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:500;font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:rgba(245,166,35,0.1);color:#f5a623;border:1px solid rgba(245,166,35,0.3)}
 .empty-state{text-align:center;padding:48px 16px;color:var(--text3);font-size:13px}
 .chart-wrap{background:var(--bg2);border:1px solid var(--card-bdr);border-radius:var(--radius-lg);padding:20px;margin-top:16px;height:240px;position:relative}
 .settings-block{max-width:580px;margin-bottom:28px}
-.settings-block h3{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.08em;font-family:'IBM Plex Mono',monospace;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.settings-block h3{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.08em;font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
 .tag-list{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;min-height:32px}
 .tag{display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;border:1px solid var(--border2);background:var(--bg3);font-size:12px;color:var(--text)}
 .tag button{background:none;border:none;cursor:pointer;color:var(--text3);font-size:12px;display:flex;align-items:center;transition:color .15s;line-height:1}
 .tag button:hover{color:var(--red)}
 .add-row{display:flex;gap:8px}
-.add-row input{flex:1;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);padding:8px 12px;font-size:13px;outline:none;font-family:'IBM Plex Sans Thai',sans-serif;transition:border-color .15s}
+.add-row input{flex:1;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);padding:8px 12px;font-size:13px;outline:none;font-family:-apple-system,BlinkMacSystemFont,sans-serif;transition:border-color .15s}
 .add-row input:focus{border-color:var(--accent)}
-.add-row button{padding:8px 16px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text2);font-size:12px;cursor:pointer;white-space:nowrap;transition:all .15s;font-family:'IBM Plex Mono',monospace}
+.add-row button{padding:8px 16px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text2);font-size:12px;cursor:pointer;white-space:nowrap;transition:all .15s;font-family:-apple-system,BlinkMacSystemFont,sans-serif}
 .add-row button:hover{border-color:var(--accent);color:var(--accent)}
 .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:998;align-items:center;justify-content:center}
 .modal-bg.open{display:flex}
 .modal-box{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-lg);padding:24px;max-width:700px;width:95%;max-height:92vh;overflow-y:auto}
 .modal-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
-.modal-title{font-size:14px;font-weight:500;font-family:'IBM Plex Mono',monospace}
+.modal-title{font-size:14px;font-weight:500;font-family:-apple-system,BlinkMacSystemFont,sans-serif}
 .modal-close{background:none;border:none;cursor:pointer;color:var(--text2);font-size:20px;transition:color .15s}
 .modal-close:hover{color:var(--text)}
 .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 24px;margin-bottom:20px}
 .detail-item{display:flex;flex-direction:column;gap:3px}
-.detail-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;font-family:'IBM Plex Mono',monospace}
-.detail-val{font-size:13px;color:var(--text);font-family:'IBM Plex Mono',monospace}
+.detail-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;font-family:-apple-system,BlinkMacSystemFont,sans-serif}
+.detail-val{font-size:13px;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,sans-serif}
 .detail-note{background:var(--bg3);border-radius:var(--radius);padding:12px 14px;font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:16px}
 .detail-strip{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
 .detail-strip-thumb{width:56px;height:42px;object-fit:cover;border-radius:5px;border:2px solid transparent;cursor:pointer;transition:border-color .15s}
 .detail-strip-thumb.active{border-color:var(--accent)}
 .detail-main-img{width:100%;border-radius:var(--radius);border:1px solid var(--border2);max-height:400px;object-fit:contain;display:block;background:#000}
 .detail-img-nav{display:flex;justify-content:center;gap:10px;margin-top:10px}
-.detail-img-nav button{padding:5px 16px;border:1px solid var(--border2);border-radius:var(--radius);background:transparent;color:var(--text2);font-size:12px;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .15s}
+.detail-img-nav button{padding:5px 16px;border:1px solid var(--border2);border-radius:var(--radius);background:transparent;color:var(--text2);font-size:12px;cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,sans-serif;transition:all .15s}
 .detail-img-nav button:hover{border-color:var(--accent);color:var(--accent)}
-.detail-counter{font-size:11px;color:var(--text3);text-align:center;margin-top:6px;font-family:'IBM Plex Mono',monospace}
-.section-label{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;font-family:'IBM Plex Mono',monospace;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.detail-counter{font-size:11px;color:var(--text3);text-align:center;margin-top:6px;font-family:-apple-system,BlinkMacSystemFont,sans-serif}
+.section-label{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
 .del-confirm{background:var(--red-bg)!important;color:var(--red)!important;border:1px solid rgba(255,77,106,.5)!important;font-size:10px!important;animation:shake .15s ease;}
 @keyframes shake{0%,100%{transform:translateX(0)}50%{transform:translateX(-2px)}}
 .theme-picker{display:flex;flex-direction:row;gap:10px;flex-wrap:wrap;margin-bottom:12px}
@@ -189,9 +188,9 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
 [data-view='1'] .view-badge { display:flex !important; }
 
-.view-badge { display:none; align-items:center; gap:6px; padding:4px 10px; background:var(--accent-bg); border:1px solid var(--accent); border-radius:20px; font-size:11px; color:var(--accent); font-family:'IBM Plex Mono',monospace; margin-bottom:12px; }
+.view-badge { display:none; align-items:center; gap:6px; padding:4px 10px; background:var(--accent-bg); border:1px solid var(--accent); border-radius:20px; font-size:11px; color:var(--accent); font-family:-apple-system,BlinkMacSystemFont,sans-serif; margin-bottom:12px; }
 
-.toast{position:fixed;bottom:24px;right:24px;background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:10px 18px;border-radius:var(--radius);font-size:12px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:9999;font-family:'IBM Plex Mono',monospace}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:10px 18px;border-radius:var(--radius);font-size:12px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:9999;font-family:-apple-system,BlinkMacSystemFont,sans-serif}
 .toast.show{opacity:1}
 .cal-day-cell:hover{filter:brightness(1.15)}
 .cal-day-cell.cal-day-active{outline:2px solid var(--accent);outline-offset:-2px;z-index:1;position:relative}
@@ -213,7 +212,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 #app-loader.hidden{opacity:0;visibility:hidden}
 .loader-spinner{width:38px;height:38px;border:3px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:loaderSpin .7s linear infinite}
 @keyframes loaderSpin{to{transform:rotate(360deg)}}
-.loader-text{font-size:12px;color:var(--text3);font-family:'IBM Plex Mono',monospace;letter-spacing:.06em}
+.loader-text{font-size:12px;color:var(--text3);font-family:-apple-system,BlinkMacSystemFont,sans-serif;letter-spacing:.06em}
 .nav-group-header{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;color:var(--text2);font-size:13px;transition:all .15s;border-left:2px solid transparent;user-select:none}
 .nav-group-header:hover{color:var(--text);background:var(--bg3)}
 .nav-group-header svg{width:16px;height:16px;flex-shrink:0}
@@ -256,7 +255,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <div class="nav-item nav-sub" data-page="analysis" onclick="showPage('analysis')">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
           <span data-i18n="nav.analysis">วิเคราะห์</span>
-          <span id="analysis-nav-badge" style="display:none;margin-left:auto;background:var(--accent);color:#fff;font-size:10px;font-family:'IBM Plex Mono',monospace;font-weight:500;padding:1px 7px;border-radius:20px;min-width:18px;text-align:center"></span>
+          <span id="analysis-nav-badge" style="display:none;margin-left:auto;background:var(--accent);color:#fff;font-size:10px;font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-weight:500;padding:1px 7px;border-radius:20px;min-width:18px;text-align:center"></span>
         </div>
       </div>
       <div class="nav-item" data-page="account" onclick="showPage('account')">
@@ -285,7 +284,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <div class="overview-section-title" data-i18n="ov.result">Result</div>
         <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:16px">
           <div class="stat-card"><div class="stat-label" data-i18n="ov.withdrawal">ถอนกำไรรวม</div><div class="stat-val pos" id="ov-acc-profit2">—</div><div class="stat-sub" id="ov-acc-profit-thb2">—</div></div>
-          <div class="stat-card"><div class="stat-label">ฝากรวม</div><div class="stat-val neg" id="ov-acc-deposit2">—</div><div class="stat-sub" id="ov-acc-deposit-thb2">—</div></div>
+          <div class="stat-card"><div class="stat-label" data-i18n="ov.deposit">ฝากรวม</div><div class="stat-val neg" id="ov-acc-deposit2">—</div><div class="stat-sub" id="ov-acc-deposit-thb2">—</div></div>
           <div class="stat-card"><div class="stat-label">Net</div><div class="stat-val" id="ov-acc-net2">—</div><div class="stat-sub" id="ov-acc-net-thb2">—</div></div>
         </div>
       </div>
@@ -301,7 +300,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <!-- BUY / SELL -->
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
           <div style="background:var(--buy-box-bg);border:1px solid var(--buy-box-bdr);border-radius:var(--radius-lg);padding:14px">
-            <div style="font-size:11px;color:var(--green);font-family:'IBM Plex Mono',monospace;font-weight:500;margin-bottom:10px;text-align:center">BUY</div>
+            <div style="font-size:11px;color:var(--green);font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-weight:500;margin-bottom:10px;text-align:center">BUY</div>
             <div class="stats-grid" style="grid-template-columns:1fr 1fr;gap:8px">
               <div class="stat-card"><div class="stat-label" data-i18n="stat.winrate">Win Rate</div><div class="stat-val" id="ov-wr-buy">—</div><div class="stat-sub" id="ov-wl-buy">—</div></div>
               <div class="stat-card"><div class="stat-label" data-i18n="stat.pnlshort">P&L ($)</div><div class="stat-val" id="ov-pnl-buy">—</div></div>
@@ -310,7 +309,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
             </div>
           </div>
           <div style="background:var(--sell-box-bg);border:1px solid var(--sell-box-bdr);border-radius:var(--radius-lg);padding:14px">
-            <div style="font-size:11px;color:var(--red);font-family:'IBM Plex Mono',monospace;font-weight:500;margin-bottom:10px;text-align:center">SELL</div>
+            <div style="font-size:11px;color:var(--red);font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-weight:500;margin-bottom:10px;text-align:center">SELL</div>
             <div class="stats-grid" style="grid-template-columns:1fr 1fr;gap:8px">
               <div class="stat-card"><div class="stat-label" data-i18n="stat.winrate">Win Rate</div><div class="stat-val" id="ov-wr-sell">—</div><div class="stat-sub" id="ov-wl-sell">—</div></div>
               <div class="stat-card"><div class="stat-label" data-i18n="stat.pnlshort">P&L ($)</div><div class="stat-val" id="ov-pnl-sell">—</div></div>
@@ -335,8 +334,8 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
         <div class="page-title" style="margin-bottom:0" data-i18n="nav.history">ประวัติการเทรด</div>
         <div style="display:flex;border:1px solid var(--border2);border-radius:var(--radius);overflow:hidden">
-          <button id="htab-mt5" onclick="switchHistTab('mt5')" style="padding:7px 18px;background:var(--accent);border:none;color:#fff;font-size:12px;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .15s"><span data-i18n="tab.mt5">MT5</span></button>
-          <button id="htab-manual" onclick="switchHistTab('manual')" style="padding:7px 18px;background:transparent;border:none;color:var(--text2);font-size:12px;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .15s"><span data-i18n="tab.manual">Manual</span></button>
+          <button id="htab-mt5" onclick="switchHistTab('mt5')" style="padding:7px 18px;background:var(--accent);border:none;color:#fff;font-size:12px;cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,sans-serif;transition:all .15s"><span data-i18n="tab.mt5">MT5</span></button>
+          <button id="htab-manual" onclick="switchHistTab('manual')" style="padding:7px 18px;background:transparent;border:none;color:var(--text2);font-size:12px;cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,sans-serif;transition:all .15s"><span data-i18n="tab.manual">Manual</span></button>
         </div>
       </div>
 
@@ -353,7 +352,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <div id="hist-session-breakdown" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px"></div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
           <div style="background:var(--buy-box-bg);border:1px solid var(--buy-box-bdr);border-radius:var(--radius-lg);padding:14px">
-            <div style="font-size:11px;color:var(--green);font-family:'IBM Plex Mono',monospace;font-weight:500;margin-bottom:10px;text-align:center">BUY</div>
+            <div style="font-size:11px;color:var(--green);font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-weight:500;margin-bottom:10px;text-align:center">BUY</div>
             <div class="stats-grid" style="grid-template-columns:1fr 1fr;gap:8px">
               <div class="stat-card"><div class="stat-label">Win Rate</div><div class="stat-val" id="hist-wr-buy">—</div><div class="stat-sub" id="hist-wl-buy">—</div></div>
               <div class="stat-card"><div class="stat-label" data-i18n="stat.pnlshort">P&L ($)</div><div class="stat-val" id="hist-pnl-buy">—</div></div>
@@ -362,7 +361,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
             </div>
           </div>
           <div style="background:var(--sell-box-bg);border:1px solid var(--sell-box-bdr);border-radius:var(--radius-lg);padding:14px">
-            <div style="font-size:11px;color:var(--red);font-family:'IBM Plex Mono',monospace;font-weight:500;margin-bottom:10px;text-align:center">SELL</div>
+            <div style="font-size:11px;color:var(--red);font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-weight:500;margin-bottom:10px;text-align:center">SELL</div>
             <div class="stats-grid" style="grid-template-columns:1fr 1fr;gap:8px">
               <div class="stat-card"><div class="stat-label">Win Rate</div><div class="stat-val" id="hist-wr-sell">—</div><div class="stat-sub" id="hist-wl-sell">—</div></div>
               <div class="stat-card"><div class="stat-label" data-i18n="stat.pnlshort">P&L ($)</div><div class="stat-val" id="hist-pnl-sell">—</div></div>
@@ -374,26 +373,26 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <!-- Filters -->
         <div class="filter-row" style="margin-bottom:16px">
           <div style="display:flex;align-items:center;gap:6px">
-            <input type="date" id="hist-from" onchange="renderHistory()" style="background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);padding:7px 10px;font-size:12px;font-family:'IBM Plex Mono',monospace"/>
+            <input type="date" id="hist-from" onchange="renderHistory()" style="background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);padding:7px 10px;font-size:12px;font-family:-apple-system,BlinkMacSystemFont,sans-serif"/>
             <span style="color:var(--text3);font-size:12px">—</span>
-            <input type="date" id="hist-to" onchange="renderHistory()" style="background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);padding:7px 10px;font-size:12px;font-family:'IBM Plex Mono',monospace"/>
-            <button onclick="resetHistDateRange()" style="padding:7px 10px;background:transparent;border:1px solid var(--border2);border-radius:var(--radius);color:var(--text2);font-size:11px;cursor:pointer;font-family:'IBM Plex Mono',monospace"><span data-i18n="btn.reset">รีเซ็ต</span></button>
+            <input type="date" id="hist-to" onchange="renderHistory()" style="background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);padding:7px 10px;font-size:12px;font-family:-apple-system,BlinkMacSystemFont,sans-serif"/>
+            <button onclick="resetHistDateRange()" style="padding:7px 10px;background:transparent;border:1px solid var(--border2);border-radius:var(--radius);color:var(--text2);font-size:11px;cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,sans-serif"><span data-i18n="btn.reset">รีเซ็ต</span></button>
           </div>
           <select id="hist-fp" onchange="renderHistory()"><option value="" data-i18n="filter.allpairs">ทุกคู่เงิน</option></select>
           <select id="hist-fs" onchange="renderHistory()"><option value="" data-i18n="filter.alldir">ทุกทิศทาง</option><option value="BUY">Buy</option><option value="SELL">Sell</option></select>
           <select id="hist-fstr" onchange="renderHistory()"><option value="" data-i18n="filter.allstrat">ทุกกลยุทธ์</option></select>
           <select id="hist-fses" onchange="renderHistory()"><option value="" data-i18n="filter.allsession">ทุก Session</option><option>Asia</option><option>London</option><option>New York</option><option>Overlap</option></select>
           <select id="hist-facct" onchange="renderHistory()"><option value="" data-i18n="filter.allacct">ทุกบัญชี</option></select>
-          <button onclick="openAddTradeModal()" style="margin-left:auto;padding:7px 14px;background:var(--accent);border:none;border-radius:var(--radius);color:#fff;font-size:12px;cursor:pointer;font-family:'IBM Plex Sans Thai',sans-serif;font-weight:500;white-space:nowrap;flex-shrink:0">Add Trade</button>
+          <button onclick="openAddTradeModal()" style="margin-left:auto;padding:7px 14px;background:var(--accent);border:none;border-radius:var(--radius);color:#fff;font-size:12px;cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-weight:500;white-space:nowrap;flex-shrink:0">Add Trade</button>
         </div>
         <!-- Table -->
         <div class="table-wrap">
           <table>
             <thead><tr>
-              <th style="width:36px;padding:10px 8px"><input type="checkbox" class="trade-cb" id="hist-cb-all" onchange="toggleHistSelectAll(this)" title="เลือกทั้งหมดในหน้านี้"/></th>
-              <th>วันที่</th><th>Pair</th><th>Side</th>
-              <th>Entry</th><th>Exit</th><th>Lot</th><th>จุด</th>
-              <th>P&L ($)</th><th>R:R</th><th>กลยุทธ์</th><th>Session</th><th>รูป</th><th></th>
+              <th style="width:36px;padding:10px 8px"><input type="checkbox" class="trade-cb" id="hist-cb-all" onchange="toggleHistSelectAll(this)" title=""/></th>
+              <th data-i18n="th.date">วันที่</th><th>Pair</th><th>Side</th>
+              <th>Entry</th><th>Exit</th><th>Lot</th><th data-i18n="th.pips">จุด</th>
+              <th>P&L ($)</th><th>R:R</th><th data-i18n="th.strategy">กลยุทธ์</th><th>Session</th><th data-i18n="th.img">รูป</th><th></th>
             </tr></thead>
             <tbody id="hist-tbody"></tbody>
           </table>
@@ -401,7 +400,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <div class="pagination" id="hist-pagination" style="display:none">
             <button class="pg-btn" id="hist-prev" onclick="changeHistPage(-1)"><span data-i18n="pg.prev">← ก่อนหน้า</span></button>
             <span class="pg-info" id="hist-info"></span>
-            <button class="pg-btn" id="hist-next" onclick="changeHistPage(1)">ถัดไป →</button>
+            <button class="pg-btn" id="hist-next" onclick="changeHistPage(1)"><span data-i18n="pg.next">ถัดไป →</span></button>
           </div>
         </div>
       </div>
@@ -413,14 +412,14 @@ tr:hover td{background:rgba(255,255,255,.02)}
         </div>
         <!-- Table -->
         <div class="filter-row">
-          <input type="text" id="srch" placeholder="ค้นหา pair..." oninput="renderTable()"/>
+          <input type="text" id="srch" data-i18n-ph="srch.ph" placeholder="ค้นหา pair..." oninput="renderTable()"/>
           <select id="fs" onchange="renderTable()"><option value="" data-i18n="filter.alldir">ทุกทิศทาง</option><option value="BUY">Buy</option><option value="SELL">Sell</option></select>
         </div>
         <div class="table-wrap">
           <table>
             <thead><tr>
-              <th>วันที่</th><th>Pair</th><th>Side</th>
-              <th>Entry</th><th>Exit</th><th>Lot</th><th>กำไร/ขาดทุน</th><th>R:R</th><th>กลยุทธ์</th><th>Session</th><th>รูป</th><th></th>
+              <th data-i18n="th.date">วันที่</th><th>Pair</th><th>Side</th>
+              <th>Entry</th><th>Exit</th><th>Lot</th><th data-i18n="th.pnl2">กำไร/ขาดทุน</th><th>R:R</th><th data-i18n="th.strategy">กลยุทธ์</th><th>Session</th><th data-i18n="th.img">รูป</th><th></th>
             </tr></thead>
             <tbody id="tbody"></tbody>
           </table>
@@ -428,7 +427,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <div class="pagination" id="pagination" style="display:none">
             <button class="pg-btn" id="pg-prev" onclick="changePage(-1)"><span data-i18n="pg.prev">← ก่อนหน้า</span></button>
             <span class="pg-info" id="pg-info"></span>
-            <button class="pg-btn" id="pg-next" onclick="changePage(1)">ถัดไป →</button>
+            <button class="pg-btn" id="pg-next" onclick="changePage(1)"><span data-i18n="pg.next">ถัดไป →</span></button>
           </div>
         </div>
       </div>
@@ -493,14 +492,14 @@ tr:hover td{background:rgba(255,255,255,.02)}
       </div>
       <!-- สรุปเดือนที่เลือก -->
       <div id="acc-month-summary" style="display:none;margin-bottom:1rem;padding:12px 16px;background:var(--bg2);border:1px solid var(--card-bdr);border-radius:var(--radius-lg)">
-        <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;font-family:'IBM Plex Mono',monospace;margin-bottom:10px" id="acc-month-label">สรุปเดือน</div>
+        <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin-bottom:10px" id="acc-month-label" data-i18n="acc.monthlabel">สรุปเดือน</div>
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
-          <div><div style="font-size:10px;color:var(--text3);font-family:'IBM Plex Mono',monospace;margin-bottom:4px" data-i18n="ms.profit">กำไรถอน ($)</div><div class="mono pos" id="ms-profit" style="font-size:16px;font-weight:500">—</div></div>
-          <div><div style="font-size:10px;color:var(--text3);font-family:'IBM Plex Mono',monospace;margin-bottom:4px" data-i18n="ms.deposit">ฝาก ($)</div><div class="mono neg" id="ms-deposit" style="font-size:16px;font-weight:500">—</div></div>
-          <div><div style="font-size:10px;color:var(--text3);font-family:'IBM Plex Mono',monospace;margin-bottom:4px" data-i18n="ms.net">Net ($)</div><div class="mono" id="ms-net" style="font-size:16px;font-weight:500">—</div></div>
-          <div><div style="font-size:10px;color:var(--text3);font-family:'IBM Plex Mono',monospace;margin-bottom:4px" data-i18n="ms.profitthb">กำไรถอน (฿)</div><div class="mono pos" id="ms-profit-thb" style="font-size:16px;font-weight:500">—</div></div>
-          <div><div style="font-size:10px;color:var(--text3);font-family:'IBM Plex Mono',monospace;margin-bottom:4px" data-i18n="ms.depositthb">ฝาก (฿)</div><div class="mono neg" id="ms-deposit-thb" style="font-size:16px;font-weight:500">—</div></div>
-          <div><div style="font-size:10px;color:var(--text3);font-family:'IBM Plex Mono',monospace;margin-bottom:4px" data-i18n="ms.netthb">Net (฿)</div><div class="mono" id="ms-net-thb" style="font-size:16px;font-weight:500">—</div></div>
+          <div><div style="font-size:10px;color:var(--text3);font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin-bottom:4px" data-i18n="ms.profit">กำไรถอน ($)</div><div class="mono pos" id="ms-profit" style="font-size:16px;font-weight:500">—</div></div>
+          <div><div style="font-size:10px;color:var(--text3);font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin-bottom:4px" data-i18n="ms.deposit">ฝาก ($)</div><div class="mono neg" id="ms-deposit" style="font-size:16px;font-weight:500">—</div></div>
+          <div><div style="font-size:10px;color:var(--text3);font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin-bottom:4px" data-i18n="ms.net">Net ($)</div><div class="mono" id="ms-net" style="font-size:16px;font-weight:500">—</div></div>
+          <div><div style="font-size:10px;color:var(--text3);font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin-bottom:4px" data-i18n="ms.profitthb">กำไรถอน (฿)</div><div class="mono pos" id="ms-profit-thb" style="font-size:16px;font-weight:500">—</div></div>
+          <div><div style="font-size:10px;color:var(--text3);font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin-bottom:4px" data-i18n="ms.depositthb">ฝาก (฿)</div><div class="mono neg" id="ms-deposit-thb" style="font-size:16px;font-weight:500">—</div></div>
+          <div><div style="font-size:10px;color:var(--text3);font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin-bottom:4px" data-i18n="ms.netthb">Net (฿)</div><div class="mono" id="ms-net-thb" style="font-size:16px;font-weight:500">—</div></div>
         </div>
       </div>
       <div class="table-wrap">
@@ -509,7 +508,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
             <th style="cursor:pointer;user-select:none" onclick="sortAccount('date')"><span data-i18n="th.date">วันที่</span> <span id="sort-date">↕</span></th>
             <th data-i18n="th.name">ชื่อ</th>
             <th style="cursor:pointer;user-select:none" onclick="sortAccount('type')"><span data-i18n="th.type">ประเภท</span> <span id="sort-type">↕</span></th>
-            <th>บัญชี</th>
+            <th data-i18n="th.acct">บัญชี</th>
             <th style="cursor:pointer;user-select:none" onclick="sortAccount('amount_usd')"><span data-i18n="th.amtusd">จำนวน ($)</span> <span id="sort-amount_usd">↕</span></th>
             <th style="cursor:pointer;user-select:none" onclick="sortAccount('amount_thb')"><span data-i18n="th.amtthb">จำนวน (฿)</span> <span id="sort-amount_thb">↕</span></th>
             <th data-i18n="th.ratedep">฿/$ ฝาก</th>
@@ -518,7 +517,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
           </tr></thead>
           <tbody id="acc-tbody"></tbody>
         </table>
-        <div id="acc-empty" class="empty-state" style="display:none">ยังไม่มีข้อมูล</div>
+        <div id="acc-empty" class="empty-state" style="display:none"><span data-i18n="empty.history">ยังไม่มีข้อมูล</span></div>
       </div>
     </div>
 
@@ -528,24 +527,24 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <h3 data-i18n="set.pairs">คู่เงิน</h3>
         <div class="tag-list" id="pair-tags"></div>
         <div class="add-row">
-          <input type="text" id="new-pair" placeholder="เช่น GBPAUD, EURCAD"/>
-          <button onclick="addPair()">+ เพิ่ม</button>
+          <input type="text" id="new-pair" data-i18n-ph="set.pairph" placeholder="เช่น GBPAUD, EURCAD"/>
+          <button onclick="addPair()"><span data-i18n="set.additem">+ เพิ่ม</span></button>
         </div>
       </div>
       <div class="settings-block settings-strategies">
         <h3 data-i18n="set.strategies">กลยุทธ์</h3>
         <div class="tag-list" id="strategy-tags"></div>
         <div class="add-row">
-          <input type="text" id="new-strategy" placeholder="เช่น ICT, Price Action..."/>
-          <button onclick="addStrategy()">+ เพิ่ม</button>
+          <input type="text" id="new-strategy" data-i18n-ph="set.stratph" placeholder="เช่น ICT, Price Action..."/>
+          <button onclick="addStrategy()"><span data-i18n="set.additem">+ เพิ่ม</span></button>
         </div>
       </div>
       <div class="settings-block">
         <h3 data-i18n="set.accounts">บัญชีเทรด</h3>
         <div class="tag-list" id="account-tags"></div>
         <div class="add-row">
-          <input type="text" id="new-account" placeholder="เช่น XM K.MK (82952428)"/>
-          <button onclick="addAccountSetting()">+ เพิ่ม</button>
+          <input type="text" id="new-account" data-i18n-ph="set.acctph" placeholder="เช่น XM K.MK (82952428)"/>
+          <button onclick="addAccountSetting()"><span data-i18n="set.additem">+ เพิ่ม</span></button>
         </div>
       </div>
       <div class="settings-block">
@@ -554,48 +553,48 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <div class="theme-dot active" data-theme="default" style="background:#1a1e25" title="Dark" onclick="setTheme('default')"></div>
           <div class="theme-dot" data-theme="light" style="background:#f0f2f5;border-color:#ccc" title="Light" onclick="setTheme('light')"></div>
         </div>
-        <div style="font-size:11px;color:var(--text2);font-family:'IBM Plex Mono',monospace">กดวงกลมเพื่อเปลี่ยนธีม — จำค่าไว้อัตโนมัติ</div>
+        <div style="font-size:11px;color:var(--text2);font-family:-apple-system,BlinkMacSystemFont,sans-serif" data-i18n="set.themetip">กดวงกลมเพื่อเปลี่ยนธีม — จำค่าไว้อัตโนมัติ</div>
       </div>
       <div class="settings-block">
         <h3>Backup &amp; Export</h3>
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
           <button class="export-btn primary" onclick="exportJSON()">⬇ Export JSON</button>
           <button class="export-btn secondary" onclick="exportCSV()">⬇ Export CSV</button>
-          <button class="export-btn secondary" onclick="backupToLocal()">💾 Backup ลง Browser</button>
+          <button class="export-btn secondary" onclick="backupToLocal()"><span data-i18n="set.backupbtn">💾 Backup ลง Browser</span></button>
         </div>
-        <div style="font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace" id="backup-status">—</div>
+        <div style="font-size:11px;color:var(--text3);font-family:-apple-system,BlinkMacSystemFont,sans-serif" id="backup-status">—</div>
       </div>
       <div class="settings-block">
         <h3 data-i18n="set.language">ภาษา / Language</h3>
         <div style="display:flex;gap:8px">
-          <button id="glang-th" onclick="setGlobalLang('th')" style="padding:8px 20px;background:var(--accent);border:none;border-radius:var(--radius);color:#fff;font-size:13px;cursor:pointer;font-family:'IBM Plex Sans Thai',sans-serif;transition:all .15s">ไทย</button>
-          <button id="glang-en" onclick="setGlobalLang('en')" style="padding:8px 20px;background:transparent;border:1px solid var(--border2);border-radius:var(--radius);color:var(--text2);font-size:13px;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .15s">English</button>
+          <button id="glang-th" onclick="setGlobalLang('th')" style="padding:8px 20px;background:var(--accent);border:none;border-radius:var(--radius);color:#fff;font-size:13px;cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,sans-serif;transition:all .15s">ไทย</button>
+          <button id="glang-en" onclick="setGlobalLang('en')" style="padding:8px 20px;background:transparent;border:1px solid var(--border2);border-radius:var(--radius);color:var(--text2);font-size:13px;cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,sans-serif;transition:all .15s">English</button>
         </div>
       </div>
       <div class="settings-block">
-        <h3 style="font-family:'IBM Plex Mono',monospace;letter-spacing:.03em">Version</h3>
+        <h3 style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;letter-spacing:.03em">Version</h3>
         <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:12px">
-          <span style="font-size:20px;font-weight:500;font-family:'IBM Plex Mono',monospace;color:var(--accent)">v5.3</span>
-          <span style="font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace">FX Journal</span>
+          <span style="font-size:20px;font-weight:500;font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:var(--accent)">v5.3</span>
+          <span style="font-size:11px;color:var(--text3);font-family:-apple-system,BlinkMacSystemFont,sans-serif">FX Journal</span>
         </div>
         <div style="display:flex;flex-direction:column;gap:6px">
-          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--accent);font-family:'IBM Plex Mono',monospace;margin-bottom:2px">
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--accent);font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin-bottom:2px">
             <span style="font-size:10px">✦</span>
             <span style="font-weight:500">v5.3</span>
           </div>
-          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);font-family:'IBM Plex Mono',monospace">
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);font-family:-apple-system,BlinkMacSystemFont,sans-serif">
             <span style="color:var(--text3);font-size:10px">·</span>
             <span>Add Trade — modal popup แทน inline form</span>
           </div>
-          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);font-family:'IBM Plex Mono',monospace">
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);font-family:-apple-system,BlinkMacSystemFont,sans-serif">
             <span style="color:var(--text3);font-size:10px">·</span>
             <span>Add Trade — ปุ่มใน MT5 tab filter bar (มุมขวา)</span>
           </div>
-          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);font-family:'IBM Plex Mono',monospace">
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);font-family:-apple-system,BlinkMacSystemFont,sans-serif">
             <span style="color:var(--text3);font-size:10px">·</span>
             <span>Add Trade — บันทึกขึ้น MT5 tab, source_account = Manual</span>
           </div>
-          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);font-family:'IBM Plex Mono',monospace">
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);font-family:-apple-system,BlinkMacSystemFont,sans-serif">
             <span style="color:var(--text3);font-size:10px">·</span>
             <span>ลบ "+" ออกจากปุ่มทุกปุ่ม (Add Trade / Add Plan / Add Record)</span>
           </div>
@@ -610,16 +609,16 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <!-- Calendar Header -->
         <div style="display:flex;align-items:center;padding:11px 16px;border-bottom:1px solid var(--border)">
           <button onclick="changeCalendarMonth(-1)" style="background:none;border:1px solid var(--border2);border-radius:var(--radius);color:var(--text2);width:28px;height:28px;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;line-height:1">&#8249;</button>
-          <span id="cal-month-title" style="margin:0 12px;font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:500;min-width:160px;text-align:center">—</span>
+          <span id="cal-month-title" style="margin:0 12px;font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;font-weight:500;min-width:160px;text-align:center">—</span>
           <button onclick="changeCalendarMonth(1)" style="background:none;border:1px solid var(--border2);border-radius:var(--radius);color:var(--text2);width:28px;height:28px;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;line-height:1">&#8250;</button>
           <div style="margin-left:auto;display:flex;align-items:center;gap:22px">
             <div style="display:flex;align-items:baseline;gap:5px">
-              <span style="font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace">P/L:</span>
-              <span id="cal-total-pnl" style="font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:500;color:var(--text2)">—</span>
+              <span style="font-size:11px;color:var(--text3);font-family:-apple-system,BlinkMacSystemFont,sans-serif">P/L:</span>
+              <span id="cal-total-pnl" style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;font-weight:500;color:var(--text2)">—</span>
             </div>
             <div style="display:flex;align-items:baseline;gap:5px">
-              <span style="font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace">Trades:</span>
-              <span id="cal-total-trades" style="font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:500;color:var(--text)">0</span>
+              <span style="font-size:11px;color:var(--text3);font-family:-apple-system,BlinkMacSystemFont,sans-serif">Trades:</span>
+              <span id="cal-total-trades" style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;font-weight:500;color:var(--text)">0</span>
             </div>
           </div>
         </div>
@@ -630,9 +629,9 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <!-- Day Trades Panel -->
         <div id="cal-day-panel" style="display:none;border-top:1px solid var(--border);padding:16px 20px">
           <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
-            <span id="cal-day-panel-date" style="font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;color:var(--text)"></span>
-            <span id="cal-day-panel-count" style="font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace"></span>
-            <span id="cal-day-panel-pnl" style="font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500"></span>
+            <span id="cal-day-panel-date" style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:13px;font-weight:500;color:var(--text)"></span>
+            <span id="cal-day-panel-count" style="font-size:11px;color:var(--text3);font-family:-apple-system,BlinkMacSystemFont,sans-serif"></span>
+            <span id="cal-day-panel-pnl" style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:13px;font-weight:500"></span>
             <button onclick="closeDayPanel()" style="margin-left:auto;background:none;border:none;color:var(--text3);cursor:pointer;font-size:16px;line-height:1;padding:2px 6px;border-radius:4px;transition:color .15s" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text3)'">✕</button>
           </div>
           <div id="cal-day-panel-table"></div>
@@ -644,9 +643,9 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px">
         <div class="page-title" style="margin-bottom:0" data-i18n="nav.analysis">วิเคราะห์</div>
         <div style="display:flex;align-items:center;gap:10px">
-          <span id="an-count-badge" style="font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace"></span>
-          <button onclick="showPage('history')" style="padding:7px 14px;background:transparent;border:1px solid var(--border2);border-radius:var(--radius);color:var(--text2);font-size:12px;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .15s" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text2)'"><span data-i18n="an.back">← กลับ</span></button>
-          <button id="btn-clear-pool" onclick="clearStatsPool(this)" style="padding:7px 14px;background:transparent;border:1px solid rgba(255,77,106,.3);border-radius:var(--radius);color:var(--red);font-size:12px;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .15s" onmouseover="this.style.background='var(--red-bg)'" onmouseout="this.style.background='transparent'"><span data-i18n="an.clearpool">🗑 ล้าง pool</span></button>
+          <span id="an-count-badge" style="font-size:11px;color:var(--text3);font-family:-apple-system,BlinkMacSystemFont,sans-serif"></span>
+          <button onclick="showPage('history')" style="padding:7px 14px;background:transparent;border:1px solid var(--border2);border-radius:var(--radius);color:var(--text2);font-size:12px;cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,sans-serif;transition:all .15s" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text2)'"><span data-i18n="an.back">← กลับ</span></button>
+          <button id="btn-clear-pool" onclick="clearStatsPool(this)" style="padding:7px 14px;background:transparent;border:1px solid rgba(255,77,106,.3);border-radius:var(--radius);color:var(--red);font-size:12px;cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,sans-serif;transition:all .15s" onmouseover="this.style.background='var(--red-bg)'" onmouseout="this.style.background='transparent'"><span data-i18n="an.clearpool">🗑 ล้าง pool</span></button>
         </div>
       </div>
       <div id="analysis-empty" class="empty-state" style="display:none"></div>
@@ -660,15 +659,15 @@ tr:hover td{background:rgba(255,255,255,.02)}
 <div class="modal-bg" id="missed-modal" onclick="if(event.target===this)this.classList.remove('open')">
   <div class="modal-box" style="max-width:520px">
     <div class="modal-hdr">
-      <span class="modal-title" id="missed-modal-title">เพิ่มMissed Trade</span>
+      <span class="modal-title" id="missed-modal-title" data-i18n="modal.addmissed">เพิ่ม Missed Trade</span>
       <button class="modal-close" onclick="document.getElementById('missed-modal').classList.remove('open')">✕</button>
     </div>
     <div style="background:rgba(245,166,35,0.06);border:1px solid rgba(245,166,35,0.2);border-radius:var(--radius);padding:10px 14px;margin-bottom:16px;font-size:12px;color:#f5a623">
-      แผนที่เห็นแต่เข้าไม่ทัน — ไม่มีกำไร/ขาดทุน บันทึกไว้เพื่อเรียนรู้
+      <span data-i18n="modal.misseddesc">แผนที่เห็นแต่เข้าไม่ทัน — ไม่มีกำไร/ขาดทุน บันทึกไว้เพื่อเรียนรู้</span>
     </div>
     <div class="form-grid">
-      <div class="fg"><label>วันที่</label><input type="date" id="m-date"/></div>
-      <div class="fg"><label>คู่เงิน</label><select id="m-sym"></select></div>
+      <div class="fg"><label data-i18n="lbl.date">วันที่</label><input type="date" id="m-date"/></div>
+      <div class="fg"><label data-i18n="lbl.pair">คู่เงิน</label><select id="m-sym"></select></div>
       <div class="fg"><label data-i18n="lbl.direction">ทิศทาง</label>
         <div class="side-row">
           <button class="side-btn buy" id="m-btn-buy" onclick="setMissedSide('BUY')">↑ Buy</button>
@@ -676,24 +675,24 @@ tr:hover td{background:rgba(255,255,255,.02)}
         </div>
       </div>
 
-      <div class="fg"><label>กลยุทธ์</label><select id="m-str"></select></div>
-      <div class="fg"><label>Entry Zone (เช่น 4700-4705)</label><input type="text" id="m-zone" placeholder="เช่น 4700-4705" oninput="calcMissedRR()"/></div>
+      <div class="fg"><label data-i18n="lbl.strategy">กลยุทธ์</label><select id="m-str"></select></div>
+      <div class="fg"><label>Entry Zone</label><input type="text" id="m-zone" data-i18n-ph="ph.pipsexp" placeholder="เช่น 4700-4705" oninput="calcMissedRR()"/></div>
       <div class="fg"><label>Stop Loss</label><input type="number" id="m-sl" placeholder="0.00000" step="any" oninput="calcMissedRR()"/></div>
       <div class="fg"><label>Take Profit</label><input type="number" id="m-tp" placeholder="0.00000" step="any" oninput="calcMissedRR()"/></div>
-      <div class="fg"><label>จุดที่คาดว่าได้</label><input type="number" id="m-pips" placeholder="เช่น 110" step="any"/></div>
-      <div class="fg"><label>R:R</label><input type="text" id="m-rr" placeholder="เช่น 1:2.5" oninput="calcMissedRR()"/></div>
-      <div class="fg"><label>เหตุผลที่พลาด</label><input type="text" id="m-reason" placeholder="เช่น เข้าไม่ทัน, ลังเล, ไม่อยู่หน้าจอ"/></div>
-      <div class="fg full"><label>หมายเหตุ</label><textarea id="m-note" placeholder="รายละเอียดแผน, สิ่งที่เรียนรู้..."></textarea></div>
+      <div class="fg"><label data-i18n="lbl.pipsexp">จุดที่คาดว่าได้</label><input type="number" id="m-pips" data-i18n-ph="ph.pipsexp" placeholder="เช่น 110" step="any"/></div>
+      <div class="fg"><label>R:R</label><input type="text" id="m-rr" data-i18n-ph="ph.rr" placeholder="เช่น 1:2.5" oninput="calcMissedRR()"/></div>
+      <div class="fg"><label data-i18n="lbl.missedreason">เหตุผลที่พลาด</label><input type="text" id="m-reason" data-i18n-ph="ph.missedreason" placeholder="เช่น เข้าไม่ทัน, ลังเล, ไม่อยู่หน้าจอ"/></div>
+      <div class="fg full"><label data-i18n="lbl.note">หมายเหตุ</label><textarea id="m-note" data-i18n-ph="ph.missednote" placeholder="รายละเอียดแผน, สิ่งที่เรียนรู้..."></textarea></div>
       <div class="fg full">
-        <label>รูป Chart</label>
+        <label data-i18n="det.img">รูป Chart</label>
         <div class="upload-area" onclick="document.getElementById('m-img-in').click()">
           <div style="font-size:24px;margin-bottom:6px">↑</div>
-          คลิกเพื่อเลือกรูป หรือลากวาง
+          <span data-i18n="upload.text">คลิกเพื่อเลือกรูป หรือลากวาง</span>
         </div>
         <input type="file" id="m-img-in" accept="image/*" multiple style="display:none" onchange="handleMissedImgs(this)"/>
         <div class="preview-row" id="m-preview-row"></div>
       </div>
-      <div class="fg full"><button class="save-btn" onclick="saveMissed()">บันทึกแผน</button></div>
+      <div class="fg full"><button class="save-btn" onclick="saveMissed()"><span data-i18n="btn.savemissed">บันทึกแผน</span></button></div>
     </div>
   </div>
 </div>
@@ -702,41 +701,41 @@ tr:hover td{background:rgba(255,255,255,.02)}
 <div class="modal-bg" id="acc-modal" onclick="if(event.target===this)this.classList.remove('open')">
   <div class="modal-box" style="max-width:480px">
     <div class="modal-hdr">
-      <span class="modal-title" id="acc-modal-title">เพิ่มรายการ</span>
+      <span class="modal-title" id="acc-modal-title" data-i18n="modal.addacc">เพิ่มรายการ</span>
       <button class="modal-close" onclick="document.getElementById('acc-modal').classList.remove('open')">✕</button>
     </div>
     <div class="form-grid">
-      <div class="fg"><label>วันที่</label><input type="date" id="acc-m-date"/></div>
-      <div class="fg"><label>ประเภท</label>
-        <select id="acc-m-type"><option value="Profit">Profit (ถอนกำไร)</option><option value="Deposit">Deposit (ฝาก)</option></select>
+      <div class="fg"><label data-i18n="lbl.date">วันที่</label><input type="date" id="acc-m-date"/></div>
+      <div class="fg"><label data-i18n="lbl.acctype">ประเภท</label>
+        <select id="acc-m-type"><option value="Profit" data-i18n="opt.profit">Profit (ถอนกำไร)</option><option value="Deposit" data-i18n="opt.deposit">Deposit (ฝาก)</option></select>
       </div>
-      <div class="fg full"><label>ชื่อ</label><input type="text" id="acc-m-name" placeholder="เช่น XM K.MK ถอนกำไร"/></div>
-      <div class="fg full"><label>บัญชี</label>
+      <div class="fg full"><label data-i18n="th.name">ชื่อ</label><input type="text" id="acc-m-name" data-i18n-ph="ph.accname" placeholder="เช่น XM K.MK ถอนกำไร"/></div>
+      <div class="fg full"><label data-i18n="th.acct">บัญชี</label>
         <select id="acc-m-acct"></select>
       </div>
-      <div class="fg"><label>จำนวน ($)</label><input type="number" id="acc-m-usd" placeholder="เช่น 50 หรือ -32.02" step="any" oninput="calcAccThb()"/></div>
-      <div class="fg"><label>จำนวน (฿)</label><input type="number" id="acc-m-thb" placeholder="เช่น 1571 หรือ -1000" step="any"/></div>
+      <div class="fg"><label data-i18n="th.amtusd">จำนวน ($)</label><input type="number" id="acc-m-usd" data-i18n-ph="ph.amtusd" placeholder="เช่น 50 หรือ -32.02" step="any" oninput="calcAccThb()"/></div>
+      <div class="fg"><label data-i18n="th.amtthb">จำนวน (฿)</label><input type="number" id="acc-m-thb" data-i18n-ph="ph.amtthb" placeholder="เช่น 1571 หรือ -1000" step="any"/></div>
       <div style="grid-column:1/-1;border-top:1px solid var(--border);padding-top:12px;margin-top:2px">
-        <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;font-family:'IBM Plex Mono',monospace;margin-bottom:10px">อัตราแลกเปลี่ยน</div>
+        <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin-bottom:10px" data-i18n="lbl.exrate">อัตราแลกเปลี่ยน</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
           <div class="fg">
-            <label>ค่าเงิน วันที่ฝาก (฿/$)</label>
+            <label data-i18n="lbl.ratedepfull">ค่าเงิน วันที่ฝาก (฿/$)</label>
             <div style="position:relative">
-              <input type="number" id="acc-m-rate-dep" placeholder="เช่น 32.42" step="any" style="padding-left:36px"/>
-              <span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--text3);font-family:'IBM Plex Mono',monospace">฿/$</span>
+              <input type="number" id="acc-m-rate-dep" data-i18n-ph="ph.ratedep" placeholder="เช่น 32.42" step="any" style="padding-left:36px"/>
+              <span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--text3);font-family:-apple-system,BlinkMacSystemFont,sans-serif">฿/$</span>
             </div>
           </div>
           <div class="fg">
-            <label>ค่าเงิน วันที่ถอน (฿/$)</label>
+            <label data-i18n="lbl.ratewdfull">ค่าเงิน วันที่ถอน (฿/$)</label>
             <div style="position:relative">
-              <input type="number" id="acc-m-rate-wd" placeholder="เช่น 31.65" step="any" style="padding-left:36px" oninput="calcAccThb()"/>
-              <span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--text3);font-family:'IBM Plex Mono',monospace">฿/$</span>
+              <input type="number" id="acc-m-rate-wd" data-i18n-ph="ph.ratewd" placeholder="เช่น 31.65" step="any" style="padding-left:36px" oninput="calcAccThb()"/>
+              <span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--text3);font-family:-apple-system,BlinkMacSystemFont,sans-serif">฿/$</span>
             </div>
           </div>
         </div>
       </div>
-      <div class="fg full"><label>หมายเหตุ</label><input type="text" id="acc-m-note" placeholder="เพิ่มเติม..."/></div>
-      <div class="fg full"><button class="save-btn" onclick="saveAccount()">บันทึก</button></div>
+      <div class="fg full"><label data-i18n="lbl.note">หมายเหตุ</label><input type="text" id="acc-m-note" data-i18n-ph="ph.accnote" placeholder="เพิ่มเติม..."/></div>
+      <div class="fg full"><button class="save-btn" onclick="saveAccount()"><span data-i18n="btn.saveacc">บันทึก</span></button></div>
     </div>
   </div>
 </div>
@@ -750,21 +749,21 @@ tr:hover td{background:rgba(255,255,255,.02)}
     </div>
     <div class="detail-grid" id="detail-grid"></div>
     <div id="detail-note-wrap" style="display:none;margin-bottom:16px">
-      <div class="section-label">หมายเหตุ</div>
+      <div class="section-label" data-i18n="det.note">หมายเหตุ</div>
       <div class="detail-note" id="detail-note"></div>
     </div>
     <div id="detail-img-wrap" style="display:none;margin-top:16px">
-      <div class="section-label" style="margin-bottom:10px">รูป Chart</div>
+      <div class="section-label" style="margin-bottom:10px" data-i18n="det.img">รูป Chart</div>
       <div class="detail-strip" id="detail-strip"></div>
       <img class="detail-main-img" id="detail-main-img" src="" alt="chart"/>
       <div class="detail-counter" id="detail-counter"></div>
       <div class="detail-img-nav">
-        <button onclick="detailPrev()">← ก่อนหน้า</button>
-        <button onclick="detailNext()">ถัดไป →</button>
+        <button onclick="detailPrev()"><span data-i18n="pg.prev">← ก่อนหน้า</span></button>
+        <button onclick="detailNext()"><span data-i18n="pg.next">ถัดไป →</span></button>
       </div>
     </div>
     <div style="margin-top:20px" id="detail-edit-wrap">
-      <button class="save-btn" onclick="openEditFromDetail()" style="background:var(--bg3);border:1px solid var(--border2);color:var(--text2)">✎ แก้ไข</button>
+      <button class="save-btn" onclick="openEditFromDetail()" style="background:var(--bg3);border:1px solid var(--border2);color:var(--text2)"><span data-i18n="det.edit">✎ แก้ไข</span></button>
     </div>
   </div>
 </div>
@@ -773,13 +772,13 @@ tr:hover td{background:rgba(255,255,255,.02)}
 <div class="modal-bg" id="add-trade-modal" onclick="addTradeBgClick(event)">
   <div class="modal-box">
     <div class="modal-hdr">
-      <span class="modal-title">เพิ่ม Trade</span>
+      <span class="modal-title" data-i18n="modal.addtrade2">เพิ่ม Trade</span>
       <button class="modal-close" onclick="closeAddTradeModal()">✕</button>
     </div>
     <div class="form-grid">
-      <div class="fg"><label>วันที่</label><input type="date" id="f-date"/></div>
-      <div class="fg"><label>คู่เงิน</label><select id="f-sym"></select></div>
-      <div class="fg"><label>ทิศทาง</label>
+      <div class="fg"><label data-i18n="lbl.date">วันที่</label><input type="date" id="f-date"/></div>
+      <div class="fg"><label data-i18n="lbl.pair">คู่เงิน</label><select id="f-sym"></select></div>
+      <div class="fg"><label data-i18n="lbl.direction">ทิศทาง</label>
         <div class="side-row">
           <button class="side-btn buy on" id="btn-buy" onclick="setSide('BUY')">↑ Buy</button>
           <button class="side-btn sell" id="btn-sell" onclick="setSide('SELL')">↓ Sell</button>
@@ -787,32 +786,32 @@ tr:hover td{background:rgba(255,255,255,.02)}
       </div>
       <div class="fg"><label>Entry Price</label><input type="number" id="f-en" placeholder="0.00000" step="any" oninput="autoCalc()"/></div>
       <div class="fg"><label>Take Profit</label><input type="number" id="f-ex" placeholder="0.00000" step="any" oninput="autoCalc()"/></div>
-      <div class="fg"><label>จำนวนไม้</label><input type="number" id="f-entries" placeholder="เช่น 6" min="1" step="1" oninput="updateLotCalc()"/>
-        <div id="avg-entry-display" style="font-size:11px;color:var(--text2);font-family:'IBM Plex Mono',monospace;margin-top:4px"></div>
+      <div class="fg"><label data-i18n="lbl.entries">จำนวนไม้</label><input type="number" id="f-entries" data-i18n-ph="ph.entries" placeholder="เช่น 6" min="1" step="1" oninput="updateLotCalc()"/>
+        <div id="avg-entry-display" style="font-size:11px;color:var(--text2);font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin-top:4px"></div>
       </div>
-      <div class="fg"><label>Lot ต่อไม้</label><input type="number" id="f-lot-per" placeholder="0.01" step="any" oninput="updateLotCalc()"/></div>
+      <div class="fg"><label data-i18n="lbl.lotper2">Lot ต่อไม้</label><input type="number" id="f-lot-per" placeholder="0.01" step="any" oninput="updateLotCalc()"/></div>
       <div class="fg"><label>Stop Loss</label><input type="number" id="f-sl" placeholder="0.00000" step="any" oninput="autoCalc()"/></div>
-      <div class="fg"><label>R:R Ratio (อัตโนมัติ)</label><input type="text" id="f-rr" placeholder="—" readonly/></div>
-      <div class="fg"><label>กลยุทธ์</label><select id="f-str"></select></div>
+      <div class="fg"><label data-i18n="lbl.rr">R:R Ratio (อัตโนมัติ)</label><input type="text" id="f-rr" placeholder="—" readonly/></div>
+      <div class="fg"><label data-i18n="lbl.strategy">กลยุทธ์</label><select id="f-str"></select></div>
       <div class="fg"><label>Session</label><select id="f-session">
-        <option value="">— เลือก —</option>
+        <option value="" data-i18n="sel.choose">— เลือก —</option>
         <option value="Asia">Asia</option>
         <option value="London">London</option>
         <option value="New York">New York</option>
         <option value="Overlap">Overlap</option>
       </select></div>
-      <div class="fg"><label>กำไร / ขาดทุน ($)</label><input type="number" id="f-pnl" placeholder="เช่น 12.50 หรือ -8.00" step="any"/></div>
+      <div class="fg"><label data-i18n="lbl.pnl">กำไร / ขาดทุน ($)</label><input type="number" id="f-pnl" data-i18n-ph="ph.pnl" placeholder="เช่น 12.50 หรือ -8.00" step="any"/></div>
       <div class="fg full">
-        <label>รูป Chart</label>
+        <label data-i18n="det.img">รูป Chart</label>
         <div class="upload-area" onclick="document.getElementById('img-in').click()">
           <div style="font-size:24px;margin-bottom:6px">↑</div>
-          คลิกเพื่อเลือกรูป หรือลากวาง
+          <span data-i18n="upload.text">คลิกเพื่อเลือกรูป หรือลากวาง</span>
         </div>
         <input type="file" id="img-in" accept="image/*" multiple style="display:none" onchange="handleImgs(this)"/>
         <div class="preview-row" id="preview-row"></div>
       </div>
-      <div class="fg full"><label>หมายเหตุ</label><textarea id="f-note" placeholder="เหตุผล, สิ่งที่เรียนรู้..."></textarea></div>
-      <div class="fg full"><button class="save-btn" id="savebtn" onclick="addTrade()">บันทึก Trade</button></div>
+      <div class="fg full"><label data-i18n="lbl.note">หมายเหตุ</label><textarea id="f-note" data-i18n-ph="ph.note" placeholder="เหตุผล, สิ่งที่เรียนรู้..."></textarea></div>
+      <div class="fg full"><button class="save-btn" id="savebtn" onclick="addTrade()"><span data-i18n="btn.savetrade">บันทึก Trade</span></button></div>
     </div>
   </div>
 </div>
@@ -820,12 +819,12 @@ tr:hover td{background:rgba(255,255,255,.02)}
 <div class="modal-bg" id="edit-modal" onclick="editBgClick(event)">
   <div class="modal-box">
     <div class="modal-hdr">
-      <span class="modal-title">แก้ไข Trade</span>
+      <span class="modal-title" data-i18n="modal.edittrade">แก้ไข Trade</span>
       <button class="modal-close" onclick="closeEdit()">✕</button>
     </div>
     <div class="form-grid">
-      <div class="fg"><label>วันที่</label><input type="date" id="e-date"/></div>
-      <div class="fg"><label>คู่เงิน</label><select id="e-sym"></select></div>
+      <div class="fg"><label data-i18n="lbl.date">วันที่</label><input type="date" id="e-date"/></div>
+      <div class="fg"><label data-i18n="lbl.pair">คู่เงิน</label><select id="e-sym"></select></div>
       <div class="fg"><label data-i18n="lbl.direction">ทิศทาง</label>
         <div class="side-row">
           <button class="side-btn buy" id="e-btn-buy" onclick="setEditSide('BUY')">↑ Buy</button>
@@ -837,39 +836,39 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div class="fg"><label>Lot Size</label><input type="number" id="e-lot" step="any"/></div>
       <div class="fg"><label>Stop Loss</label><input type="number" id="e-sl" step="any" oninput="calcEditRR()"/></div>
       <div class="fg"><label>R:R Ratio</label><input type="text" id="e-rr" readonly/></div>
-      <div class="fg"><label>กลยุทธ์</label><select id="e-str"></select></div>
+      <div class="fg"><label data-i18n="lbl.strategy">กลยุทธ์</label><select id="e-str"></select></div>
       <div class="fg"><label>Session</label><select id="e-session">
-    <option value="">— เลือก —</option>
+    <option value="" data-i18n="sel.choose">— เลือก —</option>
     <option value="Asia">Asia</option>
     <option value="London">London</option>
     <option value="New York">New York</option>
     <option value="Overlap">Overlap</option>
       </select></div>
-      <div class="fg"><label>กำไร / ขาดทุน ($)</label><input type="number" id="e-pnl" step="any"/></div>
-      <div class="fg full"><label>หมายเหตุ</label><textarea id="e-note"></textarea></div>
+      <div class="fg"><label data-i18n="lbl.pnl">กำไร / ขาดทุน ($)</label><input type="number" id="e-pnl" step="any"/></div>
+      <div class="fg full"><label data-i18n="lbl.note">หมายเหตุ</label><textarea id="e-note"></textarea></div>
       <div class="fg full">
-        <label>รูป Chart</label>
+        <label data-i18n="det.img">รูป Chart</label>
         <div class="upload-area" onclick="document.getElementById('e-img-in').click()">
           <div style="font-size:24px;margin-bottom:6px">↑</div>
-          คลิกเพื่อเพิ่มรูป
+          <span data-i18n="ph.editimg">คลิกเพื่อเพิ่มรูป</span>
         </div>
         <input type="file" id="e-img-in" accept="image/*" multiple style="display:none" onchange="handleEditImgs(this)"/>
         <div class="preview-row" id="e-preview-row"></div>
       </div>
-      <div class="fg full"><button class="save-btn" onclick="saveEdit()">บันทึกการแก้ไข</button></div>
+      <div class="fg full"><button class="save-btn" onclick="saveEdit()"><span data-i18n="btn.saveedit">บันทึกการแก้ไข</span></button></div>
     </div>
   </div>
 </div>
 
 
 <div id="sel-bar" class="sel-bar hidden">
-  <span data-i18n="an.sel" style="color:var(--text2);font-family:'IBM Plex Mono',monospace;font-size:11px">เลือก</span>
-  <span id="sel-count" style="font-weight:500;color:var(--accent);font-family:'IBM Plex Mono',monospace;min-width:18px;text-align:center">0</span>
-  <span data-i18n="an.items" style="color:var(--text2);font-family:'IBM Plex Mono',monospace;font-size:11px">รายการ</span>
+  <span data-i18n="an.sel" style="color:var(--text2);font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:11px">เลือก</span>
+  <span id="sel-count" style="font-weight:500;color:var(--accent);font-family:-apple-system,BlinkMacSystemFont,sans-serif;min-width:18px;text-align:center">0</span>
+  <span data-i18n="an.items" style="color:var(--text2);font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:11px">รายการ</span>
   <div style="width:1px;height:14px;background:var(--border2)"></div>
-  <button onclick="insertToStats()" style="padding:6px 16px;background:var(--accent);border:none;border-radius:20px;color:#fff;font-size:12px;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-weight:500;white-space:nowrap"><span data-i18n="an.insert">➕ เพิ่มเข้าสถิติ</span></button>
-  <button onclick="showPage('analysis')" style="padding:6px 12px;background:transparent;border:1px solid var(--border2);border-radius:20px;color:var(--text2);font-size:12px;cursor:pointer;font-family:'IBM Plex Mono',monospace;white-space:nowrap;transition:all .15s" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text2)'"><span data-i18n="an.viewstats">ดูสถิติ</span></button>
-  <button onclick="clearAnalysisSelection()" style="padding:4px 8px;background:transparent;border:none;cursor:pointer;color:var(--text3);font-size:14px;line-height:1;transition:color .15s" onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='var(--text3)'" title="ล้างการเลือก">✕</button>
+  <button onclick="insertToStats()" style="padding:6px 16px;background:var(--accent);border:none;border-radius:20px;color:#fff;font-size:12px;cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-weight:500;white-space:nowrap"><span data-i18n="an.insert">➕ เพิ่มเข้าสถิติ</span></button>
+  <button onclick="showPage('analysis')" style="padding:6px 12px;background:transparent;border:1px solid var(--border2);border-radius:20px;color:var(--text2);font-size:12px;cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,sans-serif;white-space:nowrap;transition:all .15s" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text2)'"><span data-i18n="an.viewstats">ดูสถิติ</span></button>
+  <button onclick="clearAnalysisSelection()" style="padding:4px 8px;background:transparent;border:none;cursor:pointer;color:var(--text3);font-size:14px;line-height:1;transition:color .15s" onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='var(--text3)'" title="">✕</button>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -961,7 +960,7 @@ const I18N = {
     'an.sessect':'Session Breakdown','an.symsect':'Symbol Breakdown','an.symbol':'Symbol','an.poollist':'เทรดใน pool','an.remove':'ลบออก',
     'sync.btn':'⟳ Sync',
     'tab.mt5':'MT5','tab.manual':'บันทึกเอง',
-    'stat.winrate':'อัตราชนะ','stat.pnl':'กำไร/ขาดทุนรวม ($)','stat.pnlshort':'กำไร/ขาดทุน ($)',
+    'stat.winrate':'อัตราชนะ','stat.pnl':'กำไร/ขาดทุนรวม','stat.pnlshort':'กำไร/ขาดทุน',
     'stat.total':'เทรดทั้งหมด','stat.wl':'ชนะ / แพ้',
     'stat.highwin':'ชนะสูงสุด','stat.highloss':'แพ้สูงสุด',
     'filter.allpairs':'ทุกคู่เงิน','filter.alldir':'ทุกทิศทาง','filter.allstrat':'ทุกกลยุทธ์',
@@ -978,7 +977,7 @@ const I18N = {
     'lbl.date':'วันที่','lbl.pair':'คู่เงิน','lbl.direction':'ทิศทาง',
     'lbl.entry':'ราคาเข้า','lbl.tp':'เป้าหมายกำไร','lbl.entries':'จำนวนไม้',
     'lbl.lotper':'ล็อตต่อไม้','lbl.sl':'จุดตัดขาดทุน','lbl.rr':'อัตรา R:R (อัตโนมัติ)',
-    'lbl.strategy':'กลยุทธ์','lbl.session':'เซสชัน','lbl.pnl':'กำไร / ขาดทุน ($)',
+    'lbl.strategy':'กลยุทธ์','lbl.session':'เซสชัน','lbl.pnl':'กำไร / ขาดทุน',
     'lbl.chart':'รูปกราฟ','lbl.note':'หมายเหตุ',
     'upload.text':'คลิกเพื่อเลือกรูป หรือลากวาง',
     'empty.history':'ยังไม่มีข้อมูล',
@@ -988,15 +987,59 @@ const I18N = {
     'acc.profit':'กำไรถอนรวม','acc.deposit':'ฝากรวม','acc.net':'สุทธิ',
     'acc.count':'รายการทั้งหมด','acc.profitthb':'ถอนรวม (฿)',
     'acc.depositthb':'ฝากรวม (฿)','acc.netthb':'สุทธิ (฿)',
-    'ms.profit':'กำไรถอน ($)','ms.deposit':'ฝาก ($)','ms.net':'สุทธิ ($)',
+    'ms.profit':'กำไรถอน $','ms.deposit':'ฝาก $','ms.net':'สุทธิ $',
     'ms.profitthb':'กำไรถอน (฿)','ms.depositthb':'ฝาก (฿)','ms.netthb':'สุทธิ (฿)',
     'set.pairs':'คู่เงิน','set.strategies':'กลยุทธ์','set.accounts':'บัญชีเทรด',
     'set.theme':'ธีมสี','set.backup':'สำรองและส่งออก',
     'ov.result':'ผลลัพธ์','ov.withdrawal':'ถอนกำไรรวม','ov.tradesummary':'สรุปการเทรด',
     'ov.charts':'กราฟ','ov.pnlchart':'กำไร/ขาดทุนสะสม','ov.pairchart':'กำไร/ขาดทุนแยกตามคู่เงิน',
     'th.pair':'คู่เงิน','th.side':'ทิศทาง','th.entry':'ราคาเข้า','th.exit':'ราคาออก',
-    'th.lot':'ล็อต','th.rr':'R:R','th.session':'เซสชัน','th.pnl':'กำไร/ขาดทุน ($)',
+    'th.lot':'ล็อต','th.rr':'R:R','th.session':'เซสชัน','th.pnl':'กำไร/ขาดทุน',
     'th.slcol':'จุดตัดขาดทุน','th.tpcol':'เป้าหมาย','th.zone':'โซนเข้า',
+    'ov.deposit':'ฝากรวม',
+    'srch.ph':'ค้นหา pair...',
+    'set.additem':'+ เพิ่ม',
+    'set.pairph':'เช่น GBPAUD, EURCAD',
+    'set.stratph':'เช่น ICT, Price Action...',
+    'set.acctph':'เช่น XM K.MK (82952428)',
+    'set.themetip':'กดวงกลมเพื่อเปลี่ยนธีม — จำค่าไว้อัตโนมัติ',
+    'set.backupbtn':'💾 Backup ลง Browser',
+    'modal.addmissed':'เพิ่ม Missed Trade','modal.editmissed':'แก้ไขแผน',
+    'modal.misseddesc':'แผนที่เห็นแต่เข้าไม่ทัน — ไม่มีกำไร/ขาดทุน บันทึกไว้เพื่อเรียนรู้',
+    'lbl.pipsexp':'จุดที่คาดว่าได้','ph.pipsexp':'เช่น 110','ph.rr':'เช่น 1:2.5',
+    'lbl.missedreason':'เหตุผลที่พลาด','ph.missedreason':'เช่น เข้าไม่ทัน, ลังเล, ไม่อยู่หน้าจอ',
+    'ph.missednote':'รายละเอียดแผน, สิ่งที่เรียนรู้...','btn.savemissed':'บันทึกแผน',
+    'modal.addacc':'เพิ่มรายการ','modal.editacc':'แก้ไขรายการ',
+    'lbl.acctype':'ประเภท','opt.profit':'Profit (ถอนกำไร)','opt.deposit':'Deposit (ฝาก)',
+    'ph.accname':'เช่น XM K.MK ถอนกำไร',
+    'ph.amtusd':'เช่น 50 หรือ -32.02','ph.amtthb':'เช่น 1571 หรือ -1000',
+    'lbl.exrate':'อัตราแลกเปลี่ยน',
+    'lbl.ratedepfull':'ค่าเงิน วันที่ฝาก (฿/$)','ph.ratedep':'เช่น 32.42',
+    'lbl.ratewdfull':'ค่าเงิน วันที่ถอน (฿/$)','ph.ratewd':'เช่น 31.65',
+    'ph.accnote':'เพิ่มเติม...','btn.saveacc':'บันทึก',
+    'det.note':'หมายเหตุ','det.img':'รูป Chart',
+    'modal.addtrade2':'เพิ่ม Trade','modal.edittrade':'แก้ไข Trade',
+    'lbl.lotper2':'Lot ต่อไม้','ph.entries':'เช่น 6',
+    'ph.pnl':'เช่น 12.50 หรือ -8.00','ph.note':'เหตุผล, สิ่งที่เรียนรู้...',
+    'ph.editimg':'คลิกเพื่อเพิ่มรูป','btn.saveedit':'บันทึกการแก้ไข',
+    'sel.choose':'— เลือก —','det.edit':'✎ แก้ไข','det.pair':'คู่เงิน','lbl.reason':'เหตุผล',
+    'js.confirm':'ยืนยัน?','js.viewimg':'ดูรูป','js.imgs':'รูป',
+    'js.page':'หน้า','js.records':'รายการ','js.entries':'ไม้',
+    'js.connfail':'เชื่อมต่อ Supabase ไม่ได้','js.filldate':'กรุณากรอกวันที่และคู่เงิน',
+    'js.saving':'กำลังบันทึก...','js.saved':'บันทึกแล้ว!',
+    'js.savefailsync':'บันทึกไม่ได้ — ลอง sync ใหม่',
+    'js.savetrade':'บันทึก Trade','js.savefail2':'บันทึกไม่ได้',
+    'js.edited':'แก้ไขแล้ว!','js.editfail':'แก้ไขไม่ได้',
+    'js.deleted':'ลบแล้ว','js.delfail':'ลบไม่ได้','js.del':'ลบ',
+    'js.plansaved':'บันทึกแผนแล้ว!','js.fillname':'กรุณากรอกวันที่และชื่อ',
+    'js.fillfields':'กรุณากรอก วันที่, Pair, Entry, Lot',
+    'js.accadded':'เพิ่มรายการแล้ว!','js.settingssaved':'บันทึกการตั้งค่าแล้ว!',
+    'js.pairexists':'มีคู่เงินนี้แล้ว','js.pairfill':'กรุณากรอกชื่อ','js.pairmin':'ต้องมีอย่างน้อย 1 คู่',
+    'js.stratexists':'มีกลยุทธ์นี้แล้ว','js.stratfill':'กรุณากรอกชื่อ','js.stratmin':'ต้องมีอย่างน้อย 1',
+    'js.acctexists':'มีบัญชีนี้แล้ว','js.acctfill':'กรุณากรอกชื่อบัญชี',
+    'js.backuplast':'Backup ล่าสุด:','js.backupnone':'ยังไม่มี Backup ใน Browser',
+    'js.backupdone':'Backup ลง Browser แล้ว!','js.backupfail':'Backup ไม่ได้:',
+    'js.expjson':'Export JSON สำเร็จ!','js.expcsv':'Export CSV สำเร็จ!','acc.monthlabel':'สรุปเดือน',
     'set.language':'ภาษา / Language','ov.title':'ภาพรวม',
   },
   en: {
@@ -1017,7 +1060,7 @@ const I18N = {
     'an.sessect':'Session Breakdown','an.symsect':'Symbol Breakdown','an.symbol':'Symbol','an.poollist':'Trades in pool','an.remove':'Remove',
     'sync.btn':'⟳ Sync',
     'tab.mt5':'MT5','tab.manual':'Manual',
-    'stat.winrate':'Win Rate','stat.pnl':'Total P&L ($)','stat.pnlshort':'P&L ($)',
+    'stat.winrate':'Win Rate','stat.pnl':'Total P&L','stat.pnlshort':'P&L',
     'stat.total':'Total Trades','stat.wl':'Win / Loss',
     'stat.highwin':'Highest Win','stat.highloss':'Highest Loss',
     'filter.allpairs':'All Pairs','filter.alldir':'All Directions','filter.allstrat':'All Strategies',
@@ -1034,7 +1077,7 @@ const I18N = {
     'lbl.date':'Date','lbl.pair':'Pair','lbl.direction':'Direction',
     'lbl.entry':'Entry Price','lbl.tp':'Take Profit','lbl.entries':'No. of Entries',
     'lbl.lotper':'Lot per Entry','lbl.sl':'Stop Loss','lbl.rr':'R:R Ratio (auto)',
-    'lbl.strategy':'Strategy','lbl.session':'Session','lbl.pnl':'Profit / Loss ($)',
+    'lbl.strategy':'Strategy','lbl.session':'Session','lbl.pnl':'Profit / Loss',
     'lbl.chart':'Chart Image','lbl.note':'Note',
     'upload.text':'Click to select image, or drag and drop',
     'empty.history':'No data',
@@ -1044,15 +1087,59 @@ const I18N = {
     'acc.profit':'Total Withdrawal','acc.deposit':'Total Deposit','acc.net':'Net',
     'acc.count':'Total Records','acc.profitthb':'Withdrawal (฿)',
     'acc.depositthb':'Deposit (฿)','acc.netthb':'Net (฿)',
-    'ms.profit':'Profit ($)','ms.deposit':'Deposit ($)','ms.net':'Net ($)',
+    'ms.profit':'Profit $','ms.deposit':'Deposit $','ms.net':'Net $',
     'ms.profitthb':'Profit (฿)','ms.depositthb':'Deposit (฿)','ms.netthb':'Net (฿)',
     'set.pairs':'Currency Pairs','set.strategies':'Strategies','set.accounts':'Trading Accounts',
     'set.theme':'Color Theme','set.backup':'Backup & Export',
     'ov.result':'Result','ov.withdrawal':'Total Withdrawal','ov.tradesummary':'Trade Summary',
     'ov.charts':'Charts','ov.pnlchart':'Cumulative P&L','ov.pairchart':'P&L by Pair',
     'th.pair':'Pair','th.side':'Side','th.entry':'Entry','th.exit':'Exit',
-    'th.lot':'Lot','th.rr':'R:R','th.session':'Session','th.pnl':'P&L ($)',
+    'th.lot':'Lot','th.rr':'R:R','th.session':'Session','th.pnl':'P&L',
     'th.slcol':'SL','th.tpcol':'TP','th.zone':'Entry Zone',
+    'ov.deposit':'Total Deposit',
+    'srch.ph':'Search pair...',
+    'set.additem':'+ Add',
+    'set.pairph':'e.g. GBPAUD, EURCAD',
+    'set.stratph':'e.g. ICT, Price Action...',
+    'set.acctph':'e.g. XM K.MK (82952428)',
+    'set.themetip':'Click circle to change theme — saved automatically',
+    'set.backupbtn':'💾 Backup to Browser',
+    'modal.addmissed':'Add Missed Trade','modal.editmissed':'Edit Plan',
+    'modal.misseddesc':'Plans you saw but could not take — no P&L, recorded for learning',
+    'lbl.pipsexp':'Expected Pips','ph.pipsexp':'e.g. 110','ph.rr':'e.g. 1:2.5',
+    'lbl.missedreason':'Reason for Missing','ph.missedreason':'e.g. too late, hesitated, not at screen',
+    'ph.missednote':'Plan details, lessons learned...','btn.savemissed':'Save Plan',
+    'modal.addacc':'Add Record','modal.editacc':'Edit Record',
+    'lbl.acctype':'Type','opt.profit':'Profit (Withdrawal)','opt.deposit':'Deposit',
+    'ph.accname':'e.g. XM K.MK withdrawal',
+    'ph.amtusd':'e.g. 50 or -32.02','ph.amtthb':'e.g. 1571 or -1000',
+    'lbl.exrate':'Exchange Rate',
+    'lbl.ratedepfull':'Deposit Rate (฿/$)','ph.ratedep':'e.g. 32.42',
+    'lbl.ratewdfull':'Withdrawal Rate (฿/$)','ph.ratewd':'e.g. 31.65',
+    'ph.accnote':'Additional notes...','btn.saveacc':'Save',
+    'det.note':'Note','det.img':'Chart Image',
+    'modal.addtrade2':'Add Trade','modal.edittrade':'Edit Trade',
+    'lbl.lotper2':'Lot per Entry','ph.entries':'e.g. 6',
+    'ph.pnl':'e.g. 12.50 or -8.00','ph.note':'Reason, lessons learned...',
+    'ph.editimg':'Click to add image','btn.saveedit':'Save Changes',
+    'sel.choose':'— Select —','det.edit':'✎ Edit','det.pair':'Pair','lbl.reason':'Reason',
+    'js.confirm':'Confirm?','js.viewimg':'View','js.imgs':'images',
+    'js.page':'Page','js.records':'records','js.entries':'entries',
+    'js.connfail':'Cannot connect to Supabase','js.filldate':'Please fill in Date and Pair',
+    'js.saving':'Saving...','js.saved':'Saved!',
+    'js.savefailsync':'Cannot save — try syncing again',
+    'js.savetrade':'Save Trade','js.savefail2':'Cannot save',
+    'js.edited':'Edited!','js.editfail':'Cannot edit',
+    'js.deleted':'Deleted','js.delfail':'Cannot delete','js.del':'Delete',
+    'js.plansaved':'Plan saved!','js.fillname':'Please fill in date and name',
+    'js.fillfields':'Please fill in Date, Pair, Entry, Lot',
+    'js.accadded':'Record added!','js.settingssaved':'Settings saved!',
+    'js.pairexists':'This pair already exists','js.pairfill':'Please enter a name','js.pairmin':'Must have at least 1 pair',
+    'js.stratexists':'This strategy already exists','js.stratfill':'Please enter a name','js.stratmin':'Must have at least 1',
+    'js.acctexists':'This account already exists','js.acctfill':'Please enter account name',
+    'js.backuplast':'Last backup:','js.backupnone':'No backup in Browser',
+    'js.backupdone':'Backup to Browser done!','js.backupfail':'Cannot backup:',
+    'js.expjson':'Export JSON done!','js.expcsv':'Export CSV done!','acc.monthlabel':'Monthly Summary',
     'set.language':'Language','ov.title':'Overview',
   }
 };
@@ -1193,7 +1280,7 @@ async function loadAll() {
     if (activePage === 'settings') { renderPairTags(); renderStrategyTags(); renderAccountTags(); }
   } catch (e) {
     setS('err', 'connection error');
-    toast('เชื่อมต่อ Supabase ไม่ได้');
+    toast(T('js.connfail'));
   } finally {
     const ldr = document.getElementById('app-loader');
     if (ldr) {
@@ -1224,7 +1311,7 @@ function updateEditLotCalc() {
   const lotPer = parseFloat(document.getElementById('e-lot-per').value) || 0;
   const entries = parseInt(document.getElementById('e-entries').value) || 1;
   const disp = document.getElementById('e-lot-display');
-  if (disp && lotPer && entries) disp.textContent = `Total Lot: ${(lotPer * entries).toFixed(2)} (${entries} ไม้ × ${lotPer} lot)`;
+  if (disp && lotPer && entries) disp.textContent = `Total Lot: ${(lotPer * entries).toFixed(2)} (${entries} ${T('js.entries')} × ${lotPer} lot)`;
   else if (disp) disp.textContent = '';
 }
 
@@ -1234,7 +1321,7 @@ function updateLotCalc() {
   const totalLot = (lotPer * entries).toFixed(2);
   const display = document.getElementById('avg-entry-display');
   if (display && lotPer && entries) {
-    display.textContent = `Total Lot: ${totalLot} (${entries} ไม้ × ${lotPer} lot)`;
+    display.textContent = `Total Lot: ${totalLot} (${entries} ${T('js.entries')} × ${lotPer} lot)`;
   } else if (display) { display.textContent = ''; }
 }
 
@@ -1260,11 +1347,11 @@ function openMissedDetailView(id) {
     detailImgs = imgs; detailIdx = 0;
     document.getElementById('detail-title').textContent = `${m.symbol} · ${m.date} · Missed Trade`;
     document.getElementById('detail-grid').innerHTML = [
-      ['คู่เงิน',m.symbol],['วันที่',m.date],['ทิศทาง',m.side||'—'],['กลยุทธ์',m.strategy||'—'],
-      ['Entry Zone',m.zone||'—'],['SL',m.sl||'—'],['TP',m.tp||'—'],['จุด',m.pips||'—'],['R:R',m.rr||'—'],
+      [T('det.pair'),m.symbol],[T('th.date'),m.date],[T('lbl.direction'),m.side||'—'],[T('lbl.strategy'),m.strategy||'—'],
+      ['Entry Zone',m.zone||'—'],['SL',m.sl||'—'],['TP',m.tp||'—'],[T('th.pips'),m.pips||'—'],['R:R',m.rr||'—'],
     ].map(([l,v])=>`<div class="detail-item"><div class="detail-label">${l}</div><div class="detail-val">${v}</div></div>`).join('');
     const noteEl = document.getElementById('detail-note-wrap');
-    const reasonNote = [m.reason && 'เหตุผล: '+m.reason, m.note].filter(Boolean).join('\n');
+    const reasonNote = [m.reason && T('lbl.reason')+': '+m.reason, m.note].filter(Boolean).join('\n');
     if (reasonNote) { document.getElementById('detail-note').textContent = reasonNote; noteEl.style.display=''; } else { noteEl.style.display='none'; }
     const imgWrap = document.getElementById('detail-img-wrap');
     document.getElementById('detail-strip').innerHTML = imgs.map((img,i)=>{
@@ -1288,11 +1375,11 @@ function removeMissedImg(id) { missedPending = missedPending.filter(i => i.id !=
 
 function openMissedModal(id) {
   missedEditId = id || null;
-  document.getElementById('missed-modal-title').textContent = id ? 'แก้ไขแผน' : 'เพิ่มMissed Trade';
+  document.getElementById('missed-modal-title').textContent = id ? T('modal.editmissed') : T('modal.addmissed');
   const msym = document.getElementById('m-sym');
   msym.innerHTML = settings.pairs.map(p => `<option>${p}</option>`).join('');
   const mstr = document.getElementById('m-str');
-  mstr.innerHTML = '<option value="">— เลือก —</option>' + settings.strategies.map(s => `<option>${s}</option>`).join('');
+  mstr.innerHTML = `<option value="">${T('sel.choose')}</option>` + settings.strategies.map(s => `<option>${s}</option>`).join('');
   if (id) {
     const m = missedTrades.find(x => x.id == id);
     if (!m) return;
@@ -1354,7 +1441,7 @@ async function saveMissed() {
     rr: document.getElementById('m-rr').value,
     note: document.getElementById('m-note').value,
   };
-  if (!row.date || !row.symbol) { toast('กรุณากรอกวันที่และคู่เงิน'); return; }
+  if (!row.date || !row.symbol) { toast(T('js.filldate')); return; }
   // upload รูป
   let mImgs = [];
   for (const p of missedPending) {
@@ -1375,8 +1462,8 @@ async function saveMissed() {
     document.getElementById('missed-modal').classList.remove('open');
     missedPending = []; renderMissedPreviews();
     renderMissed();
-    toast(missedEditId ? 'แก้ไขแล้ว!' : 'บันทึกแผนแล้ว!');
-  } catch(e) { toast('บันทึกไม่ได้: ' + e.message); }
+    toast(missedEditId ? T('js.edited') : T('js.plansaved'));
+  } catch(e) { toast(T('js.savefail2') + ': ' + e.message); }
 }
 
 function renderMissed() {
@@ -1397,7 +1484,7 @@ function renderMissed() {
     <td style="font-size:11px;color:var(--text2);max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${m.reason||''}">${m.reason||'—'}</td>
     <td>${(() => { try { const imgs = Array.isArray(m.images) ? m.images : JSON.parse(m.images||'[]'); if(!imgs.length) return '—'; const src=imgs[0].url||imgs[0].data||''; return src?`<img src="${src}" style="width:36px;height:28px;object-fit:cover;border-radius:4px;border:1px solid var(--border2);cursor:pointer" onclick="openMissedDetailView(${m.id})">`:'-'; } catch{return '—';} })()}</td>
     <td style="white-space:nowrap">
-      <button class="tbl-btn edit" onclick="openMissedModal(${m.id})" title="แก้ไข">✎</button>
+      <button class="tbl-btn edit" onclick="openMissedModal(${m.id})" title="${T('det.edit')}">✎</button>
       <button class="tbl-btn del" data-del-missed="${m.id}" onclick="delMissed(${m.id})">✕</button>
     </td>
   </tr>`).join('');
@@ -1411,7 +1498,7 @@ async function delMissed(id) {
     if (btn) { btn.textContent = '✕'; btn.className = 'tbl-btn del'; }
     await sbDelete('missed_trades', id);
     missedTrades = missedTrades.filter(m => m.id !== id);
-    renderMissed(); toast('ลบแล้ว');
+    renderMissed(); toast(T('js.deleted'));
   } else {
     if (delMissedConfirm !== null) {
       const prev = document.querySelector(`[data-del-missed="${delMissedConfirm}"]`);
@@ -1419,7 +1506,7 @@ async function delMissed(id) {
     }
     delMissedConfirm = id;
     const btn = document.querySelector(`[data-del-missed="${id}"]`);
-    if (btn) { btn.textContent = 'ยืนยัน?'; btn.className = 'tbl-btn del del-confirm'; }
+    if (btn) { btn.textContent = T('js.confirm'); btn.className = 'tbl-btn del del-confirm'; }
     delMissedTimer = setTimeout(() => {
       delMissedConfirm = null;
       if (btn) { btn.textContent = '✕'; btn.className = 'tbl-btn del'; }
@@ -1498,10 +1585,10 @@ function renderAccount() {
     const mpThb = mData.filter(a => a.type === 'Profit').reduce((s, a) => s + (parseFloat(a.amount_thb)||0), 0);
     const mdThb = mData.filter(a => a.type === 'Deposit').reduce((s, a) => s + (parseFloat(a.amount_thb)||0), 0);
     const mnThb = mpThb + mdThb;
-    document.getElementById('ms-profit').textContent = mp > 0 ? '+' + mp.toFixed(2) : mp.toFixed(2);
-    document.getElementById('ms-deposit').textContent = md.toFixed(2);
+    document.getElementById('ms-profit').textContent = mp > 0 ? '+' + mp.toFixed(2) + '$' : mp.toFixed(2) + '$';
+    document.getElementById('ms-deposit').textContent = md.toFixed(2) + '$';
     const msNet = document.getElementById('ms-net');
-    msNet.textContent = (mn >= 0 ? '+' : '') + mn.toFixed(2);
+    msNet.textContent = (mn >= 0 ? '+' : '') + mn.toFixed(2) + '$';
     msNet.className = 'mono ' + (mn >= 0 ? 'pos' : 'neg');
     document.getElementById('ms-profit-thb').textContent = mpThb > 0 ? '+' + mpThb.toLocaleString() : mpThb.toLocaleString();
     document.getElementById('ms-deposit-thb').textContent = mdThb.toLocaleString();
@@ -1521,7 +1608,7 @@ function renderAccount() {
     const usd = parseFloat(a.amount_usd);
     const thb = parseFloat(a.amount_thb);
     const isProfit = a.type === 'Profit';
-    const usdStr = isProfit ? `<span class="pnl-pos">+${usd.toFixed(2)}</span>` : `<span class="pnl-neg">${usd.toFixed(2)}</span>`;
+    const usdStr = isProfit ? `<span class="pnl-pos">+${usd.toFixed(2)}$</span>` : `<span class="pnl-neg">${usd.toFixed(2)}$</span>`;
     const thbStr = isProfit ? `<span class="pnl-pos">+${thb.toLocaleString()}</span>` : `<span class="pnl-neg">${thb.toLocaleString()}</span>`;
     const badge = isProfit
       ? `<span class="badge" style="background:var(--green-bg);color:var(--green);border:1px solid rgba(0,217,126,.2)">Profit</span>`
@@ -1537,7 +1624,7 @@ function renderAccount() {
       <td class="mono" style="font-size:11px;color:var(--text2)">${a.rate_withdraw ? a.rate_withdraw.toFixed(2) : '—'}</td>
       <td style="font-size:11px;color:var(--text2)">${a.note || '—'}</td>
       <td style="white-space:nowrap">
-        <button class="tbl-btn edit" onclick="openEditAccount(${a.id})" title="แก้ไข">✎</button>
+        <button class="tbl-btn edit" onclick="openEditAccount(${a.id})" title="${T('det.edit')}">✎</button>
         <button class="tbl-btn del" data-del-acc="${a.id}" onclick="delAccount(${a.id})" title="ลบ">✕</button>
       </td>
     </tr>`;
@@ -1554,7 +1641,7 @@ function calcAccThb() {
 
 function openAddAccount() {
   accEditId = null;
-  document.getElementById('acc-modal-title').textContent = 'เพิ่มรายการ';
+  document.getElementById('acc-modal-title').textContent = T('modal.addacc');
   ['acc-m-date','acc-m-name','acc-m-usd','acc-m-thb','acc-m-note','acc-m-rate-dep','acc-m-rate-wd'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('acc-m-date').value = new Date().toISOString().split('T')[0];
   document.getElementById('acc-m-type').value = 'Profit';
@@ -1565,7 +1652,7 @@ function openAddAccount() {
 function openEditAccount(id) {
   const a = accounts.find(x => x.id === id); if (!a) return;
   accEditId = id;
-  document.getElementById('acc-modal-title').textContent = 'แก้ไขรายการ';
+  document.getElementById('acc-modal-title').textContent = T('modal.editacc');
   document.getElementById('acc-m-date').value = a.date || '';
   document.getElementById('acc-m-name').value = a.name || '';
   document.getElementById('acc-m-type').value = a.type || 'Profit';
@@ -1590,7 +1677,7 @@ async function saveAccount() {
     rate_withdraw: parseFloat(document.getElementById('acc-m-rate-wd').value) || null,
     note: document.getElementById('acc-m-note').value,
   };
-  if (!row.date || !row.name) { toast('กรุณากรอกวันที่และชื่อ'); return; }
+  if (!row.date || !row.name) { toast(T('js.fillname')); return; }
   try {
     if (accEditId) {
       await sbUpdate('accounts', accEditId, row);
@@ -1603,8 +1690,8 @@ async function saveAccount() {
     }
     document.getElementById('acc-modal').classList.remove('open');
     renderAccount();
-    toast(accEditId ? 'แก้ไขแล้ว!' : 'เพิ่มรายการแล้ว!');
-  } catch { toast('บันทึกไม่ได้'); }
+    toast(accEditId ? T('js.edited') : T('js.accadded'));
+  } catch { toast(T('js.savefail2')); }
 }
 
 let delAccConfirm = null, delAccTimer = null;
@@ -1619,8 +1706,8 @@ async function delAccount(id) {
       await sbDelete('accounts', id);
       accounts = accounts.filter(a => a.id !== id);
       renderAccount();
-      toast('ลบแล้ว');
-    } catch { toast('ลบไม่ได้'); }
+      toast(T('js.deleted'));
+    } catch { toast(T('js.delfail')); }
   } else {
     if (delAccConfirm !== null) {
       const prev = document.querySelector(`[data-del-acc="${delAccConfirm}"]`);
@@ -1628,7 +1715,7 @@ async function delAccount(id) {
     }
     delAccConfirm = id;
     const btn = document.querySelector(`[data-del-acc="${id}"]`);
-    if (btn) { btn.textContent = 'ยืนยัน?'; btn.className = 'tbl-btn del del-confirm'; }
+    if (btn) { btn.textContent = T('js.confirm'); btn.className = 'tbl-btn del del-confirm'; }
     delAccTimer = setTimeout(() => {
       delAccConfirm = null;
       if (btn) { btn.textContent = '✕'; btn.className = 'tbl-btn del'; }
@@ -1663,7 +1750,7 @@ function applySettings() {
   sym.innerHTML = settings.pairs.map(p => `<option>${p}</option>`).join('');
   if (settings.pairs.includes(cur)) sym.value = cur;
   const str = document.getElementById('f-str'), scur = str.value;
-  str.innerHTML = '<option value="">— เลือก —</option>' + settings.strategies.map(s => `<option>${s}</option>`).join('');
+  str.innerHTML = `<option value="">${T('sel.choose')}</option>` + settings.strategies.map(s => `<option>${s}</option>`).join('');
   if (settings.strategies.includes(scur)) str.value = scur;
   // sync hist account dropdown
   const histAcctSel = document.getElementById('hist-facct');
@@ -1691,8 +1778,8 @@ function renderAccountTags() {
 }
 function addAccountSetting() {
   const inp = document.getElementById('new-account'), val = inp.value.trim();
-  if (!val) { toast('กรุณากรอกชื่อบัญชี'); return; }
-  if (settings.accounts_list.includes(val)) { toast('มีบัญชีนี้แล้ว'); return; }
+  if (!val) { toast(T('js.acctfill')); return; }
+  if (settings.accounts_list.includes(val)) { toast(T('js.acctexists')); return; }
   settings.accounts_list.push(val); inp.value = '';
   applySettings();
 }
@@ -1710,20 +1797,20 @@ function renderStrategyTags() {
 }
 function addPair() {
   const inp = document.getElementById('new-pair'), val = inp.value.trim();
-  if (!val || settings.pairs.includes(val)) { toast(val ? 'มีคู่เงินนี้แล้ว' : 'กรุณากรอกชื่อ'); return; }
+  if (!val || settings.pairs.includes(val)) { toast(val ? T('js.pairexists') : T('js.pairfill')); return; }
   settings.pairs.push(val); inp.value = ''; applySettings(); autoSaveSettings();
 }
 function removePair(p) {
-  if (settings.pairs.length <= 1) { toast('ต้องมีอย่างน้อย 1 คู่'); return; }
+  if (settings.pairs.length <= 1) { toast(T('js.pairmin')); return; }
   settings.pairs = settings.pairs.filter(x => x !== p); applySettings(); autoSaveSettings();
 }
 function addStrategy() {
   const inp = document.getElementById('new-strategy'), val = inp.value.trim();
-  if (!val || settings.strategies.includes(val)) { toast(val ? 'มีกลยุทธ์นี้แล้ว' : 'กรุณากรอกชื่อ'); return; }
+  if (!val || settings.strategies.includes(val)) { toast(val ? T('js.stratexists') : T('js.stratfill')); return; }
   settings.strategies.push(val); inp.value = ''; applySettings(); autoSaveSettings();
 }
 function removeStrategy(i) {
-  if (settings.strategies.length <= 1) { toast('ต้องมีอย่างน้อย 1'); return; }
+  if (settings.strategies.length <= 1) { toast(T('js.stratmin')); return; }
   settings.strategies.splice(i, 1); applySettings(); autoSaveSettings();
 }
 async function autoSaveSettings() {
@@ -1735,8 +1822,8 @@ async function autoSaveSettings() {
 async function saveSettings() {
   try {
     await sbUpsert('settings', { id: 1, pairs: JSON.stringify(settings.pairs), strategies: JSON.stringify(settings.strategies) });
-    toast('บันทึกการตั้งค่าแล้ว!');
-  } catch { toast('บันทึกไม่ได้'); }
+    toast(T('js.settingssaved'));
+  } catch { toast(T('js.savefail2')); }
 }
 
 function openNavGroup() {
@@ -1775,14 +1862,14 @@ function showPage(n) {
     renderPairTags(); renderStrategyTags(); renderAccountTags();
     const bt = localStorage.getItem('fx_journal_backup_time');
     const bel = document.getElementById('backup-status');
-    if (bel) bel.textContent = bt ? 'Backup ล่าสุด: ' + new Date(bt).toLocaleString('th-TH') : 'ยังไม่มี backup ใน browser';
+    if (bel) bel.textContent = bt ? T('js.backuplast') + ' ' + new Date(bt).toLocaleString('th-TH') : T('js.backupnone');
   }
 }
 function openAddTradeModal() {
   const fsym = document.getElementById('f-sym');
   if (fsym) { fsym.innerHTML = settings.pairs.map(p => `<option>${p}</option>`).join(''); }
   const fstr = document.getElementById('f-str');
-  if (fstr) { fstr.innerHTML = '<option value="">— เลือก —</option>' + settings.strategies.map(s => `<option>${s}</option>`).join(''); }
+  if (fstr) { fstr.innerHTML = `<option value="">${T('sel.choose')}</option>` + settings.strategies.map(s => `<option>${s}</option>`).join(''); }
   document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
   ['f-en','f-ex','f-lot-per','f-entries','f-sl','f-rr','f-pips','f-note','f-pnl'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
   const dispEl = document.getElementById('avg-entry-display'); if (dispEl) dispEl.textContent = '';
@@ -1855,7 +1942,7 @@ async function addTrade() {
   const totalLotVal = lotPerEntry ? (lotPerEntry * entriesNum).toFixed(2) : '0';
   const avgEntryVal = document.getElementById('f-en').value;
   if (!date || !sym || !avgEntryVal || !lotPerEntry) { toast('กรุณากรอก วันที่, Pair, Entry, Lot'); return; }
-  btn.disabled = true; btn.textContent = 'กำลังบันทึก...';
+  btn.disabled = true; btn.textContent = T('js.saving');
   const newTrade = {
     id: Date.now(),
     date, symbol: sym, side: tradeSide,
@@ -1874,12 +1961,12 @@ async function addTrade() {
   try {
     await sbUpsert('trades', tradeToRow(newTrade));
     trades.unshift(newTrade);
-    toast('บันทึกแล้ว!');
+    toast(T('js.saved'));
     setS('ok', `connected · ${trades.length} trades`);
-  } catch { toast('บันทึกไม่ได้ — ลอง sync ใหม่'); }
+  } catch { toast(T('js.savefailsync')); }
   closeAddTradeModal();
   renderTable();
-  btn.disabled = false; btn.textContent = 'บันทึก Trade';
+  btn.disabled = false; btn.textContent = T('js.savetrade');
 }
 
 let histPage = 1;
@@ -1912,10 +1999,10 @@ function renderSessionBreakdown(trades) {
     const pnl   = withPnl.reduce((a, x) => a + parseFloat(x.pnl || 0), 0);
     const wins  = withPnl.filter(x => parseFloat(x.pnl) > 0).length;
     const wr    = withPnl.length ? ((wins / withPnl.length) * 100).toFixed(0) + '%' : '—';
-    const pnlStr = withPnl.length ? (pnl >= 0 ? '+$' : '-$') + Math.abs(pnl).toFixed(2) : '—';
+    const pnlStr = withPnl.length ? (pnl >= 0 ? '+' : '') + pnl.toFixed(2) + '$' : '—';
     const pnlColor = pnl >= 0 ? 'var(--green)' : 'var(--red)';
     return `<div style="background:${s.bg};border:1px solid ${s.border};border-radius:var(--radius-lg);padding:12px">
-      <div style="font-size:11px;font-weight:500;color:${s.color};text-align:center;font-family:'IBM Plex Mono',monospace;margin-bottom:10px">${s.name}</div>
+      <div style="font-size:11px;font-weight:500;color:${s.color};text-align:center;font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin-bottom:10px">${s.name}</div>
       <div style="font-size:18px;font-weight:500;text-align:center;margin-bottom:8px">${t.length} <span style="font-size:11px;color:var(--text2)">trades</span></div>
       <div style="display:flex;justify-content:center;gap:10px;margin-bottom:8px">
         <span style="font-size:11px;color:var(--green)">B ${buys}</span>
@@ -1967,7 +2054,7 @@ function renderHistory() {
      'hist-wr-sell','hist-pnl-sell','hist-win-sell','hist-loss-sell'].forEach(id => setH(id, '—'));
   } else {
     setH('hist-wr',  ((s.wins.length / s.withPnl.length) * 100).toFixed(1) + '%');
-    setH('hist-pnl', (s.total >= 0 ? '+' : '') + s.total.toFixed(2), s.total >= 0 ? 'pos' : 'neg');
+    setH('hist-pnl', (s.total >= 0 ? '+' : '') + s.total.toFixed(2) + '$', s.total >= 0 ? 'pos' : 'neg');
     setH('hist-wl',  s.wins.length + ' / ' + s.losses.length);
     // BUY stats
     const buyT  = filtered.filter(t => t.side === 'BUY'  && t.pnl !== null && t.pnl !== '');
@@ -1980,19 +2067,19 @@ function renderHistory() {
       const wrB = (buyW.length / buyT.length * 100).toFixed(1);
       setH('hist-wr-buy',  wrB + '%', parseFloat(wrB) >= 50 ? 'pos' : 'neg');
       setH('hist-wl-buy',  buyW.length + 'W / ' + (buyT.length - buyW.length) + 'L');
-      setH('hist-pnl-buy', (buyPnl >= 0 ? '+' : '') + buyPnl.toFixed(2), buyPnl >= 0 ? 'pos' : 'neg');
+      setH('hist-pnl-buy', (buyPnl >= 0 ? '+' : '') + buyPnl.toFixed(2) + '$', buyPnl >= 0 ? 'pos' : 'neg');
       const buyPs = buyT.map(t => parseFloat(t.pnl || 0));
-      setH('hist-win-buy',  buyPs.filter(p=>p>0).length  ? '+'+Math.max(...buyPs.filter(p=>p>0)).toFixed(2)  : '—');
-      setH('hist-loss-buy', buyPs.filter(p=>p<=0).length ? Math.min(...buyPs.filter(p=>p<=0)).toFixed(2) : '—');
+      setH('hist-win-buy',  buyPs.filter(p=>p>0).length  ? '+'+Math.max(...buyPs.filter(p=>p>0)).toFixed(2)+'$'  : '—');
+      setH('hist-loss-buy', buyPs.filter(p=>p<=0).length ? Math.min(...buyPs.filter(p=>p<=0)).toFixed(2)+'$' : '—');
     }
     if (sellT.length) {
       const wrS = (sellW.length / sellT.length * 100).toFixed(1);
       setH('hist-wr-sell',  wrS + '%', parseFloat(wrS) >= 50 ? 'pos' : 'neg');
       setH('hist-wl-sell',  sellW.length + 'W / ' + (sellT.length - sellW.length) + 'L');
-      setH('hist-pnl-sell', (sellPnl >= 0 ? '+' : '') + sellPnl.toFixed(2), sellPnl >= 0 ? 'pos' : 'neg');
+      setH('hist-pnl-sell', (sellPnl >= 0 ? '+' : '') + sellPnl.toFixed(2) + '$', sellPnl >= 0 ? 'pos' : 'neg');
       const sellPs = sellT.map(t => parseFloat(t.pnl || 0));
-      setH('hist-win-sell',  sellPs.filter(p=>p>0).length  ? '+'+Math.max(...sellPs.filter(p=>p>0)).toFixed(2)  : '—');
-      setH('hist-loss-sell', sellPs.filter(p=>p<=0).length ? Math.min(...sellPs.filter(p=>p<=0)).toFixed(2) : '—');
+      setH('hist-win-sell',  sellPs.filter(p=>p>0).length  ? '+'+Math.max(...sellPs.filter(p=>p>0)).toFixed(2)+'$'  : '—');
+      setH('hist-loss-sell', sellPs.filter(p=>p<=0).length ? Math.min(...sellPs.filter(p=>p<=0)).toFixed(2)+'$' : '—');
     }
   }
 
@@ -2007,21 +2094,21 @@ function renderHistory() {
   const paginated = filtered.slice((histPage - 1) * HIST_PAGE_SIZE, histPage * HIST_PAGE_SIZE);
   if (filtered.length > HIST_PAGE_SIZE) {
     pagination.style.display = '';
-    document.getElementById('hist-info').textContent = `หน้า ${histPage} / ${totalPages} (${filtered.length} รายการ)`;
+    document.getElementById('hist-info').textContent = `${T('js.page')} ${histPage} / ${totalPages} (${filtered.length} ${T('js.records')})`;
     document.getElementById('hist-prev').disabled = histPage === 1;
     document.getElementById('hist-next').disabled = histPage === totalPages;
   } else { pagination.style.display = 'none'; }
 
   tbody.innerHTML = paginated.map(t => {
     const pnl    = parseFloat(t.pnl);
-    const pnlStr = t.pnl ? (pnl >= 0 ? `<span class="pnl-pos">+${pnl.toFixed(2)}</span>` : `<span class="pnl-neg">${pnl.toFixed(2)}</span>`) : '—';
+    const pnlStr = t.pnl ? (pnl >= 0 ? `<span class="pnl-pos">+${pnl.toFixed(2)}$</span>` : `<span class="pnl-neg">${pnl.toFixed(2)}$</span>`) : '—';
     const pipsColor = t.pips > 0 ? 'var(--green)' : t.pips < 0 ? 'var(--red)' : 'var(--text2)';
     const imgs   = t.images || [];
     let imgCell  = '<span style="color:var(--text3)">—</span>';
     if (imgs.length) {
       const src = imgs[0].url || imgs[0].data || '';
       imgCell = `<div class="img-cell">${src ? `<img class="cell-thumb" src="${src}" onclick="openDetail(${t.id})">` : ''}
-        <button class="zoom-btn" onclick="openDetail(${t.id})">⊕ ${imgs.length > 1 ? imgs.length + ' รูป' : 'ดูรูป'}</button></div>`;
+        <button class="zoom-btn" onclick="openDetail(${t.id})">⊕ ${imgs.length > 1 ? imgs.length + ' ' + T('js.imgs') : T('js.viewimg')}</button></div>`;
     }
     return `<tr data-trade-id="${t.id}">
       <td style="padding:9px 8px;width:36px" onclick="event.stopPropagation()">${statsPool.includes(t.id) ? '<input type="checkbox" class="trade-cb" checked disabled style="opacity:.55;cursor:not-allowed">' : '<input type="checkbox" class="trade-cb" onchange="toggleTradeSel('+t.id+',this.checked)" '+(selectedForAnalysis.includes(t.id)?'checked':'')+'>'}</td>
@@ -2038,7 +2125,7 @@ function renderHistory() {
       <td>${sessionBadge(t.session)}</td>
       <td>${imgCell}</td>
       <td style="white-space:nowrap">
-        <button class="tbl-btn edit" onclick="openEdit(${t.id})" title="แก้ไข">✎</button>
+        <button class="tbl-btn edit" onclick="openEdit(${t.id})" title="${T('det.edit')}">✎</button>
         <button class="tbl-btn del" data-del-trade="${t.id}" onclick="delTrade(${t.id})" title="ลบ">✕</button>
       </td>
     </tr>`;
@@ -2078,19 +2165,19 @@ function renderTable() {
   const paginated = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
   if (filtered.length > PAGE_SIZE) {
     pagination.style.display = '';
-    document.getElementById('pg-info').textContent = `หน้า ${currentPage} / ${totalPages} (${filtered.length} รายการ)`;
+    document.getElementById('pg-info').textContent = `${T('js.page')} ${currentPage} / ${totalPages} (${filtered.length} ${T('js.records')})`;
     document.getElementById('pg-prev').disabled = currentPage === 1;
     document.getElementById('pg-next').disabled = currentPage === totalPages;
   } else { pagination.style.display = 'none'; }
   tbody.innerHTML = paginated.map(t => {
     const pnl = parseFloat(t.pnl);
-    const pnlStr = t.pnl ? (pnl >= 0 ? `<span class="pnl-pos">+${pnl.toFixed(2)}</span>` : `<span class="pnl-neg">${pnl.toFixed(2)}</span>`) : '—';
+    const pnlStr = t.pnl ? (pnl >= 0 ? `<span class="pnl-pos">+${pnl.toFixed(2)}$</span>` : `<span class="pnl-neg">${pnl.toFixed(2)}$</span>`) : '—';
     const imgs = t.images || [];
     let imgCell = '<span style="color:var(--text3)">—</span>';
     if (imgs.length) {
       const src = imgs[0].url || imgs[0].data || '';
       imgCell = `<div class="img-cell">${src ? `<img class="cell-thumb" src="${src}" onclick="openDetail(${t.id})">` : ''}
-        <button class="zoom-btn" onclick="openDetail(${t.id})">⊕ ${imgs.length > 1 ? imgs.length + ' รูป' : 'ดูรูป'}</button></div>`;
+        <button class="zoom-btn" onclick="openDetail(${t.id})">⊕ ${imgs.length > 1 ? imgs.length + ' ' + T('js.imgs') : T('js.viewimg')}</button></div>`;
     }
     return `<tr>
       <td class="mono" style="font-size:11px;cursor:pointer;color:var(--accent)" onclick="openDetail(${t.id})">${t.date}</td>
@@ -2105,7 +2192,7 @@ function renderTable() {
       <td>${sessionBadge(t.session)}</td>
       <td>${imgCell}</td>
       <td style="white-space:nowrap">
-        <button class="tbl-btn edit" onclick="openEdit(${t.id})" title="แก้ไข">✎</button>
+        <button class="tbl-btn edit" onclick="openEdit(${t.id})" title="${T('det.edit')}">✎</button>
         <button class="tbl-btn del" data-del-trade="${t.id}" onclick="delTrade(${t.id})" title="ลบ">✕</button>
       </td>
     </tr>`;
@@ -2120,11 +2207,11 @@ function openDetail(id) {
   const pnlDisplay = t.pnl ? (pnl >= 0 ? `+${pnl.toFixed(2)}` : `${pnl.toFixed(2)}`) : '—';
   const pnlColor = t.pnl ? (pnl >= 0 ? 'var(--green)' : 'var(--red)') : 'var(--text)';
   document.getElementById('detail-grid').innerHTML = [
-    ['คู่เงิน', t.symbol], ['วันที่', t.date],
-    ['ทิศทาง', t.side],
+    [T('det.pair'), t.symbol], [T('th.date'), t.date],
+    [T('lbl.direction'), t.side],
     ['Entry', t.entry ? parseFloat(t.entry).toFixed(2) : '—'], ['Exit', t.exit ? parseFloat(t.exit).toFixed(2) : '—'],
-    ['Lot', t.lot || '—'], ['จุด', t.pips || '—'],
-    ['R:R', t.rr || '—'], ['กลยุทธ์', t.strategy || '—'],
+    ['Lot', t.lot || '—'], [T('th.pips'), t.pips || '—'],
+    ['R:R', t.rr || '—'], [T('lbl.strategy'), t.strategy || '—'],
     ['Stop Loss', t.sl ? parseFloat(t.sl).toFixed(2) : '—'],
   ].map(([label, val]) => `
     <div class="detail-item">
@@ -2132,7 +2219,7 @@ function openDetail(id) {
       <div class="detail-val">${val}</div>
     </div>`).join('') + `
     <div class="detail-item" style="grid-column:1/-1">
-      <div class="detail-label">กำไร / ขาดทุน ($)</div>
+      <div class="detail-label">' + T('lbl.pnl') + '</div>
       <div class="detail-val" style="font-size:20px;color:${pnlColor}">${pnlDisplay}</div>
     </div>`;
   const noteWrap = document.getElementById('detail-note-wrap');
@@ -2178,7 +2265,7 @@ function openEdit(id) {
   document.getElementById('e-sl').value = t.sl || '';
   document.getElementById('e-rr').value = t.rr || '';
   const estr = document.getElementById('e-str');
-  estr.innerHTML = '<option value="">— เลือก —</option>' + settings.strategies.map(s => `<option>${s}</option>`).join('');
+  estr.innerHTML = `<option value="">${T('sel.choose')}</option>` + settings.strategies.map(s => `<option>${s}</option>`).join('');
   estr.value = t.strategy || '';
   document.getElementById('e-pnl').value = t.pnl || '';
   document.getElementById('e-note').value = t.note || '';
@@ -2218,8 +2305,8 @@ async function saveEdit() {
     updated.images = [...editExistingImgs, ...newImgs];
     await sbUpsert('trades', tradeToRow(updated));
     trades[idx] = updated;
-    closeEdit(); toast('แก้ไขแล้ว!');
-  } catch(e) { console.error('saveEdit error:', e); toast('แก้ไขไม่ได้: ' + (e?.message || e)); return; }
+    closeEdit(); toast(T('js.edited'));
+  } catch(e) { console.error('saveEdit error:', e); toast(T('js.editfail') + ': ' + (e?.message || e)); return; }
   renderTable(); renderHistory();
 }
 function closeEdit() { document.getElementById('edit-modal').classList.remove('open'); editPending = []; editExistingImgs = []; }
@@ -2239,8 +2326,8 @@ async function delTrade(id) {
       trades = trades.filter(t => t.id !== id);
       renderTable(); renderStats();
       setS('ok', `connected · ${trades.length} trades`);
-      toast('ลบแล้ว');
-    } catch { toast('ลบไม่ได้'); }
+      toast(T('js.deleted'));
+    } catch { toast(T('js.delfail')); }
   } else {
     // กดครั้งแรก — ขอยืนยัน
     if (delTradeConfirm !== null) {
@@ -2249,7 +2336,7 @@ async function delTrade(id) {
     }
     delTradeConfirm = id;
     const btn = document.querySelector(`[data-del-trade="${id}"]`);
-    if (btn) { btn.textContent = 'ยืนยัน?'; btn.className = 'tbl-btn del del-confirm'; }
+    if (btn) { btn.textContent = T('js.confirm'); btn.className = 'tbl-btn del del-confirm'; }
     delTradeTimer = setTimeout(() => {
       delTradeConfirm = null;
       if (btn) { btn.textContent = '✕'; btn.className = 'tbl-btn del'; }
@@ -2311,7 +2398,7 @@ function renderOverview() {
   else {
     setEl('ov-wr', ((s.wins.length/s.withPnl.length)*100).toFixed(1)+'%');
     setEl('ov-wl', `${s.wins.length} / ${s.losses.length}`);
-    setEl('ov-pnl', (s.total>=0?'+':'')+s.total.toFixed(2), s.total>=0?'pos':'neg');
+    setEl('ov-pnl', (s.total>=0?'+':'')+s.total.toFixed(2)+'$', s.total>=0?'pos':'neg');
     setEl('ov-avg-win', '+'+s.maxWin.toFixed(2));
     setEl('ov-avg-loss', s.maxLoss.toFixed(2));
     setEl('ov-max-win', '+'+s.maxWin.toFixed(2));
@@ -2339,8 +2426,8 @@ function renderOverview() {
     }
     const pnlBuyEl = document.getElementById('ov-pnl-buy');
     const pnlSellEl = document.getElementById('ov-pnl-sell');
-    if (pnlBuyEl) { pnlBuyEl.textContent = (buyPnl >= 0 ? '+' : '') + buyPnl.toFixed(2); pnlBuyEl.className = 'stat-val ' + (buyPnl >= 0 ? 'pos' : 'neg'); }
-    if (pnlSellEl) { pnlSellEl.textContent = (sellPnl >= 0 ? '+' : '') + sellPnl.toFixed(2); pnlSellEl.className = 'stat-val ' + (sellPnl >= 0 ? 'pos' : 'neg'); }
+    if (pnlBuyEl) { pnlBuyEl.textContent = (buyPnl >= 0 ? '+' : '') + buyPnl.toFixed(2) + '$'; pnlBuyEl.className = 'stat-val ' + (buyPnl >= 0 ? 'pos' : 'neg'); }
+    if (pnlSellEl) { pnlSellEl.textContent = (sellPnl >= 0 ? '+' : '') + sellPnl.toFixed(2) + '$'; pnlSellEl.className = 'stat-val ' + (sellPnl >= 0 ? 'pos' : 'neg'); }
     // Highest Win/Loss per side
     const buyPnls  = buyTrades.map(t => parseFloat(t.pnl || 0));
     const sellPnls = sellTrades.map(t => parseFloat(t.pnl || 0));
@@ -2348,10 +2435,10 @@ function renderOverview() {
     const buyMaxLoss  = buyPnls.filter(p => p <= 0).length ? Math.min(...buyPnls.filter(p => p <= 0))  : 0;
     const sellMaxWin  = sellPnls.filter(p => p > 0).length  ? Math.max(...sellPnls.filter(p => p > 0)) : 0;
     const sellMaxLoss = sellPnls.filter(p => p <= 0).length ? Math.min(...sellPnls.filter(p => p <= 0)): 0;
-    setEl('ov-win-buy',   buyMaxWin  > 0 ? '+' + buyMaxWin.toFixed(2)   : '—');
-    setEl('ov-loss-buy',  buyMaxLoss < 0 ? buyMaxLoss.toFixed(2)         : '—');
-    setEl('ov-win-sell',  sellMaxWin > 0 ? '+' + sellMaxWin.toFixed(2)  : '—');
-    setEl('ov-loss-sell', sellMaxLoss< 0 ? sellMaxLoss.toFixed(2)        : '—');
+    setEl('ov-win-buy',   buyMaxWin  > 0 ? '+' + buyMaxWin.toFixed(2) + '$'  : '—');
+    setEl('ov-loss-buy',  buyMaxLoss < 0 ? buyMaxLoss.toFixed(2) + '$'        : '—');
+    setEl('ov-win-sell',  sellMaxWin > 0 ? '+' + sellMaxWin.toFixed(2) + '$' : '—');
+    setEl('ov-loss-sell', sellMaxLoss< 0 ? sellMaxLoss.toFixed(2) + '$'       : '—');
     // Chart P&L
     let cum2=0; const rev2=s.withPnl.slice().reverse();
     makeChart('ov-chart-pnl','line', rev2.map((t,i)=>t.symbol+'#'+(i+1)),
@@ -2426,7 +2513,7 @@ function exportJSON() {
   const date = new Date().toISOString().split('T')[0];
   a.href = url; a.download = 'fx-journal-backup-' + date + '.json';
   a.click(); URL.revokeObjectURL(url);
-  toast('Export JSON สำเร็จ!');
+  toast(T('js.expjson'));
 }
 
 function exportCSV() {
@@ -2443,7 +2530,7 @@ function exportCSV() {
   const date = new Date().toISOString().split('T')[0];
   a.href = url; a.download = 'fx-journal-trades-' + date + '.csv';
   a.click(); URL.revokeObjectURL(url);
-  toast('Export CSV สำเร็จ!');
+  toast(T('js.expcsv'));
 }
 
 function backupToLocal() {
@@ -2458,9 +2545,9 @@ function backupToLocal() {
     localStorage.setItem('fx_journal_backup', JSON.stringify(data));
     localStorage.setItem('fx_journal_backup_time', new Date().toISOString());
     const el = document.getElementById('backup-status');
-    if (el) el.textContent = 'Backup ล่าสุด: ' + new Date().toLocaleString('th-TH');
-    toast('Backup ลง Browser แล้ว!');
-  } catch(e) { toast('Backup ไม่ได้: ' + e.message); }
+    if (el) el.textContent = T('js.backuplast') + ' ' + new Date().toLocaleString('th-TH');
+    toast(T('js.backupdone'));
+  } catch(e) { toast(T('js.backupfail') + ' ' + e.message); }
 }
 
 function autoBackup() {
@@ -2502,7 +2589,7 @@ function _buildTradeTable(rows, showDate) {
     </tr></thead><tbody>
     ${rows.map(t => {
       const p = parseFloat(t.pnl);
-      const pStr = isNaN(p) ? '—' : (p >= 0 ? `<span class="pnl-pos">+${p.toFixed(2)}</span>` : `<span class="pnl-neg">${p.toFixed(2)}</span>`);
+      const pStr = isNaN(p) ? '—' : (p >= 0 ? `<span class="pnl-pos">+${p.toFixed(2)}$</span>` : `<span class="pnl-neg">${p.toFixed(2)}$</span>`);
       const dateCell = showDate ? `<td class="mono" style="font-size:11px;color:var(--accent)">${t.date||'—'}</td>` : '';
       return `<tr>
         ${dateCell}
@@ -2574,9 +2661,9 @@ function buildCalHeaders() {
   const L = CAL_L[calLang];
   const el = document.getElementById('cal-day-headers');
   if (!el) return;
-  const s = "padding:7px 6px;font-size:10px;color:var(--text2);font-family:'IBM Plex Mono',monospace;text-align:center;border-right:1px solid var(--border);letter-spacing:.04em;line-height:1.5";
+  const s = "padding:7px 6px;font-size:10px;color:var(--text2);font-family:-apple-system,BlinkMacSystemFont,sans-serif;text-align:center;border-right:1px solid var(--border);letter-spacing:.04em;line-height:1.5";
   el.innerHTML = L.days.map(d => `<div style="${s}">${d}</div>`).join('')
-    + `<div style="padding:7px 6px;font-size:10px;color:var(--accent);font-family:'IBM Plex Mono',monospace;text-align:center;letter-spacing:.04em;line-height:1.5">${L.summary}</div>`;
+    + `<div style="padding:7px 6px;font-size:10px;color:var(--accent);font-family:-apple-system,BlinkMacSystemFont,sans-serif;text-align:center;letter-spacing:.04em;line-height:1.5">${L.summary}</div>`;
 }
 function changeCalendarMonth(dir) {
   calendarMonth += dir;
@@ -2630,6 +2717,7 @@ function renderCalendar() {
   grid.innerHTML = '';
   closeDayPanel();
 
+  const todayStr = new Date().toISOString().split('T')[0];
   let cur = new Date(startSunday);
 
   while (cur <= lastDay) {
@@ -2652,16 +2740,18 @@ function renderCalendar() {
       let bg = 'transparent';
       if (inMonth && data) bg = data.pnl > 0 ? 'var(--cal-pos-bg)' : 'var(--cal-neg-bg)';
 
-      cell.style.cssText = 'background:' + bg + ';border-right:1px solid var(--border);border-bottom:1px solid var(--border);padding:8px 10px;min-height:62px;box-sizing:border-box' + (inMonth ? ';cursor:pointer' : '');
+      cell.style.cssText = 'background:' + bg + ';border-right:1px solid var(--border);border-bottom:1px solid var(--border);padding:8px 10px;aspect-ratio:2;box-sizing:border-box;position:relative;display:flex;align-items:center;justify-content:center' + (inMonth ? ';cursor:pointer' : '');
 
       const dayColor = inMonth ? 'var(--text2)' : 'var(--text3)';
-      let html = '<div style="font-size:11px;color:' + dayColor + ';font-family:\'IBM Plex Mono\',monospace">' + cur.getDate() + '</div>';
+      const isToday = ds === todayStr;
+      let html = '<div style="position:absolute;top:6px;left:8px;font-size:11px;color:' + dayColor + ';font-family:-apple-system,BlinkMacSystemFont,sans-serif;display:flex;align-items:center;gap:5px">' + cur.getDate() + (isToday ? ' <span style="font-size:9px;background:var(--accent);color:#fff;padding:1px 5px;border-radius:3px;font-weight:500">Today</span>' : '') + '</div>';
 
       if (inMonth && data) {
         const pc = data.pnl >= 0 ? 'var(--green)' : 'var(--red)';
-        html += '<div style="text-align:center;padding-top:6px">'
-          + '<div style="font-size:13px;color:' + pc + ';font-family:\'IBM Plex Mono\',monospace;font-weight:500">' + data.count + '</div>'
-          + '<div style="font-size:13px;color:' + pc + ';font-family:\'IBM Plex Mono\',monospace;font-weight:500">' + calFmtPnl(data.pnl) + '</div>'
+        const tradeLabel = data.count === 1 ? 'trade' : 'trades';
+        html += '<div style="text-align:center">'
+          + '<div style="font-size:12px;color:' + pc + ';font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-weight:500">' + data.count + ' ' + tradeLabel + '</div>'
+          + '<div style="font-size:13px;color:' + pc + ';font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-weight:500">' + calFmtPnl(data.pnl) + '</div>'
           + '</div>';
       }
 
@@ -2676,8 +2766,8 @@ function renderCalendar() {
     sumCell.style.cssText = 'border-bottom:1px solid var(--border);padding:8px 10px;min-height:62px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--bg3);box-sizing:border-box' + (wCount > 0 ? ';cursor:pointer' : '');
     if (wCount > 0) {
       const wc = wPnl >= 0 ? 'var(--green)' : 'var(--red)';
-      sumCell.innerHTML = '<div style="font-size:10px;color:var(--text2);margin-bottom:3px;text-align:center">' + wCount + ' ' + L.trades + '</div>'
-        + '<div style="font-size:13px;font-weight:500;color:' + wc + ';font-family:\'IBM Plex Mono\',monospace;text-align:center">' + calFmtPnl(wPnl) + '</div>';
+      sumCell.innerHTML = '<div style="font-size:12px;color:var(--text2);margin-bottom:4px;text-align:center;font-family:-apple-system,BlinkMacSystemFont,sans-serif">' + wCount + ' ' + L.trades + '</div>'
+        + '<div style="font-size:16px;font-weight:500;color:' + wc + ';font-family:-apple-system,BlinkMacSystemFont,sans-serif;text-align:center">' + calFmtPnl(wPnl) + '</div>';
       const captured = weekDates.slice();
       sumCell.onclick = () => showWeekTrades(captured);
     }
@@ -2784,7 +2874,7 @@ function removeFromPool(id, btnEl) {
       clearTimeout(delPoolTimer);
     }
     delPoolConfirm = id;
-    if (btnEl) { btnEl.textContent = 'ยืนยัน?'; btnEl.className = 'tbl-btn del del-confirm'; btnEl.setAttribute('data-del-pool-confirm', '1'); }
+    if (btnEl) { btnEl.textContent = T('js.confirm'); btnEl.className = 'tbl-btn del del-confirm'; btnEl.setAttribute('data-del-pool-confirm', '1'); }
     delPoolTimer = setTimeout(() => {
       delPoolConfirm = null;
       if (btnEl) { btnEl.textContent = '✕'; btnEl.className = 'tbl-btn del'; btnEl.removeAttribute('data-del-pool-confirm'); }
@@ -2841,7 +2931,7 @@ function clearStatsPool(btnEl) {
     renderAnalysis();
   } else {
     delClearConfirm = true;
-    if (btnEl) { btnEl.textContent = 'ยืนยัน?'; btnEl.style.background = 'var(--red-bg)'; }
+    if (btnEl) { btnEl.textContent = T('js.confirm'); btnEl.style.background = 'var(--red-bg)'; }
     delClearTimer = setTimeout(() => {
       delClearConfirm = false;
       if (btnEl) { btnEl.innerHTML = '<span data-i18n="an.clearpool">🗑 ล้าง pool</span>'; btnEl.style.background = 'transparent'; applyLang(); }
@@ -2861,7 +2951,7 @@ function renderAnalysis() {
       + '<div style="font-size:32px;margin-bottom:12px">&#x1F4CA;</div>'
       + '<div style="font-size:14px;color:var(--text2);margin-bottom:6px">' + T('an.empty') + '</div>'
       + '<div style="font-size:12px;color:var(--text3)">' + T('an.emptysub') + '</div>'
-      + '<button onclick="showPage(\'history\')" style="margin-top:16px;padding:8px 18px;background:var(--accent);border:none;border-radius:var(--radius);color:#fff;font-size:13px;cursor:pointer;font-family:\'IBM Plex Sans Thai\',sans-serif">' + T('an.gotohist') + '</button></div>';
+      + '<button onclick="showPage(\'history\')" style="margin-top:16px;padding:8px 18px;background:var(--accent);border:none;border-radius:var(--radius);color:#fff;font-size:13px;cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,sans-serif">' + T('an.gotohist') + '</button></div>';
     return;
   }
   emptyEl.style.display = 'none'; contentEl.style.display = '';
@@ -2869,7 +2959,7 @@ function renderAnalysis() {
   // ── Trade List ──
   const tradeListHTML = '<div class="overview-section-title" style="margin-bottom:12px;display:flex;justify-content:space-between;align-items:center">'
     + '<span>' + T('an.poollist') + '</span>'
-    + '<span style="font-size:11px;font-weight:400;color:var(--text3);font-family:\'IBM Plex Mono\',monospace">' + selTrades.length + ' ' + T('an.items') + '</span>'
+    + '<span style="font-size:11px;font-weight:400;color:var(--text3);font-family:-apple-system,BlinkMacSystemFont,sans-serif">' + selTrades.length + ' ' + T('an.items') + '</span>'
     + '</div>'
     + '<div class="table-wrap" style="margin-bottom:24px"><table>'
     + '<thead><tr>'
@@ -2880,7 +2970,7 @@ function renderAnalysis() {
     + selTrades.map(t => {
         const pnl = parseFloat(t.pnl);
         const pnlStr = (t.pnl !== null && t.pnl !== '')
-          ? (pnl >= 0 ? '<span class="pnl-pos">+' + pnl.toFixed(2) + '</span>' : '<span class="pnl-neg">' + pnl.toFixed(2) + '</span>')
+          ? (pnl >= 0 ? '<span class="pnl-pos">+' + pnl.toFixed(2) + '$</span>' : '<span class="pnl-neg">' + pnl.toFixed(2) + '$</span>')
           : '—';
         return '<tr>'
           + '<td class="mono" style="font-size:11px">' + (t.date || '—') + '</td>'
@@ -2970,9 +3060,9 @@ function renderAnalysis() {
     ${sesRows.length
       ? '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px">'
         + sesRows.map(s => '<div style="background:'+s.bg+';border:1px solid '+s.bdr+';border-radius:var(--radius-lg);padding:12px">'
-          + '<div style="font-size:11px;font-weight:500;color:'+s.c+';text-align:center;font-family:\'IBM Plex Mono\',monospace;margin-bottom:8px">'+s.name+'</div>'
+          + '<div style="font-size:11px;font-weight:500;color:'+s.c+';text-align:center;font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin-bottom:8px">'+s.name+'</div>'
           + '<div style="font-size:20px;font-weight:500;text-align:center;margin-bottom:4px">'+s.cnt+'</div>'
-          + '<div style="text-align:center;font-size:12px;color:'+gc(s.pnl)+';font-family:\'IBM Plex Mono\',monospace;margin-bottom:3px">'+(s.tot?fp(s.pnl)+'$':'—')+'</div>'
+          + '<div style="text-align:center;font-size:12px;color:'+gc(s.pnl)+';font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin-bottom:3px">'+(s.tot?fp(s.pnl)+'$':'—')+'</div>'
           + '<div style="text-align:center;font-size:11px;color:var(--text2)">Win '+(s.tot?fc(s.wins/s.tot*100):'—')+'</div>'
           + '</div>').join('') + '</div>'
       : '<div class="empty-state" style="margin-bottom:24px;padding:20px 0">'+T('an.nosession')+'</div>'}
