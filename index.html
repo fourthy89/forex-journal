@@ -322,7 +322,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div class="overview-section">
         <div class="overview-section-title" data-i18n="ov.charts">กราฟ</div>
         <div class="stats-grid-2" style="grid-template-columns:minmax(0,1fr)">
-          <div class="chart-half" style="height:auto;overflow:hidden;width:100%;box-sizing:border-box;min-width:0"><div class="chart-half-title" id="ov-week-cal-title">สัปดาห์นี้</div><div id="ov-week-cal" style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr)) 52px;gap:4px;overflow:hidden;width:100%;box-sizing:border-box"></div></div>
+          <div class="chart-half" style="height:auto;overflow:hidden;width:100%;box-sizing:border-box;min-width:0"><div class="chart-half-title" id="ov-week-cal-title" data-i18n="ov.thisweek">สัปดาห์นี้</div><div id="ov-week-cal" style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr)) 52px;gap:4px;overflow:hidden;width:100%;box-sizing:border-box"></div></div>
           <div class="chart-half"><div class="chart-half-title" data-i18n="ov.pairchart">P&L แยกตามคู่เงิน</div><canvas id="ov-chart-pair"></canvas></div>
         </div>
 
@@ -573,48 +573,9 @@ tr:hover td{background:rgba(255,255,255,.02)}
       </div>
       <div class="settings-block">
         <h3 style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;letter-spacing:.03em">Version</h3>
-        <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:12px">
+        <div style="display:flex;align-items:baseline;gap:10px">
           <span style="font-size:20px;font-weight:500;font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:var(--accent)">v5.5</span>
           <span style="font-size:11px;color:var(--text3);font-family:-apple-system,BlinkMacSystemFont,sans-serif">FX Journal</span>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:6px">
-          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--accent);font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin-bottom:2px">
-            <span style="font-size:10px">✦</span>
-            <span style="font-weight:500">v5.5</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);font-family:-apple-system,BlinkMacSystemFont,sans-serif">
-            <span style="color:var(--text3);font-size:10px">·</span>
-            <span>Calendar — เพิ่มขนาด font: header 10→11px, เลขวัน 11→13px, trade count 12→13px, P&L 13→15px, summary P&L 16→18px</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);font-family:-apple-system,BlinkMacSystemFont,sans-serif">
-            <span style="color:var(--text3);font-size:10px">·</span>
-            <span>Calendar — เพิ่มความสว่าง text: เลขวัน, trade count สัปดาห์ ใช้ --text แทน --text2/text3</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);font-family:-apple-system,BlinkMacSystemFont,sans-serif">
-            <span style="color:var(--text3);font-size:10px">·</span>
-            <span>Calendar header — label P/L: และ Trades: สว่างขึ้น (--text3 → --text2)</span>
-          </div>
-          <div style="margin:8px 0 6px;border-top:1px solid var(--border)"></div>
-<div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--accent);font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin-bottom:2px">
-            <span style="font-size:10px">✦</span>
-            <span style="font-weight:500">v5.3</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);font-family:-apple-system,BlinkMacSystemFont,sans-serif">
-            <span style="color:var(--text3);font-size:10px">·</span>
-            <span>Add Trade — modal popup แทน inline form</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);font-family:-apple-system,BlinkMacSystemFont,sans-serif">
-            <span style="color:var(--text3);font-size:10px">·</span>
-            <span>Add Trade — ปุ่มใน MT5 tab filter bar (มุมขวา)</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);font-family:-apple-system,BlinkMacSystemFont,sans-serif">
-            <span style="color:var(--text3);font-size:10px">·</span>
-            <span>Add Trade — บันทึกขึ้น MT5 tab, source_account = Manual</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);font-family:-apple-system,BlinkMacSystemFont,sans-serif">
-            <span style="color:var(--text3);font-size:10px">·</span>
-            <span>ลบ "+" ออกจากปุ่มทุกปุ่ม (Add Trade / Add Plan / Add Record)</span>
-          </div>
         </div>
       </div>
       <button class="save-btn settings-save-btn" onclick="saveSettings()"><span data-i18n="btn.saveset">บันทึกการตั้งค่า</span></button>
@@ -973,8 +934,8 @@ const I18N = {
     'an.needsl':'ต้องมีข้อมูล SL','an.metplan':'✓ ได้ตามแผน','an.belowplan':'✗ ต่ำกว่าแผน',
     'an.actual':'จริง','an.plan':'แผน','an.loss':'ติดลบ',
     'an.nodata':'ไม่มีข้อมูล','an.nosession':'ไม่มีข้อมูล session',
-    'an.sum':'Summary','an.rrsect':'R:R Actual vs Planned',
-    'an.sessect':'Session Breakdown','an.symsect':'Symbol Breakdown','an.symbol':'Symbol','an.poollist':'เทรดใน pool','an.remove':'ลบออก',
+    'an.sum':'สรุป','an.rrsect':'R:R จริง vs แผน',
+    'an.sessect':'แยกตาม Session','an.symsect':'แยกตาม Symbol','an.symbol':'Symbol','an.poollist':'เทรดใน pool','an.remove':'ลบออก',
     'sync.btn':'⟳ Sync',
     'tab.mt5':'MT5','tab.manual':'บันทึกเอง',
     'stat.winrate':'อัตราชนะ','stat.pnl':'กำไร/ขาดทุนรวม','stat.pnlshort':'กำไร/ขาดทุน',
@@ -1008,7 +969,7 @@ const I18N = {
     'ms.profitthb':'กำไรถอน (฿)','ms.depositthb':'ฝาก (฿)','ms.netthb':'สุทธิ (฿)',
     'set.pairs':'คู่เงิน','set.strategies':'กลยุทธ์','set.accounts':'บัญชีเทรด',
     'set.theme':'ธีมสี','set.backup':'สำรองและส่งออก',
-    'ov.result':'Account','ov.withdrawal':'ถอนกำไรรวม','ov.tradesummary':'สรุปการเทรด',
+    'ov.result':'บัญชี','ov.thisweek':'สัปดาห์นี้','ov.withdrawal':'ถอนกำไรรวม','ov.tradesummary':'สรุปการเทรด',
     'ov.charts':'กราฟ','ov.pnlchart':'กำไร/ขาดทุนสะสม','ov.pairchart':'กำไร/ขาดทุนแยกตามคู่เงิน',
     'th.pair':'คู่เงิน','th.side':'ทิศทาง','th.entry':'ราคาเข้า','th.exit':'ราคาออก',
     'th.lot':'ล็อต','th.rr':'R:R','th.session':'เซสชัน','th.pnl':'กำไร/ขาดทุน',
@@ -1108,7 +1069,7 @@ const I18N = {
     'ms.profitthb':'Profit (฿)','ms.depositthb':'Deposit (฿)','ms.netthb':'Net (฿)',
     'set.pairs':'Currency Pairs','set.strategies':'Strategies','set.accounts':'Trading Accounts',
     'set.theme':'Color Theme','set.backup':'Backup & Export',
-    'ov.result':'Account','ov.withdrawal':'Total Withdrawal','ov.tradesummary':'Trade Summary',
+    'ov.result':'Account','ov.thisweek':'This Week','ov.withdrawal':'Total Withdrawal','ov.tradesummary':'Trade Summary',
     'ov.charts':'Charts','ov.pnlchart':'Cumulative P&L','ov.pairchart':'P&L by Pair',
     'th.pair':'Pair','th.side':'Side','th.entry':'Entry','th.exit':'Exit',
     'th.lot':'Lot','th.rr':'R:R','th.session':'Session','th.pnl':'P&L',
@@ -2451,7 +2412,7 @@ function renderOverviewWeekCal() {
   }
   if (titleEl) {
     const fmt = d => d.getDate() + '/' + (d.getMonth()+1);
-    titleEl.textContent = 'สัปดาห์นี้  ' + fmt(days[0].d) + ' \u2013 ' + fmt(days[6].d);
+    titleEl.textContent = T('ov.thisweek') + '  ' + fmt(days[0].d) + ' \u2013 ' + fmt(days[6].d);
   }
   const dayMap = {};
   trades.forEach(t => {
@@ -3116,9 +3077,9 @@ function renderAnalysis() {
     return {...s, cnt: tt.length, wins: w.length, tot: wp.length, pnl: wp.reduce((a, x) => a + parseFloat(x.pnl || 0), 0)};
   }).filter(s => s.cnt > 0);
 
-  const syms = [...new Set(selTrades.map(t => t.symbol).filter(Boolean))];
+  const syms = [...new Set(selTrades.map(t => normalizePair(t.symbol)).filter(Boolean))];
   const symRows = syms.map(s => {
-    const tt = selTrades.filter(x => x.symbol === s);
+    const tt = selTrades.filter(x => normalizePair(x.symbol) === s);
     const wp = tt.filter(x => x.pnl !== null && x.pnl !== '');
     const w = wp.filter(x => parseFloat(x.pnl) > 0);
     return {name: s, cnt: tt.length, wins: w.length, tot: wp.length, pnl: wp.reduce((a, x) => a + parseFloat(x.pnl || 0), 0)};
