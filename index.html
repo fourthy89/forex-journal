@@ -257,6 +257,10 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <span data-i18n="nav.analysis">วิเคราะห์</span>
           <span id="analysis-nav-badge" style="display:none;margin-left:auto;background:var(--accent);color:#fff;font-size:10px;font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-weight:500;padding:1px 7px;border-radius:20px;min-width:18px;text-align:center"></span>
         </div>
+        <div class="nav-item nav-sub" data-page="calculator" onclick="showPage('calculator')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="10" y2="10"/><line x1="14" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="10" y2="14"/><line x1="14" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="10" y2="18"/><line x1="14" y1="18" x2="16" y2="18"/></svg>
+          <span data-i18n="nav.calculator">คำนวณ Lot</span>
+        </div>
       </div>
       <div class="nav-item" data-page="account" onclick="showPage('account')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
@@ -628,6 +632,49 @@ tr:hover td{background:rgba(255,255,255,.02)}
       </div>
       <div id="analysis-empty" class="empty-state" style="display:none"></div>
       <div id="analysis-content"></div>
+    </div>
+
+    <div id="page-calculator" class="page">
+      <div class="page-title" data-i18n="nav.calculator">คำนวณ Lot</div>
+      <div style="max-width:520px">
+        <div style="margin-bottom:20px">
+          <div class="stat-label" style="margin-bottom:10px" data-i18n="calc.symbol">Symbol</div>
+          <div id="calc-sym-btns" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+        </div>
+        <div class="fg" style="margin-bottom:18px">
+          <label data-i18n="calc.balance">ทุนในบัญชี ($)</label>
+          <input type="number" id="calc-balance" placeholder="10000" min="0" step="100">
+        </div>
+        <div style="margin-bottom:20px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <label style="font-size:11px;color:var(--text2);letter-spacing:.04em;font-family:-apple-system,BlinkMacSystemFont,sans-serif" data-i18n="calc.risk">ความเสี่ยง %</label>
+            <span id="calc-risk-val" style="font-size:14px;font-weight:500;color:var(--accent);font-family:-apple-system,BlinkMacSystemFont,sans-serif">1.0%</span>
+          </div>
+          <input type="range" id="calc-risk-slider" min="0.1" max="5" step="0.1" value="1" style="width:100%;accent-color:var(--accent);cursor:pointer">
+          <div id="calc-presets" style="display:flex;gap:6px;margin-top:10px"></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px">
+          <div class="fg">
+            <label data-i18n="calc.entry">ราคาเข้า</label>
+            <input type="number" id="calc-entry" placeholder="0" step="any">
+          </div>
+          <div class="fg">
+            <label data-i18n="calc.sl">Stop Loss</label>
+            <input type="number" id="calc-sl" placeholder="0" step="any">
+          </div>
+        </div>
+        <div style="background:var(--bg2);border:1px solid var(--card-bdr);border-radius:var(--radius-lg);padding:20px 20px 16px">
+          <div style="text-align:center;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border)">
+            <div class="stat-label" style="margin-bottom:8px" data-i18n="calc.lotsize">Lot Size</div>
+            <div id="calc-lot" style="font-size:52px;font-weight:500;color:var(--accent);line-height:1;font-family:-apple-system,BlinkMacSystemFont,sans-serif">—</div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+            <div class="stat-card"><div class="stat-label" data-i18n="calc.riskamt">เงินที่เสี่ยง</div><div class="stat-val" id="calc-risk-amt" style="font-size:16px">—</div></div>
+            <div class="stat-card"><div class="stat-label" data-i18n="calc.sldist">ระยะ SL</div><div class="stat-val" id="calc-sl-dist" style="font-size:16px">—</div></div>
+            <div class="stat-card"><div class="stat-label" data-i18n="calc.perpip">$/pip/lot</div><div class="stat-val" id="calc-pip-val" style="font-size:16px">—</div></div>
+          </div>
+        </div>
+      </div>
     </div>
 
   </main>
@@ -1019,6 +1066,9 @@ const I18N = {
     'js.backupdone':'Backup ลง Browser แล้ว!','js.backupfail':'Backup ไม่ได้:',
     'js.expjson':'Export JSON สำเร็จ!','js.expcsv':'Export CSV สำเร็จ!','acc.monthlabel':'สรุปเดือน',
     'set.language':'ภาษา / Language','ov.title':'ภาพรวม',
+    'nav.calculator':'คำนวณ Lot','calc.symbol':'Symbol','calc.balance':'ทุนในบัญชี ($)',
+    'calc.risk':'ความเสี่ยง %','calc.entry':'ราคาเข้า','calc.sl':'Stop Loss',
+    'calc.lotsize':'Lot Size','calc.riskamt':'เงินที่เสี่ยง','calc.sldist':'ระยะ SL','calc.perpip':'$/pip/lot',
   },
   en: {
     'nav.overview':'Overview','nav.history':'Trade History','nav.calendar':'Calendar',
@@ -1119,6 +1169,9 @@ const I18N = {
     'js.backupdone':'Backup to Browser done!','js.backupfail':'Cannot backup:',
     'js.expjson':'Export JSON done!','js.expcsv':'Export CSV done!','acc.monthlabel':'Monthly Summary',
     'set.language':'Language','ov.title':'Overview',
+    'nav.calculator':'Lot Calculator','calc.symbol':'Symbol','calc.balance':'Account Balance ($)',
+    'calc.risk':'Risk %','calc.entry':'Entry Price','calc.sl':'Stop Loss',
+    'calc.lotsize':'Lot Size','calc.riskamt':'Risk Amount','calc.sldist':'SL Distance','calc.perpip':'$/pip/lot',
   }
 };
 
@@ -1538,10 +1591,10 @@ function renderAccount() {
   const totalDepositThb = accounts.filter(a => a.type === 'Deposit').reduce((s, a) => s + (parseFloat(a.amount_thb) || 0), 0);
   const net = totalProfit + totalDeposit;
   const netThb = totalProfitThb + totalDepositThb;
-  document.getElementById('acc-profit').textContent = '+$' + totalProfit.toFixed(2);
-  document.getElementById('acc-deposit').textContent = '$' + totalDeposit.toFixed(2);
+  document.getElementById('acc-profit').textContent = '+' + totalProfit.toFixed(2) + '$';
+  document.getElementById('acc-deposit').textContent = totalDeposit.toFixed(2) + '$';
   const netEl = document.getElementById('acc-net');
-  netEl.textContent = (net >= 0 ? '+$' : '$') + net.toFixed(2);
+  netEl.textContent = (net >= 0 ? '+' : '') + net.toFixed(2) + '$';
   netEl.className = 'metric-val ' + (net >= 0 ? 'pos' : 'neg');
   document.getElementById('acc-count').textContent = accounts.length;
   // ช่องรวมบาทแยก
@@ -1828,7 +1881,7 @@ function showPage(n) {
   document.getElementById('page-' + n).classList.add('active');
   const navEl = document.querySelector('.nav-item[data-page="'+n+'"]');
   if (navEl) { navEl.classList.add('active'); }
-  if (['history','calendar','missed','analysis'].includes(n)) openNavGroup();
+  if (['history','calendar','missed','analysis','calculator'].includes(n)) openNavGroup();
   localStorage.setItem('lastPage', n);
   if (n === 'overview') renderOverview();
   if (n === 'history') { if (histTab === 'mt5') renderHistory(); else renderTable(); }
@@ -1836,6 +1889,7 @@ function showPage(n) {
   if (n === 'account') renderAccount();
   if (n === 'calendar') renderCalendar();
   if (n === 'analysis') renderAnalysis();
+  if (n === 'calculator') renderCalculator();
   if (n === 'settings') {
     renderPairTags(); renderStrategyTags(); renderAccountTags();
     const bt = localStorage.getItem('fx_journal_backup_time');
@@ -2182,7 +2236,7 @@ function openDetail(id) {
   detailId = id;
   document.getElementById('detail-title').textContent = `${t.symbol}  ·  ${t.date}  ·  ${t.side}`;
   const pnl = parseFloat(t.pnl);
-  const pnlDisplay = t.pnl ? (pnl >= 0 ? `+${pnl.toFixed(2)}` : `${pnl.toFixed(2)}`) : '—';
+  const pnlDisplay = t.pnl ? (pnl >= 0 ? `+${pnl.toFixed(2)}$` : `${pnl.toFixed(2)}$`) : '—';
   const pnlColor = t.pnl ? (pnl >= 0 ? 'var(--green)' : 'var(--red)') : 'var(--text)';
   document.getElementById('detail-grid').innerHTML = [
     [T('det.pair'), t.symbol], [T('th.date'), t.date],
@@ -2367,6 +2421,105 @@ function makeChart(canvasId, type, labels, datasets, opts={}) {
   });
 }
 
+const CALC_SYMS = {
+  'XAUUSD':{ pip:0.01,   ppv:1,  unit:'pip' },
+  'EURUSD':{ pip:0.0001, ppv:10, unit:'pip' },
+  'GBPUSD':{ pip:0.0001, ppv:10, unit:'pip' },
+  'NAS100':{ pip:1,      ppv:1,  unit:'pt'  },
+  'BTCUSD':{ pip:1,      ppv:1,  unit:'pt'  },
+};
+function renderCalculator() {
+  const symEl = document.getElementById('calc-sym-btns');
+  if (symEl && !symEl.dataset.init) {
+    symEl.innerHTML = Object.keys(CALC_SYMS).map(s =>
+      '<button onclick="calcSetSym(\''+s+'\')" id="csym-'+s+'" style="padding:7px 16px;border-radius:var(--radius);border:1px solid var(--border2);background:transparent;cursor:pointer;font-size:12px;font-weight:500;color:var(--text2);font-family:-apple-system,BlinkMacSystemFont,sans-serif;transition:all .15s">'+s+'</button>'
+    ).join('');
+    symEl.dataset.init = '1';
+  }
+  const presEl = document.getElementById('calc-presets');
+  if (presEl && !presEl.dataset.init) {
+    presEl.innerHTML = ['0.5','1','1.5','2','3'].map(v =>
+      '<button onclick="calcSetRisk('+v+')" style="flex:1;padding:6px 0;border-radius:var(--radius);border:1px solid var(--border2);background:transparent;cursor:pointer;font-size:11px;color:var(--text2);font-family:-apple-system,BlinkMacSystemFont,sans-serif;transition:all .15s">'+v+'%</button>'
+    ).join('');
+    presEl.dataset.init = '1';
+  }
+  const balEl = document.getElementById('calc-balance');
+  if (balEl && !balEl.dataset.init) {
+    balEl.value = localStorage.getItem('calc_balance') || '';
+    balEl.addEventListener('input', () => { localStorage.setItem('calc_balance', balEl.value); calcUpdate(); });
+    balEl.dataset.init = '1';
+  }
+  const slider = document.getElementById('calc-risk-slider');
+  const riskValEl = document.getElementById('calc-risk-val');
+  if (slider && !slider.dataset.init) {
+    const sv = localStorage.getItem('calc_risk') || '1';
+    slider.value = sv;
+    if (riskValEl) riskValEl.textContent = parseFloat(sv).toFixed(1) + '%';
+    slider.addEventListener('input', () => {
+      if (riskValEl) riskValEl.textContent = parseFloat(slider.value).toFixed(1) + '%';
+      localStorage.setItem('calc_risk', slider.value);
+      calcUpdate();
+    });
+    slider.dataset.init = '1';
+  }
+  ['calc-entry','calc-sl'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el && !el.dataset.init) { el.addEventListener('input', calcUpdate); el.dataset.init = '1'; }
+  });
+  calcSetSym(localStorage.getItem('calc_sym') || 'XAUUSD');
+}
+function calcSetSym(s) {
+  if (!CALC_SYMS[s]) return;
+  localStorage.setItem('calc_sym', s);
+  Object.keys(CALC_SYMS).forEach(k => {
+    const btn = document.getElementById('csym-' + k);
+    if (!btn) return;
+    const on = k === s;
+    btn.style.background = on ? 'var(--accent)' : 'transparent';
+    btn.style.color = on ? '#fff' : 'var(--text2)';
+    btn.style.borderColor = on ? 'var(--accent)' : 'var(--border2)';
+  });
+  calcUpdate();
+}
+function calcSetRisk(v) {
+  const slider = document.getElementById('calc-risk-slider');
+  const riskValEl = document.getElementById('calc-risk-val');
+  if (slider) slider.value = v;
+  if (riskValEl) riskValEl.textContent = parseFloat(v).toFixed(1) + '%';
+  localStorage.setItem('calc_risk', String(v));
+  calcUpdate();
+}
+function calcUpdate() {
+  const sym = localStorage.getItem('calc_sym') || 'XAUUSD';
+  const spec = CALC_SYMS[sym];
+  if (!spec) return;
+  const balance  = parseFloat(document.getElementById('calc-balance')?.value) || 0;
+  const riskPct  = parseFloat(document.getElementById('calc-risk-slider')?.value) || 1;
+  const entry    = parseFloat(document.getElementById('calc-entry')?.value) || 0;
+  const sl       = parseFloat(document.getElementById('calc-sl')?.value) || 0;
+  const riskAmt  = balance * (riskPct / 100);
+  const riskAmtEl = document.getElementById('calc-risk-amt');
+  const slDistEl  = document.getElementById('calc-sl-dist');
+  const pipValEl  = document.getElementById('calc-pip-val');
+  const lotEl     = document.getElementById('calc-lot');
+  if (riskAmtEl) riskAmtEl.textContent = balance > 0 ? riskAmt.toFixed(2) + '$' : '—';
+  if (pipValEl)  pipValEl.textContent  = spec.ppv + '$';
+  if (!balance || !entry || !sl || entry === sl) {
+    if (lotEl)   lotEl.textContent = '—';
+    if (slDistEl) slDistEl.textContent = '—';
+    return;
+  }
+  const priceDist  = Math.abs(entry - sl);
+  const slPips     = Math.round(priceDist / spec.pip);
+  const riskPerLot = slPips * spec.ppv;
+  const lot        = riskAmt / riskPerLot;
+  if (lotEl) {
+    lotEl.textContent = (lot > 0 && lot < 1000) ? lot.toFixed(2) : '—';
+    lotEl.style.color = 'var(--accent)';
+  }
+  if (slDistEl) slDistEl.textContent = slPips + ' ' + spec.unit;
+}
+
 function normalizePair(sym) {
   if (!sym) return sym;
   const s = sym.toUpperCase().trim();
@@ -2516,12 +2669,12 @@ function renderOverview() {
   const adThb=accounts.filter(a=>a.type==='Deposit').reduce((s,a)=>s+(parseFloat(a.amount_thb)||0),0);
   // Result section
   const setAcc = (id, val, cls) => { const el=document.getElementById(id); if(el){el.textContent=val; if(cls) el.className='stat-val '+cls;} };
-  setAcc('ov-acc-profit2','+$'+ap.toFixed(2),'pos'); 
+  setAcc('ov-acc-profit2','+'+ap.toFixed(2)+'$','pos'); 
   const p2=document.getElementById('ov-acc-profit-thb2'); if(p2) p2.textContent='+฿'+apThb.toLocaleString();
-  setAcc('ov-acc-deposit2','$'+ad.toFixed(2),'neg');
+  setAcc('ov-acc-deposit2',ad.toFixed(2)+'$','neg');
   const d2=document.getElementById('ov-acc-deposit-thb2'); if(d2) d2.textContent='฿'+adThb.toLocaleString();
   const an=ap+ad, anThb=apThb+adThb;
-  setAcc('ov-acc-net2',(an>=0?'+$':'$')+an.toFixed(2),an>=0?'pos':'neg');
+  setAcc('ov-acc-net2',(an>=0?'+':'')+an.toFixed(2)+'$',an>=0?'pos':'neg');
   const n2=document.getElementById('ov-acc-net-thb2'); if(n2) n2.textContent=(anThb>=0?'+฿':'฿')+anThb.toLocaleString();
 }
 
@@ -2549,7 +2702,7 @@ loadPool();
 document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
 document.getElementById('new-pair').addEventListener('keydown', e => { if (e.key === 'Enter') addPair(); });
 document.getElementById('new-strategy').addEventListener('keydown', e => { if (e.key === 'Enter') addStrategy(); });
-const validPages = ['overview','history','calendar','missed','account','settings','analysis'];
+const validPages = ['overview','history','calendar','missed','account','settings','analysis','calculator'];
 const _lp = localStorage.getItem('lastPage');
 const lastPage = IS_VIEW ? 'overview' : (validPages.includes(_lp) ? _lp : 'table');
 showPage(lastPage);
