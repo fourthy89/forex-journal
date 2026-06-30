@@ -261,6 +261,10 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="10" y2="10"/><line x1="14" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="10" y2="14"/><line x1="14" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="10" y2="18"/><line x1="14" y1="18" x2="16" y2="18"/></svg>
           <span data-i18n="nav.calculator">คำนวณ Lot</span>
         </div>
+        <div class="nav-item nav-sub" data-page="propfirm" onclick="showPage('propfirm')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/></svg>
+          <span data-i18n="nav.propfirm">Propfirm</span>
+        </div>
       </div>
       <div class="nav-item" data-page="account" onclick="showPage('account')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
@@ -578,7 +582,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div class="settings-block">
         <h3 style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;letter-spacing:.03em">Version</h3>
         <div style="display:flex;align-items:baseline;gap:10px">
-          <span style="font-size:20px;font-weight:500;font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:var(--accent)">v5.5</span>
+          <span style="font-size:20px;font-weight:500;font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:var(--accent)">v5.6</span>
           <span style="font-size:11px;color:var(--text3);font-family:-apple-system,BlinkMacSystemFont,sans-serif">FX Journal</span>
         </div>
       </div>
@@ -676,6 +680,71 @@ tr:hover td{background:rgba(255,255,255,.02)}
       </div>
     </div>
 
+    <div id="page-propfirm" class="page">
+      <div class="page-title" data-i18n="nav.propfirm">Propfirm</div>
+
+      <div class="filter-row">
+        <select id="pf-select-challenge" onchange="selectChallenge(this.value)" style="min-width:240px"></select>
+        <button onclick="openAddChallenge()" style="padding:7px 14px;background:var(--accent);border:none;border-radius:var(--radius);color:#fff;font-size:12px;cursor:pointer;margin-left:auto"><span data-i18n="btn.addchallenge">+ เพิ่ม Challenge</span></button>
+      </div>
+
+      <div id="pf-empty" class="empty-state" style="display:none"><span data-i18n="empty.propfirm">ยังไม่มี Challenge — กด "เพิ่ม Challenge" เพื่อเริ่ม</span></div>
+
+      <div id="pf-content" style="display:none">
+        <div class="overview-section">
+          <div class="overview-section-title" data-i18n="pf.challengeinfo">ข้อมูล Challenge</div>
+          <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:10px">
+            <div class="stat-card"><div class="stat-label" data-i18n="pf.size">Account Size</div><div class="stat-val" id="pf-size">—</div></div>
+            <div class="stat-card"><div class="stat-label" data-i18n="pf.status">สถานะ</div><div class="stat-val" id="pf-status">—</div></div>
+            <div class="stat-card"><div class="stat-label" data-i18n="pf.target">Profit Target</div><div class="stat-val" id="pf-target">—</div></div>
+            <div class="stat-card"><div class="stat-label" data-i18n="pf.started">วันเริ่ม</div><div class="stat-val" id="pf-started" style="font-size:14px">—</div></div>
+          </div>
+          <div class="stats-grid" style="grid-template-columns:repeat(2,1fr);margin-bottom:10px">
+            <div class="stat-card"><div class="stat-label" data-i18n="pf.maxdaily">Max Daily DD</div><div class="stat-val" id="pf-maxdaily">—</div></div>
+            <div class="stat-card"><div class="stat-label" data-i18n="pf.maxtotal">Max Total DD</div><div class="stat-val" id="pf-maxtotal">—</div></div>
+          </div>
+          <div id="pf-note-wrap" style="font-size:12px;color:var(--text2);margin-bottom:12px"></div>
+          <div style="display:flex;gap:8px">
+            <button class="tbl-btn edit" onclick="openEditChallenge()" style="padding:6px 12px;font-size:12px;width:auto"><span data-i18n="btn.editchallenge">แก้ไข Challenge</span></button>
+            <button class="tbl-btn del" id="pf-del-challenge-btn" onclick="delChallenge()" style="padding:6px 12px;font-size:12px;width:auto">✕</button>
+          </div>
+        </div>
+
+        <div class="overview-section">
+          <div class="overview-section-title" data-i18n="pf.tradestats">สถิติเทรดของบัญชีนี้</div>
+          <div class="stats-grid" style="grid-template-columns:repeat(4,1fr)">
+            <div class="stat-card"><div class="stat-label" data-i18n="stat.winrate">Win Rate</div><div class="stat-val" id="pf-wr">—</div></div>
+            <div class="stat-card"><div class="stat-label" data-i18n="stat.pnl">P&amp;L รวม ($)</div><div class="stat-val" id="pf-pnl">—</div></div>
+            <div class="stat-card"><div class="stat-label" data-i18n="stat.total">Trade ทั้งหมด</div><div class="stat-val" id="pf-total">—</div></div>
+            <div class="stat-card"><div class="stat-label" data-i18n="pf.maxdd">Max Drawdown จริง ($)</div><div class="stat-val neg" id="pf-maxdd">—</div></div>
+          </div>
+        </div>
+
+        <div class="overview-section">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+            <div class="overview-section-title" data-i18n="pf.payouts" style="margin-bottom:0">Payout</div>
+            <button onclick="openAddPayout()" style="padding:6px 12px;background:var(--accent);border:none;border-radius:var(--radius);color:#fff;font-size:12px;cursor:pointer"><span data-i18n="btn.addpayout">+ เพิ่ม Payout</span></button>
+          </div>
+          <div class="metrics" style="grid-template-columns:repeat(2,1fr);margin-bottom:14px">
+            <div class="metric"><div class="metric-label" data-i18n="pf.totalpayout">Payout รวม ($)</div><div class="metric-val pos" id="pf-payout-total-usd">—</div></div>
+            <div class="metric"><div class="metric-label" data-i18n="pf.totalpayoutthb">Payout รวม (฿)</div><div class="metric-val pos" id="pf-payout-total-thb">—</div></div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr>
+                <th data-i18n="th.date">วันที่</th>
+                <th data-i18n="th.amtusd">จำนวน ($)</th>
+                <th data-i18n="th.amtthb">จำนวน (฿)</th>
+                <th data-i18n="lbl.note">หมายเหตุ</th><th></th>
+              </tr></thead>
+              <tbody id="pf-payout-tbody"></tbody>
+            </table>
+            <div id="pf-payout-empty" class="empty-state" style="display:none"><span data-i18n="empty.payout">ยังไม่มี Payout</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </main>
 </div>
 
@@ -760,6 +829,55 @@ tr:hover td{background:rgba(255,255,255,.02)}
       </div>
       <div class="fg full"><label data-i18n="lbl.note">หมายเหตุ</label><input type="text" id="acc-m-note" data-i18n-ph="ph.accnote" placeholder="เพิ่มเติม..."/></div>
       <div class="fg full"><button class="save-btn" onclick="saveAccount()"><span data-i18n="btn.saveacc">บันทึก</span></button></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="pf-challenge-modal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal-box" style="max-width:480px">
+    <div class="modal-hdr">
+      <span class="modal-title" id="pf-challenge-modal-title" data-i18n="modal.addchallenge">เพิ่ม Challenge</span>
+      <button class="modal-close" onclick="document.getElementById('pf-challenge-modal').classList.remove('open')">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="fg full"><label data-i18n="th.acct">บัญชี</label>
+        <input type="text" id="pf-m-account" list="pf-acct-suggestions" data-i18n-ph="ph.pfaccount" placeholder="เช่น FunderPro-Live01"/>
+        <datalist id="pf-acct-suggestions"></datalist>
+      </div>
+      <div class="fg"><label data-i18n="pf.firm">บริษัท Propfirm</label><input type="text" id="pf-m-firm" data-i18n-ph="ph.pffirm" placeholder="เช่น FunderPro"/></div>
+      <div class="fg"><label data-i18n="pf.size">Account Size</label><input type="number" id="pf-m-size" placeholder="100000" step="any"/></div>
+      <div class="fg"><label data-i18n="pf.status">สถานะ</label>
+        <select id="pf-m-status">
+          <option value="phase1" data-i18n="pfstatus.phase1">Phase 1</option>
+          <option value="phase2" data-i18n="pfstatus.phase2">Phase 2</option>
+          <option value="funded" data-i18n="pfstatus.funded">Funded</option>
+          <option value="failed" data-i18n="pfstatus.failed">Failed</option>
+          <option value="breached" data-i18n="pfstatus.breached">Breached</option>
+        </select>
+      </div>
+      <div class="fg"><label data-i18n="pf.started">วันเริ่ม</label><input type="date" id="pf-m-started"/></div>
+      <div class="fg"><label data-i18n="pf.target">Profit Target (%)</label><input type="number" id="pf-m-target" placeholder="8" step="any"/></div>
+      <div class="fg"><label data-i18n="pf.maxdaily">Max Daily DD (%)</label><input type="number" id="pf-m-maxdaily" placeholder="5" step="any"/></div>
+      <div class="fg"><label data-i18n="pf.maxtotal">Max Total DD (%)</label><input type="number" id="pf-m-maxtotal" placeholder="10" step="any"/></div>
+      <div class="fg full"><label data-i18n="lbl.note">หมายเหตุ</label><input type="text" id="pf-m-note" data-i18n-ph="ph.pfnote" placeholder="เพิ่มเติม..."/></div>
+      <div class="fg full"><button class="save-btn" onclick="saveChallenge()"><span data-i18n="btn.savechallenge">บันทึก</span></button></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="pf-payout-modal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal-box" style="max-width:420px">
+    <div class="modal-hdr">
+      <span class="modal-title" data-i18n="modal.addpayout">เพิ่ม Payout</span>
+      <button class="modal-close" onclick="document.getElementById('pf-payout-modal').classList.remove('open')">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="fg"><label data-i18n="lbl.date">วันที่</label><input type="date" id="pf-p-date"/></div>
+      <div class="fg"></div>
+      <div class="fg"><label data-i18n="th.amtusd">จำนวน ($)</label><input type="number" id="pf-p-usd" step="any" placeholder="0"/></div>
+      <div class="fg"><label data-i18n="th.amtthb">จำนวน (฿)</label><input type="number" id="pf-p-thb" step="any" placeholder="0"/></div>
+      <div class="fg full"><label data-i18n="lbl.note">หมายเหตุ</label><input type="text" id="pf-p-note" placeholder="เพิ่มเติม..."/></div>
+      <div class="fg full"><button class="save-btn" onclick="savePayout()"><span data-i18n="btn.savepayout">บันทึก</span></button></div>
     </div>
   </div>
 </div>
@@ -1066,6 +1184,17 @@ const I18N = {
     'js.expjson':'Export JSON สำเร็จ!','js.expcsv':'Export CSV สำเร็จ!','acc.monthlabel':'สรุปเดือน',
     'set.language':'ภาษา / Language','ov.title':'ภาพรวม',
     'nav.calculator':'คำนวณ Lot','calc.symbol':'Symbol','calc.balance':'ทุนในบัญชี ($)',
+    'nav.propfirm':'Propfirm','pf.challengeinfo':'ข้อมูล Challenge','pf.size':'Account Size','pf.status':'สถานะ',
+    'pf.target':'Profit Target','pf.started':'วันเริ่ม','pf.maxdaily':'Max Daily DD','pf.maxtotal':'Max Total DD',
+    'pf.tradestats':'สถิติเทรดของบัญชีนี้','pf.maxdd':'Max Drawdown จริง ($)','pf.payouts':'Payout',
+    'pf.totalpayout':'Payout รวม ($)','pf.totalpayoutthb':'Payout รวม (฿)','pf.firm':'บริษัท Propfirm',
+    'pfstatus.phase1':'Phase 1','pfstatus.phase2':'Phase 2','pfstatus.funded':'Funded','pfstatus.failed':'Failed','pfstatus.breached':'Breached',
+    'modal.addchallenge':'เพิ่ม Challenge','modal.editchallenge':'แก้ไข Challenge','modal.addpayout':'เพิ่ม Payout',
+    'btn.addchallenge':'+ เพิ่ม Challenge','btn.editchallenge':'แก้ไข Challenge','btn.addpayout':'+ เพิ่ม Payout',
+    'btn.savechallenge':'บันทึก','btn.savepayout':'บันทึก',
+    'empty.propfirm':'ยังไม่มี Challenge — กด "เพิ่ม Challenge" เพื่อเริ่ม','empty.payout':'ยังไม่มี Payout',
+    'ph.pfaccount':'เช่น FunderPro-Live01','ph.pffirm':'เช่น FunderPro','ph.pfnote':'เพิ่มเติม...',
+    'js.fillaccount':'กรอกชื่อบัญชี','js.challengeadded':'เพิ่ม Challenge แล้ว!','js.payoutadded':'เพิ่ม Payout แล้ว!',
     'calc.risk':'ความเสี่ยง %','calc.entry':'ราคาเข้า','calc.sl':'Stop Loss',
     'calc.lotsize':'Lot Size','calc.riskamt':'เงินที่เสี่ยง','calc.sldist':'ระยะ SL','calc.perpip':'$/pip/lot',
   },
@@ -1169,6 +1298,17 @@ const I18N = {
     'js.expjson':'Export JSON done!','js.expcsv':'Export CSV done!','acc.monthlabel':'Monthly Summary',
     'set.language':'Language','ov.title':'Overview',
     'nav.calculator':'Lot Calculator','calc.symbol':'Symbol','calc.balance':'Account Balance ($)',
+    'nav.propfirm':'Propfirm','pf.challengeinfo':'Challenge Info','pf.size':'Account Size','pf.status':'Status',
+    'pf.target':'Profit Target','pf.started':'Start Date','pf.maxdaily':'Max Daily DD','pf.maxtotal':'Max Total DD',
+    'pf.tradestats':'Trade Stats for This Account','pf.maxdd':'Realized Max Drawdown ($)','pf.payouts':'Payouts',
+    'pf.totalpayout':'Total Payout ($)','pf.totalpayoutthb':'Total Payout (THB)','pf.firm':'Propfirm Company',
+    'pfstatus.phase1':'Phase 1','pfstatus.phase2':'Phase 2','pfstatus.funded':'Funded','pfstatus.failed':'Failed','pfstatus.breached':'Breached',
+    'modal.addchallenge':'Add Challenge','modal.editchallenge':'Edit Challenge','modal.addpayout':'Add Payout',
+    'btn.addchallenge':'+ Add Challenge','btn.editchallenge':'Edit Challenge','btn.addpayout':'+ Add Payout',
+    'btn.savechallenge':'Save','btn.savepayout':'Save',
+    'empty.propfirm':'No challenges yet — click "Add Challenge" to start','empty.payout':'No payouts yet',
+    'ph.pfaccount':'e.g. FunderPro-Live01','ph.pffirm':'e.g. FunderPro','ph.pfnote':'Additional notes...',
+    'js.fillaccount':'Please enter an account name','js.challengeadded':'Challenge added!','js.payoutadded':'Payout added!',
     'calc.risk':'Risk %','calc.entry':'Entry Price','calc.sl':'Stop Loss',
     'calc.lotsize':'Lot Size','calc.riskamt':'Risk Amount','calc.sldist':'SL Distance','calc.perpip':'$/pip/lot',
   }
@@ -1272,15 +1412,19 @@ function setS(state, msg) {
 }
 
 let accounts = [];
+let propfirmChallenges = [], propfirmPayouts = [], pfSelectedId = null, pfEditId = null;
+let delPfConfirm = null, delPfTimer = null, delPayoutConfirm = null, delPayoutTimer = null;
 
 async function loadAll() {
   setS('spin', 'loading...');
   try {
-    const [tRows, sRows, aRows, mRows] = await Promise.all([
+    const [tRows, sRows, aRows, mRows, pcRows, ppRows] = await Promise.all([
       sbGet('trades', 'order=id.desc'),
       sbGet('settings', 'id=eq.1'),
       sbGet('accounts', 'order=date.desc'),
-      sbGet('missed_trades', 'order=id.desc')
+      sbGet('missed_trades', 'order=id.desc'),
+      sbGet('propfirm_challenge', 'order=started_at.desc'),
+      sbGet('propfirm_payout', 'order=date.desc')
     ]);
     trades = (tRows || []).map(r => ({ ...r, images: r.images ? JSON.parse(r.images) : [] }));
     if (sRows && sRows.length) {
@@ -1290,6 +1434,8 @@ async function loadAll() {
       settings.accounts_list = s.accounts_list ? JSON.parse(s.accounts_list) : settings.accounts_list;
     }
     accounts = aRows || [];
+    propfirmChallenges = pcRows || [];
+    propfirmPayouts = ppRows || [];
     missedTrades = (mRows || []).map(r => ({ ...r, images: r.images ? JSON.parse(r.images) : [] }));
     setS('ok', `connected · ${trades.length} trades`);
     autoBackup();
@@ -1305,6 +1451,7 @@ async function loadAll() {
     if (activePage === 'history') { if (histTab === 'mt5') renderHistory(); else renderTable(); }
     if (activePage === 'missed') renderMissed();
     if (activePage === 'account') renderAccount();
+    if (activePage === 'propfirm') renderPropfirm();
     if (activePage === 'calendar') renderCalendar();
     if (activePage === 'analysis') renderAnalysis();
     if (activePage === 'settings') { renderPairTags(); renderStrategyTags(); renderAccountTags(); }
@@ -1753,6 +1900,230 @@ async function delAccount(id) {
   }
 }
 
+// ==================== Propfirm Dashboard ====================
+function pfStatusBadge(status) {
+  const map = {
+    phase1:   ['#4f8eff','rgba(79,142,255,0.12)'],
+    phase2:   ['#a855f7','rgba(168,85,247,0.12)'],
+    funded:   ['#00d97e','rgba(0,217,126,0.12)'],
+    failed:   ['#ff4d6a','rgba(255,77,106,0.12)'],
+    breached: ['#ff4d6a','rgba(255,77,106,0.12)']
+  };
+  const [c, bg] = map[status] || ['#888','rgba(128,128,128,0.1)'];
+  const label = T('pfstatus.' + status);
+  return `<span style="font-size:11px;font-weight:500;padding:3px 10px;border-radius:100px;background:${bg};color:${c};border:1px solid ${c}40;white-space:nowrap">${label}</span>`;
+}
+
+function renderPropfirm() {
+  const sel = document.getElementById('pf-select-challenge');
+  if (!sel) return;
+  if (!propfirmChallenges.length) {
+    sel.innerHTML = '';
+    document.getElementById('pf-empty').style.display = '';
+    document.getElementById('pf-content').style.display = 'none';
+    return;
+  }
+  if (!pfSelectedId || !propfirmChallenges.some(c => c.id === pfSelectedId)) {
+    pfSelectedId = propfirmChallenges[0].id;
+  }
+  sel.innerHTML = propfirmChallenges.map(c =>
+    `<option value="${c.id}" ${c.id === pfSelectedId ? 'selected' : ''}>${c.account} — ${c.firm_name || ''} (${T('pfstatus.' + c.status)})</option>`
+  ).join('');
+
+  const c = propfirmChallenges.find(x => x.id === pfSelectedId);
+  if (!c) { document.getElementById('pf-empty').style.display = ''; document.getElementById('pf-content').style.display = 'none'; return; }
+  document.getElementById('pf-empty').style.display = 'none';
+  document.getElementById('pf-content').style.display = '';
+
+  document.getElementById('pf-size').textContent = c.account_size ? '$' + Number(c.account_size).toLocaleString() : '—';
+  document.getElementById('pf-status').innerHTML = pfStatusBadge(c.status);
+  document.getElementById('pf-target').textContent = (c.profit_target_pct !== null && c.profit_target_pct !== undefined && c.profit_target_pct !== '') ? c.profit_target_pct + '%' : '—';
+  document.getElementById('pf-started').textContent = c.started_at || '—';
+  document.getElementById('pf-maxdaily').textContent = (c.max_daily_dd_pct !== null && c.max_daily_dd_pct !== undefined && c.max_daily_dd_pct !== '') ? c.max_daily_dd_pct + '%' : '—';
+  document.getElementById('pf-maxtotal').textContent = (c.max_total_dd_pct !== null && c.max_total_dd_pct !== undefined && c.max_total_dd_pct !== '') ? c.max_total_dd_pct + '%' : '—';
+  document.getElementById('pf-note-wrap').textContent = c.note ? ('📝 ' + c.note) : '';
+
+  // สถิติเทรดเฉพาะบัญชีนี้ (กรองด้วย source_account แบบเดียวกับ hist-facct/acc-filter-acct)
+  const pfTrades = trades.filter(t => t.source_account === c.account);
+  const s = calcStats(pfTrades);
+  document.getElementById('pf-total').textContent = pfTrades.length;
+  const wrEl = document.getElementById('pf-wr'), pnlEl = document.getElementById('pf-pnl'), ddEl = document.getElementById('pf-maxdd');
+  if (!s) {
+    wrEl.textContent = '—'; pnlEl.textContent = '—'; pnlEl.className = 'stat-val'; ddEl.textContent = '—';
+  } else {
+    wrEl.textContent = ((s.wins.length / s.withPnl.length) * 100).toFixed(1) + '%';
+    pnlEl.textContent = (s.total >= 0 ? '+' : '') + s.total.toFixed(2) + '$';
+    pnlEl.className = 'stat-val ' + (s.total >= 0 ? 'pos' : 'neg');
+    ddEl.textContent = '-' + s.maxDD.toFixed(2) + '$';
+  }
+
+  // Payout
+  const payouts = propfirmPayouts.filter(p => p.challenge_id === c.id).sort((a, b) => new Date(b.date) - new Date(a.date));
+  const totalUsd = payouts.reduce((s, p) => s + (parseFloat(p.amount_usd) || 0), 0);
+  const totalThb = payouts.reduce((s, p) => s + (parseFloat(p.amount_thb) || 0), 0);
+  document.getElementById('pf-payout-total-usd').textContent = '+' + totalUsd.toFixed(2) + '$';
+  document.getElementById('pf-payout-total-thb').textContent = '+฿' + totalThb.toLocaleString();
+  const tbody = document.getElementById('pf-payout-tbody');
+  const empty = document.getElementById('pf-payout-empty');
+  if (!payouts.length) { tbody.innerHTML = ''; empty.style.display = ''; }
+  else {
+    empty.style.display = 'none';
+    tbody.innerHTML = payouts.map(p => `<tr>
+      <td class="mono" style="font-size:11px">${p.date}</td>
+      <td><span class="pnl-pos">+${parseFloat(p.amount_usd || 0).toFixed(2)}$</span></td>
+      <td><span class="pnl-pos">+${parseFloat(p.amount_thb || 0).toLocaleString()}</span></td>
+      <td style="font-size:11px;color:var(--text2)">${p.note || '—'}</td>
+      <td style="white-space:nowrap"><button class="tbl-btn del" data-del-payout="${p.id}" onclick="delPayout(${p.id})">✕</button></td>
+    </tr>`).join('');
+  }
+}
+
+function selectChallenge(id) {
+  pfSelectedId = parseInt(id);
+  renderPropfirm();
+}
+
+function populatePfAcctSuggestions() {
+  const dl = document.getElementById('pf-acct-suggestions');
+  if (!dl) return;
+  const accts = [...new Set(trades.filter(t => t.source_account).map(t => t.source_account))];
+  dl.innerHTML = accts.map(a => `<option value="${a}">`).join('');
+}
+
+function openAddChallenge() {
+  pfEditId = null;
+  document.getElementById('pf-challenge-modal-title').textContent = T('modal.addchallenge');
+  populatePfAcctSuggestions();
+  ['pf-m-account', 'pf-m-firm', 'pf-m-size', 'pf-m-target', 'pf-m-maxdaily', 'pf-m-maxtotal', 'pf-m-note'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('pf-m-status').value = 'phase1';
+  document.getElementById('pf-m-started').value = new Date().toISOString().split('T')[0];
+  document.getElementById('pf-challenge-modal').classList.add('open');
+}
+
+function openEditChallenge() {
+  const c = propfirmChallenges.find(x => x.id === pfSelectedId); if (!c) return;
+  pfEditId = c.id;
+  document.getElementById('pf-challenge-modal-title').textContent = T('modal.editchallenge');
+  populatePfAcctSuggestions();
+  document.getElementById('pf-m-account').value = c.account || '';
+  document.getElementById('pf-m-firm').value = c.firm_name || '';
+  document.getElementById('pf-m-size').value = c.account_size ?? '';
+  document.getElementById('pf-m-status').value = c.status || 'phase1';
+  document.getElementById('pf-m-started').value = c.started_at || '';
+  document.getElementById('pf-m-target').value = c.profit_target_pct ?? '';
+  document.getElementById('pf-m-maxdaily').value = c.max_daily_dd_pct ?? '';
+  document.getElementById('pf-m-maxtotal').value = c.max_total_dd_pct ?? '';
+  document.getElementById('pf-m-note').value = c.note || '';
+  document.getElementById('pf-challenge-modal').classList.add('open');
+}
+
+async function saveChallenge() {
+  const row = {
+    account: document.getElementById('pf-m-account').value.trim(),
+    firm_name: document.getElementById('pf-m-firm').value.trim(),
+    account_size: parseFloat(document.getElementById('pf-m-size').value) || null,
+    status: document.getElementById('pf-m-status').value,
+    started_at: document.getElementById('pf-m-started').value || null,
+    profit_target_pct: parseFloat(document.getElementById('pf-m-target').value),
+    max_daily_dd_pct: parseFloat(document.getElementById('pf-m-maxdaily').value),
+    max_total_dd_pct: parseFloat(document.getElementById('pf-m-maxtotal').value),
+    note: document.getElementById('pf-m-note').value,
+  };
+  if (isNaN(row.profit_target_pct)) row.profit_target_pct = null;
+  if (isNaN(row.max_daily_dd_pct)) row.max_daily_dd_pct = null;
+  if (isNaN(row.max_total_dd_pct)) row.max_total_dd_pct = null;
+  if (!row.account) { toast(T('js.fillaccount')); return; }
+  try {
+    if (pfEditId) {
+      await sbUpdate('propfirm_challenge', pfEditId, row);
+      const idx = propfirmChallenges.findIndex(x => x.id === pfEditId);
+      if (idx >= 0) propfirmChallenges[idx] = { ...propfirmChallenges[idx], ...row };
+    } else {
+      row.id = Date.now();
+      await sbInsert('propfirm_challenge', row);
+      propfirmChallenges.unshift(row);
+      pfSelectedId = row.id;
+    }
+    document.getElementById('pf-challenge-modal').classList.remove('open');
+    renderPropfirm();
+    toast(pfEditId ? T('js.edited') : T('js.challengeadded'));
+  } catch { toast(T('js.savefail2')); }
+}
+
+async function delChallenge() {
+  const id = pfSelectedId;
+  const btn = document.getElementById('pf-del-challenge-btn');
+  if (delPfConfirm === id) {
+    clearTimeout(delPfTimer);
+    delPfConfirm = null;
+    try {
+      await sbDelete('propfirm_challenge', id);
+      const linked = propfirmPayouts.filter(p => p.challenge_id === id);
+      for (const p of linked) { await sbDelete('propfirm_payout', p.id); }
+      propfirmPayouts = propfirmPayouts.filter(p => p.challenge_id !== id);
+      propfirmChallenges = propfirmChallenges.filter(c => c.id !== id);
+      pfSelectedId = null;
+      renderPropfirm();
+      toast(T('js.deleted'));
+    } catch { toast(T('js.delfail')); }
+  } else {
+    delPfConfirm = id;
+    if (btn) btn.textContent = T('js.confirm');
+    delPfTimer = setTimeout(() => { delPfConfirm = null; if (btn) btn.textContent = '✕'; }, 3000);
+  }
+}
+
+function openAddPayout() {
+  if (!pfSelectedId) return;
+  document.getElementById('pf-p-date').value = new Date().toISOString().split('T')[0];
+  ['pf-p-usd', 'pf-p-thb', 'pf-p-note'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('pf-payout-modal').classList.add('open');
+}
+
+async function savePayout() {
+  const row = {
+    challenge_id: pfSelectedId,
+    date: document.getElementById('pf-p-date').value,
+    amount_usd: parseFloat(document.getElementById('pf-p-usd').value) || 0,
+    amount_thb: parseFloat(document.getElementById('pf-p-thb').value) || 0,
+    note: document.getElementById('pf-p-note').value,
+  };
+  if (!row.date) { toast(T('js.fillname')); return; }
+  row.id = Date.now();
+  try {
+    await sbInsert('propfirm_payout', row);
+    propfirmPayouts.unshift(row);
+    document.getElementById('pf-payout-modal').classList.remove('open');
+    renderPropfirm();
+    toast(T('js.payoutadded'));
+  } catch { toast(T('js.savefail2')); }
+}
+
+async function delPayout(id) {
+  if (delPayoutConfirm === id) {
+    clearTimeout(delPayoutTimer);
+    delPayoutConfirm = null;
+    try {
+      await sbDelete('propfirm_payout', id);
+      propfirmPayouts = propfirmPayouts.filter(p => p.id !== id);
+      renderPropfirm();
+      toast(T('js.deleted'));
+    } catch { toast(T('js.delfail')); }
+  } else {
+    if (delPayoutConfirm !== null) {
+      const prev = document.querySelector(`[data-del-payout="${delPayoutConfirm}"]`);
+      if (prev) prev.textContent = '✕';
+    }
+    delPayoutConfirm = id;
+    const btn = document.querySelector(`[data-del-payout="${id}"]`);
+    if (btn) btn.textContent = T('js.confirm');
+    delPayoutTimer = setTimeout(() => {
+      delPayoutConfirm = null;
+      if (btn) btn.textContent = '✕';
+    }, 3000);
+  }
+}
+
 function tradeToRow(t) {
   return {
     id: t.id,
@@ -1880,7 +2251,7 @@ function showPage(n) {
   document.getElementById('page-' + n).classList.add('active');
   const navEl = document.querySelector('.nav-item[data-page="'+n+'"]');
   if (navEl) { navEl.classList.add('active'); }
-  if (['history','calendar','missed','analysis','calculator'].includes(n)) openNavGroup();
+  if (['history','calendar','missed','analysis','calculator','propfirm'].includes(n)) openNavGroup();
   localStorage.setItem('lastPage', n);
   if (n === 'overview') renderOverview();
   if (n === 'history') { if (histTab === 'mt5') renderHistory(); else renderTable(); }
@@ -1889,6 +2260,7 @@ function showPage(n) {
   if (n === 'calendar') renderCalendar();
   if (n === 'analysis') renderAnalysis();
   if (n === 'calculator') renderCalculator();
+  if (n === 'propfirm') renderPropfirm();
   if (n === 'settings') {
     renderPairTags(); renderStrategyTags(); renderAccountTags();
     const bt = localStorage.getItem('fx_journal_backup_time');
@@ -2744,7 +3116,7 @@ loadPool();
 document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
 document.getElementById('new-pair').addEventListener('keydown', e => { if (e.key === 'Enter') addPair(); });
 document.getElementById('new-strategy').addEventListener('keydown', e => { if (e.key === 'Enter') addStrategy(); });
-const validPages = ['overview','history','calendar','missed','account','settings','analysis','calculator'];
+const validPages = ['overview','history','calendar','missed','account','settings','analysis','calculator','propfirm'];
 const _lp = localStorage.getItem('lastPage');
 const lastPage = IS_VIEW ? 'overview' : (validPages.includes(_lp) ? _lp : 'table');
 showPage(lastPage);
@@ -2758,7 +3130,9 @@ function exportJSON() {
     trades: trades,
     missed_trades: missedTrades,
     accounts: accounts,
-    settings: settings
+    settings: settings,
+    propfirm_challenges: propfirmChallenges,
+    propfirm_payouts: propfirmPayouts
   };
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
@@ -2793,7 +3167,9 @@ function backupToLocal() {
       trades: trades,
       missed_trades: missedTrades,
       accounts: accounts,
-      settings: settings
+      settings: settings,
+      propfirm_challenges: propfirmChallenges,
+      propfirm_payouts: propfirmPayouts
     };
     localStorage.setItem('fx_journal_backup', JSON.stringify(data));
     localStorage.setItem('fx_journal_backup_time', new Date().toISOString());
@@ -2806,7 +3182,7 @@ function backupToLocal() {
 function autoBackup() {
   if (!trades.length && !accounts.length) return;
   try {
-    localStorage.setItem('fx_journal_backup', JSON.stringify({ backed_up_at: new Date().toISOString(), trades, missed_trades: missedTrades, accounts, settings }));
+    localStorage.setItem('fx_journal_backup', JSON.stringify({ backed_up_at: new Date().toISOString(), trades, missed_trades: missedTrades, accounts, settings, propfirm_challenges: propfirmChallenges, propfirm_payouts: propfirmPayouts }));
     localStorage.setItem('fx_journal_backup_time', new Date().toISOString());
   } catch(e) { console.warn('auto backup failed', e); }
 }
