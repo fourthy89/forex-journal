@@ -64,6 +64,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
 .metric-val{font-size:22px;font-weight:500;font-family:-apple-system,BlinkMacSystemFont,sans-serif}
 .metric-val.pos{color:var(--green)}
 .metric-val.neg{color:var(--red)}
+.metric-val.purple{color:var(--purple)}
+.metric-val.amber{color:var(--amber)}
 .filter-row{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
 .filter-row input,.filter-row select{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);padding:8px 12px;font-size:12px;outline:none;font-family:-apple-system,BlinkMacSystemFont,sans-serif;transition:border-color .15s}
 .filter-row input{flex:1;min-width:160px}
@@ -456,14 +458,22 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
     <div id="page-account" class="page">
       <div class="page-title" data-i18n="nav.account">บัญชี</div>
-      <div class="metrics" id="acc-metrics" style="grid-template-columns:repeat(4,1fr)">
+      <div class="metrics" id="acc-metrics" style="grid-template-columns:repeat(3,1fr)">
         <div class="metric">
-          <div class="metric-label" data-i18n="acc.profit">กำไรถอนรวม</div>
+          <div class="metric-label" data-i18n="acc.withdrawal">ถอนกำไรรวม</div>
           <div class="metric-val pos" id="acc-profit">—</div>
         </div>
         <div class="metric">
           <div class="metric-label" data-i18n="acc.deposit">ฝากรวม</div>
           <div class="metric-val neg" id="acc-deposit">—</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label" data-i18n="acc.fundingchallenge">ค่า Funding Challenge รวม</div>
+          <div class="metric-val purple" id="acc-funding">—</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label" data-i18n="acc.expenses">ค่าใช้จ่ายรวม</div>
+          <div class="metric-val amber" id="acc-expenses">—</div>
         </div>
         <div class="metric">
           <div class="metric-label" data-i18n="acc.net">Net</div>
@@ -476,7 +486,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       </div>
       <div class="metrics" style="grid-template-columns:repeat(3,1fr);margin-bottom:16px">
         <div class="metric">
-          <div class="metric-label" data-i18n="acc.profitthb">ถอนรวม (฿)</div>
+          <div class="metric-label" data-i18n="acc.withdrawalthb">ถอนรวม (฿)</div>
           <div class="metric-val pos" id="acc-thb-profit">—</div>
         </div>
         <div class="metric">
@@ -489,8 +499,13 @@ tr:hover td{background:rgba(255,255,255,.02)}
         </div>
       </div>
       <div class="filter-row">
-        <select id="acc-filter-month" onchange="renderAccount()" style="min-width:130px"><option value="" data-i18n="filter.allmonths">ทุกเดือน</option></select>
-        <select id="acc-filter-type" onchange="renderAccount()"><option value="" data-i18n="filter.alltype">ทุกประเภท</option><option value="Profit">Profit</option><option value="Deposit">Deposit</option></select>
+        <div style="display:flex;align-items:center;gap:6px">
+          <input type="date" id="acc-filter-from" onchange="renderAccount()" style="background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);padding:7px 10px;font-size:12px;font-family:-apple-system,BlinkMacSystemFont,sans-serif"/>
+          <span style="color:var(--text3);font-size:12px">—</span>
+          <input type="date" id="acc-filter-to" onchange="renderAccount()" style="background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);padding:7px 10px;font-size:12px;font-family:-apple-system,BlinkMacSystemFont,sans-serif"/>
+          <button onclick="resetAccDateRange()" style="padding:7px 10px;background:transparent;border:1px solid var(--border2);border-radius:var(--radius);color:var(--text2);font-size:11px;cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,sans-serif"><span data-i18n="btn.reset">รีเซ็ต</span></button>
+        </div>
+        <select id="acc-filter-type" onchange="renderAccount()"><option value="" data-i18n="filter.alltype">ทุกประเภท</option><option value="Withdrawal">Withdrawal</option><option value="Deposit">Deposit</option><option value="Funding Challenge">Funding Challenge</option><option value="Expenses">Expenses</option></select>
         <select id="acc-filter-acct" onchange="renderAccount()"><option value="" data-i18n="filter.allacct">ทุกบัญชี</option></select>
         <button onclick="openAddAccount()" style="padding:7px 14px;background:var(--accent);border:none;border-radius:var(--radius);color:#fff;font-size:12px;cursor:pointer;margin-left:auto"><span data-i18n="btn.addrecord">เพิ่มรายการ</span></button>
       </div>
@@ -498,10 +513,10 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div id="acc-month-summary" style="display:none;margin-bottom:1rem;padding:12px 16px;background:var(--bg2);border:1px solid var(--card-bdr);border-radius:var(--radius-lg)">
         <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin-bottom:10px" id="acc-month-label" data-i18n="acc.monthlabel">สรุปเดือน</div>
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
-          <div><div style="font-size:10px;color:var(--text3);font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin-bottom:4px" data-i18n="ms.profit">กำไรถอน ($)</div><div class="mono pos" id="ms-profit" style="font-size:16px;font-weight:500">—</div></div>
+          <div><div style="font-size:10px;color:var(--text3);font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin-bottom:4px" data-i18n="ms.withdrawal">กำไรถอน ($)</div><div class="mono pos" id="ms-profit" style="font-size:16px;font-weight:500">—</div></div>
           <div><div style="font-size:10px;color:var(--text3);font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin-bottom:4px" data-i18n="ms.deposit">ฝาก ($)</div><div class="mono neg" id="ms-deposit" style="font-size:16px;font-weight:500">—</div></div>
           <div><div style="font-size:10px;color:var(--text3);font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin-bottom:4px" data-i18n="ms.net">Net ($)</div><div class="mono" id="ms-net" style="font-size:16px;font-weight:500">—</div></div>
-          <div><div style="font-size:10px;color:var(--text3);font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin-bottom:4px" data-i18n="ms.profitthb">กำไรถอน (฿)</div><div class="mono pos" id="ms-profit-thb" style="font-size:16px;font-weight:500">—</div></div>
+          <div><div style="font-size:10px;color:var(--text3);font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin-bottom:4px" data-i18n="ms.withdrawalthb">กำไรถอน (฿)</div><div class="mono pos" id="ms-profit-thb" style="font-size:16px;font-weight:500">—</div></div>
           <div><div style="font-size:10px;color:var(--text3);font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin-bottom:4px" data-i18n="ms.depositthb">ฝาก (฿)</div><div class="mono neg" id="ms-deposit-thb" style="font-size:16px;font-weight:500">—</div></div>
           <div><div style="font-size:10px;color:var(--text3);font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin-bottom:4px" data-i18n="ms.netthb">Net (฿)</div><div class="mono" id="ms-net-thb" style="font-size:16px;font-weight:500">—</div></div>
         </div>
@@ -578,7 +593,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div class="settings-block">
         <h3 style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;letter-spacing:.03em">Version</h3>
         <div style="display:flex;align-items:baseline;gap:10px">
-          <span style="font-size:20px;font-weight:500;font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:var(--accent)">v5.8</span>
+          <span style="font-size:20px;font-weight:500;font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:var(--accent)">v5.9</span>
           <span style="font-size:11px;color:var(--text3);font-family:-apple-system,BlinkMacSystemFont,sans-serif">FX Journal</span>
         </div>
       </div>
@@ -732,7 +747,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <div class="form-grid">
       <div class="fg"><label data-i18n="lbl.date">วันที่</label><input type="date" id="acc-m-date"/></div>
       <div class="fg"><label data-i18n="lbl.acctype">ประเภท</label>
-        <select id="acc-m-type"><option value="Profit" data-i18n="opt.profit">Profit (ถอนกำไร)</option><option value="Deposit" data-i18n="opt.deposit">Deposit (ฝาก)</option></select>
+        <select id="acc-m-type"><option value="Withdrawal" data-i18n="opt.withdrawal">Withdrawal (ถอนกำไร)</option><option value="Deposit" data-i18n="opt.deposit">Deposit (ฝาก)</option><option value="Funding Challenge" data-i18n="opt.fundingchallenge">Funding Challenge (ซื้อกองทุนมาสอบ)</option><option value="Expenses" data-i18n="opt.expenses">Expenses (ค่าใช้จ่าย)</option></select>
       </div>
       <div class="fg full"><label data-i18n="th.name">ชื่อ</label><input type="text" id="acc-m-name" data-i18n-ph="ph.accname" placeholder="เช่น XM K.MK ถอนกำไร"/></div>
       <div class="fg full"><label data-i18n="th.acct">บัญชี</label>
@@ -907,6 +922,8 @@ const THEMES = {
     '--green':'#00d97e','--green-bg':'rgba(0,217,126,0.08)',
     '--red':'#ff4d6a','--red-bg':'rgba(255,77,106,0.08)',
     '--accent':'#4f8eff','--accent-bg':'rgba(79,142,255,0.1)',
+    '--purple':'#b87cff','--purple-bg':'rgba(184,124,255,0.08)',
+    '--amber':'#ffa94d','--amber-bg':'rgba(255,169,77,0.08)',
     '--cal-pos-bg':'rgba(0,105,55,0.38)','--cal-neg-bg':'rgba(115,0,30,0.4)',
     '--chart-grid':'rgba(255,255,255,0.05)','--chart-tick':'#4a5060',
     '--buy-box-bg':'rgba(0,217,126,0.08)','--buy-box-bdr':'rgba(0,217,126,0.22)',
@@ -920,6 +937,8 @@ const THEMES = {
     '--green':'#00a860','--green-bg':'rgba(0,168,96,0.05)',
     '--red':'#e02040','--red-bg':'rgba(224,32,64,0.05)',
     '--accent':'#2060e0','--accent-bg':'rgba(32,96,224,0.08)',
+    '--purple':'#7c3aed','--purple-bg':'rgba(124,58,237,0.05)',
+    '--amber':'#b45309','--amber-bg':'rgba(180,83,9,0.05)',
     '--cal-pos-bg':'rgba(0,168,96,0.18)','--cal-neg-bg':'rgba(224,32,64,0.15)',
     '--chart-grid':'rgba(0,0,0,0.08)','--chart-tick':'#5a6478',
     '--buy-box-bg':'rgba(0,168,96,0.12)','--buy-box-bdr':'rgba(0,168,96,0.40)',
@@ -1009,11 +1028,12 @@ const I18N = {
     'empty.table':'ยังไม่มีข้อมูล — เริ่มบันทึกเทรดแรกได้เลย',
     'empty.missed':'ยังไม่มีเทรดที่พลาด',
     'pg.prev':'← ก่อนหน้า','pg.next':'ถัดไป →',
-    'acc.profit':'กำไรถอนรวม','acc.deposit':'ฝากรวม','acc.net':'สุทธิ',
-    'acc.count':'รายการทั้งหมด','acc.profitthb':'ถอนรวม (฿)',
+    'acc.withdrawal':'กำไรถอนรวม','acc.deposit':'ฝากรวม','acc.net':'สุทธิ',
+    'acc.count':'รายการทั้งหมด','acc.withdrawalthb':'ถอนรวม (฿)',
     'acc.depositthb':'ฝากรวม (฿)','acc.netthb':'สุทธิ (฿)',
-    'ms.profit':'กำไรถอน $','ms.deposit':'ฝาก $','ms.net':'สุทธิ $',
-    'ms.profitthb':'กำไรถอน (฿)','ms.depositthb':'ฝาก (฿)','ms.netthb':'สุทธิ (฿)',
+    'acc.fundingchallenge':'ค่า Funding Challenge รวม','acc.expenses':'ค่าใช้จ่ายรวม',
+    'ms.withdrawal':'กำไรถอน $','ms.deposit':'ฝาก $','ms.net':'สุทธิ $',
+    'ms.withdrawalthb':'กำไรถอน (฿)','ms.depositthb':'ฝาก (฿)','ms.netthb':'สุทธิ (฿)',
     'set.pairs':'คู่เงิน','set.strategies':'กลยุทธ์','set.accounts':'บัญชีเทรด',
     'set.theme':'ธีมสี','set.backup':'สำรองและส่งออก',
     'ov.result':'บัญชี','ov.thisweek':'สัปดาห์นี้','ov.withdrawal':'ถอนกำไรรวม','ov.tradesummary':'สรุปการเทรด',
@@ -1035,7 +1055,8 @@ const I18N = {
     'lbl.missedreason':'เหตุผลที่พลาด','ph.missedreason':'เช่น เข้าไม่ทัน, ลังเล, ไม่อยู่หน้าจอ',
     'ph.missednote':'รายละเอียดแผน, สิ่งที่เรียนรู้...','btn.savemissed':'บันทึกแผน',
     'modal.addacc':'เพิ่มรายการ','modal.editacc':'แก้ไขรายการ',
-    'lbl.acctype':'ประเภท','opt.profit':'Profit (ถอนกำไร)','opt.deposit':'Deposit (ฝาก)',
+    'lbl.acctype':'ประเภท','opt.withdrawal':'Withdrawal (ถอนกำไร)','opt.deposit':'Deposit (ฝาก)',
+    'opt.fundingchallenge':'Funding Challenge (ซื้อกองทุนมาสอบ)','opt.expenses':'Expenses (ค่าใช้จ่าย)',
     'ph.accname':'เช่น XM K.MK ถอนกำไร',
     'ph.amtusd':'เช่น 50 หรือ -32.02','ph.amtthb':'เช่น 1571 หรือ -1000',
     'lbl.exrate':'อัตราแลกเปลี่ยน',
@@ -1112,11 +1133,12 @@ const I18N = {
     'empty.table':'No data — start recording your first trade',
     'empty.missed':'No missed trades',
     'pg.prev':'← Previous','pg.next':'Next →',
-    'acc.profit':'Total Withdrawal','acc.deposit':'Total Deposit','acc.net':'Net',
-    'acc.count':'Total Records','acc.profitthb':'Withdrawal (฿)',
+    'acc.withdrawal':'Total Withdrawal','acc.deposit':'Total Deposit','acc.net':'Net',
+    'acc.count':'Total Records','acc.withdrawalthb':'Withdrawal (฿)',
     'acc.depositthb':'Deposit (฿)','acc.netthb':'Net (฿)',
-    'ms.profit':'Profit $','ms.deposit':'Deposit $','ms.net':'Net $',
-    'ms.profitthb':'Profit (฿)','ms.depositthb':'Deposit (฿)','ms.netthb':'Net (฿)',
+    'acc.fundingchallenge':'Total Funding Challenge','acc.expenses':'Total Expenses',
+    'ms.withdrawal':'Withdrawal $','ms.deposit':'Deposit $','ms.net':'Net $',
+    'ms.withdrawalthb':'Withdrawal (฿)','ms.depositthb':'Deposit (฿)','ms.netthb':'Net (฿)',
     'set.pairs':'Currency Pairs','set.strategies':'Strategies','set.accounts':'Trading Accounts',
     'set.theme':'Color Theme','set.backup':'Backup & Export',
     'ov.result':'Account','ov.thisweek':'This Week','ov.withdrawal':'Total Withdrawal','ov.tradesummary':'Trade Summary',
@@ -1138,7 +1160,8 @@ const I18N = {
     'lbl.missedreason':'Reason for Missing','ph.missedreason':'e.g. too late, hesitated, not at screen',
     'ph.missednote':'Plan details, lessons learned...','btn.savemissed':'Save Plan',
     'modal.addacc':'Add Record','modal.editacc':'Edit Record',
-    'lbl.acctype':'Type','opt.profit':'Profit (Withdrawal)','opt.deposit':'Deposit',
+    'lbl.acctype':'Type','opt.withdrawal':'Withdrawal','opt.deposit':'Deposit',
+    'opt.fundingchallenge':'Funding Challenge','opt.expenses':'Expenses',
     'ph.accname':'e.g. XM K.MK withdrawal',
     'ph.amtusd':'e.g. 50 or -32.02','ph.amtthb':'e.g. 1571 or -1000',
     'lbl.exrate':'Exchange Rate',
@@ -1247,26 +1270,6 @@ async function sbUpsert(table, data) {
   return r.json();
 }
 
-function populateMonthFilters() {
-  const thaiMonths = ['','ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
-  const start = new Date(2025, 7); // ส.ค. 2025
-  const now = new Date();
-  const end = new Date(now.getFullYear(), now.getMonth());
-  const ids = ['acc-filter-month'];
-  ids.forEach(id => {
-    const sel = document.getElementById(id);
-    if (!sel) return;
-    const cur = sel.value;
-    sel.innerHTML = `<option value="">${T('filter.allmonths')}</option>`;
-    for (let d = new Date(start); d <= end; d.setMonth(d.getMonth() + 1)) {
-      const val = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0');
-      const label = thaiMonths[d.getMonth()+1] + ' ' + d.getFullYear();
-      sel.innerHTML += `<option value="${val}">${label}</option>`;
-    }
-    if (cur) sel.value = cur;
-  });
-}
-
 function setS(state, msg) {
   document.getElementById('sdot').className = 'sync-dot ' + (state === 'ok' ? 'ok' : state === 'err' ? 'err' : 'spin');
   document.getElementById('stxt').textContent = msg;
@@ -1295,7 +1298,6 @@ async function loadAll() {
     setS('ok', `connected · ${trades.length} trades`);
     autoBackup();
     applySettings();
-    populateMonthFilters();
     // populate stats filters
     const pairs = [...new Set(trades.map(t => t.symbol).filter(Boolean))];
     const strategies = [...new Set(trades.map(t => t.strategy).filter(Boolean))];
@@ -1563,13 +1565,29 @@ function sortAccount(col) {
 }
 
 function renderAccount() {
-  const fm = document.getElementById('acc-filter-month').value;
+  const accFrom = document.getElementById('acc-filter-from').value;
+  const accTo = document.getElementById('acc-filter-to').value;
   const ft = document.getElementById('acc-filter-type').value;
   const fa = document.getElementById('acc-filter-acct').value;
 
+  // ป้าย/สี ต่อประเภทรายการ — 'Profit' ของเดิม = กลุ่มเดียวกับ 'Withdrawal' ชื่อใหม่ (ข้อมูลเก่าไม่ต้อง migrate)
+  const ACC_TYPES = {
+    'Profit':            { label: 'Withdrawal',        color: 'var(--green)',  bg: 'var(--green-bg)',  bdr: '0,217,126',   credit: true },
+    'Withdrawal':        { label: 'Withdrawal',        color: 'var(--green)',  bg: 'var(--green-bg)',  bdr: '0,217,126',   credit: true },
+    'Deposit':           { label: 'Deposit',           color: 'var(--red)',    bg: 'var(--red-bg)',    bdr: '255,77,106',  credit: false },
+    'Funding Challenge': { label: 'Funding Challenge', color: 'var(--purple)', bg: 'var(--purple-bg)', bdr: '184,124,255', credit: false },
+    'Expenses':          { label: 'Expenses',          color: 'var(--amber)',  bg: 'var(--amber-bg)',  bdr: '255,169,77',  credit: false },
+  };
+  const isWithdrawal = a => a.type === 'Profit' || a.type === 'Withdrawal';
+  const isDeposit = a => a.type === 'Deposit';
+  const isFunding = a => a.type === 'Funding Challenge';
+  const isExpense = a => a.type === 'Expenses';
+  const sumWhere = (arr, pred, field) => arr.filter(pred).reduce((s, a) => s + (parseFloat(a[field]) || 0), 0);
+
   const filtered = accounts.filter(a =>
-    (!fm || (a.date && a.date.startsWith(fm))) &&
-    (!ft || a.type === ft) &&
+    (!accFrom || (a.date && a.date >= accFrom)) &&
+    (!accTo || (a.date && a.date <= accTo)) &&
+    (!ft || a.type === ft || (ft === 'Withdrawal' && a.type === 'Profit')) &&
     (!fa || a.account === fa)
   ).sort((a, b) => {
     let av = a[accSortCol] ?? '', bv = b[accSortCol] ?? '';
@@ -1585,37 +1603,49 @@ function renderAccount() {
   });
 
   // metrics รวมทั้งหมด
-  const totalProfit = accounts.filter(a => a.type === 'Profit').reduce((s, a) => s + (parseFloat(a.amount_usd) || 0), 0);
-  const totalDeposit = accounts.filter(a => a.type === 'Deposit').reduce((s, a) => s + (parseFloat(a.amount_usd) || 0), 0);
-  const totalProfitThb = accounts.filter(a => a.type === 'Profit').reduce((s, a) => s + (parseFloat(a.amount_thb) || 0), 0);
-  const totalDepositThb = accounts.filter(a => a.type === 'Deposit').reduce((s, a) => s + (parseFloat(a.amount_thb) || 0), 0);
-  const net = totalProfit + totalDeposit;
-  const netThb = totalProfitThb + totalDepositThb;
-  document.getElementById('acc-profit').textContent = '+' + totalProfit.toFixed(2) + '$';
+  const totalWithdrawal = sumWhere(accounts, isWithdrawal, 'amount_usd');
+  const totalDeposit = sumWhere(accounts, isDeposit, 'amount_usd');
+  const totalFunding = sumWhere(accounts, isFunding, 'amount_usd');
+  const totalExpenses = sumWhere(accounts, isExpense, 'amount_usd');
+  const totalWithdrawalThb = sumWhere(accounts, isWithdrawal, 'amount_thb');
+  const totalDepositThb = sumWhere(accounts, isDeposit, 'amount_thb');
+  const totalFundingThb = sumWhere(accounts, isFunding, 'amount_thb');
+  const totalExpensesThb = sumWhere(accounts, isExpense, 'amount_thb');
+  const net = totalWithdrawal + totalDeposit + totalFunding + totalExpenses;
+  const netThb = totalWithdrawalThb + totalDepositThb + totalFundingThb + totalExpensesThb;
+  document.getElementById('acc-profit').textContent = '+' + totalWithdrawal.toFixed(2) + '$';
   document.getElementById('acc-deposit').textContent = totalDeposit.toFixed(2) + '$';
+  document.getElementById('acc-funding').textContent = totalFunding.toFixed(2) + '$';
+  document.getElementById('acc-expenses').textContent = totalExpenses.toFixed(2) + '$';
   const netEl = document.getElementById('acc-net');
   netEl.textContent = (net >= 0 ? '+' : '') + net.toFixed(2) + '$';
   netEl.className = 'metric-val ' + (net >= 0 ? 'pos' : 'neg');
   document.getElementById('acc-count').textContent = accounts.length;
   // ช่องรวมบาทแยก
-  document.getElementById('acc-thb-profit').textContent = '+฿' + totalProfitThb.toLocaleString();
+  document.getElementById('acc-thb-profit').textContent = '+฿' + totalWithdrawalThb.toLocaleString();
   document.getElementById('acc-thb-deposit').textContent = '฿' + totalDepositThb.toLocaleString();
   const thbNetEl = document.getElementById('acc-thb-net');
   thbNetEl.textContent = (netThb >= 0 ? '+฿' : '฿') + netThb.toLocaleString();
   thbNetEl.className = 'metric-val ' + (netThb >= 0 ? 'pos' : 'neg');
 
-  // สรุปเดือนที่เลือก
+  // สรุปช่วงวันที่ที่เลือก (เดิมเป็นสรุปเดือนเดียว ตอนนี้รองรับช่วงวันที่ใดก็ได้)
   const mSummary = document.getElementById('acc-month-summary');
-  if (fm) {
-    const monthNames = {'2025-08':'ส.ค. 2025','2025-09':'ก.ย. 2025','2025-10':'ต.ค. 2025','2025-11':'พ.ย. 2025','2025-12':'ธ.ค. 2025','2026-01':'ม.ค. 2026','2026-02':'ก.พ. 2026','2026-03':'มี.ค. 2026'};
-    document.getElementById('acc-month-label').textContent = 'สรุป ' + (monthNames[fm] || fm);
-    const mData = accounts.filter(a => a.date && a.date.startsWith(fm));
-    const mp = mData.filter(a => a.type === 'Profit').reduce((s, a) => s + (parseFloat(a.amount_usd)||0), 0);
-    const md = mData.filter(a => a.type === 'Deposit').reduce((s, a) => s + (parseFloat(a.amount_usd)||0), 0);
-    const mn = mp + md;
-    const mpThb = mData.filter(a => a.type === 'Profit').reduce((s, a) => s + (parseFloat(a.amount_thb)||0), 0);
-    const mdThb = mData.filter(a => a.type === 'Deposit').reduce((s, a) => s + (parseFloat(a.amount_thb)||0), 0);
-    const mnThb = mpThb + mdThb;
+  if (accFrom || accTo) {
+    const fmtTH = s => { if (!s) return ''; const [y, m, d] = s.split('-'); return `${d}/${m}/${y}`; };
+    document.getElementById('acc-month-label').textContent = accFrom && accTo
+      ? `สรุป ${fmtTH(accFrom)} - ${fmtTH(accTo)}`
+      : accFrom ? `สรุปตั้งแต่ ${fmtTH(accFrom)}` : `สรุปจนถึง ${fmtTH(accTo)}`;
+    const mData = accounts.filter(a => (!accFrom || a.date >= accFrom) && (!accTo || a.date <= accTo));
+    const mp = sumWhere(mData, isWithdrawal, 'amount_usd');
+    const md = sumWhere(mData, isDeposit, 'amount_usd');
+    const mf = sumWhere(mData, isFunding, 'amount_usd');
+    const me = sumWhere(mData, isExpense, 'amount_usd');
+    const mn = mp + md + mf + me;
+    const mpThb = sumWhere(mData, isWithdrawal, 'amount_thb');
+    const mdThb = sumWhere(mData, isDeposit, 'amount_thb');
+    const mfThb = sumWhere(mData, isFunding, 'amount_thb');
+    const meThb = sumWhere(mData, isExpense, 'amount_thb');
+    const mnThb = mpThb + mdThb + mfThb + meThb;
     document.getElementById('ms-profit').textContent = mp > 0 ? '+' + mp.toFixed(2) + '$' : mp.toFixed(2) + '$';
     document.getElementById('ms-deposit').textContent = md.toFixed(2) + '$';
     const msNet = document.getElementById('ms-net');
@@ -1638,12 +1668,14 @@ function renderAccount() {
   tbody.innerHTML = filtered.map(a => {
     const usd = parseFloat(a.amount_usd);
     const thb = parseFloat(a.amount_thb);
-    const isProfit = a.type === 'Profit';
-    const usdStr = isProfit ? `<span class="pnl-pos">+${usd.toFixed(2)}$</span>` : `<span class="pnl-neg">${usd.toFixed(2)}$</span>`;
-    const thbStr = isProfit ? `<span class="pnl-pos">+${thb.toLocaleString()}</span>` : `<span class="pnl-neg">${thb.toLocaleString()}</span>`;
-    const badge = isProfit
-      ? `<span class="badge" style="background:var(--green-bg);color:var(--green);border:1px solid rgba(0,217,126,.2)">Profit</span>`
-      : `<span class="badge" style="background:var(--red-bg);color:var(--red);border:1px solid rgba(255,77,106,.2)">Deposit</span>`;
+    const st = ACC_TYPES[a.type] || ACC_TYPES['Deposit'];
+    const usdStr = st.credit
+      ? `<span class="pnl-pos">+${usd.toFixed(2)}$</span>`
+      : `<span style="color:${st.color};font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:11px">${usd.toFixed(2)}$</span>`;
+    const thbStr = st.credit
+      ? `<span class="pnl-pos">+${thb.toLocaleString()}</span>`
+      : `<span style="color:${st.color};font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:11px">${thb.toLocaleString()}</span>`;
+    const badge = `<span class="badge" style="background:${st.bg};color:${st.color};border:1px solid rgba(${st.bdr},.2)">${st.label}</span>`;
     return `<tr>
       <td class="mono" style="font-size:11px">${a.date}</td>
       <td style="font-size:12px">${a.name}</td>
@@ -1662,6 +1694,14 @@ function renderAccount() {
   }).join('');
 }
 
+function resetAccDateRange() {
+  const f = document.getElementById('acc-filter-from');
+  const t = document.getElementById('acc-filter-to');
+  if (f) f.value = '';
+  if (t) t.value = '';
+  renderAccount();
+}
+
 let accEditId = null;
 
 function calcAccThb() {
@@ -1675,7 +1715,7 @@ function openAddAccount() {
   document.getElementById('acc-modal-title').textContent = T('modal.addacc');
   ['acc-m-date','acc-m-name','acc-m-usd','acc-m-thb','acc-m-note','acc-m-rate-dep','acc-m-rate-wd'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('acc-m-date').value = new Date().toISOString().split('T')[0];
-  document.getElementById('acc-m-type').value = 'Profit';
+  document.getElementById('acc-m-type').value = 'Withdrawal';
   document.getElementById('acc-m-acct').value = 'XM K.MK (82952428)';
   document.getElementById('acc-modal').classList.add('open');
 }
@@ -1686,7 +1726,7 @@ function openEditAccount(id) {
   document.getElementById('acc-modal-title').textContent = T('modal.editacc');
   document.getElementById('acc-m-date').value = a.date || '';
   document.getElementById('acc-m-name').value = a.name || '';
-  document.getElementById('acc-m-type').value = a.type || 'Profit';
+  document.getElementById('acc-m-type').value = (a.type === 'Profit' ? 'Withdrawal' : a.type) || 'Withdrawal';
   document.getElementById('acc-m-acct').value = a.account || '';
   document.getElementById('acc-m-usd').value = a.amount_usd || '';
   document.getElementById('acc-m-thb').value = a.amount_thb || '';
@@ -2714,17 +2754,21 @@ function renderOverview() {
   }
   renderOverviewWeekCal();
   // บัญชี
-  const ap=accounts.filter(a=>a.type==='Profit').reduce((s,a)=>s+(parseFloat(a.amount_usd)||0),0);
+  const ap=accounts.filter(a=>a.type==='Profit'||a.type==='Withdrawal').reduce((s,a)=>s+(parseFloat(a.amount_usd)||0),0);
   const ad=accounts.filter(a=>a.type==='Deposit').reduce((s,a)=>s+(parseFloat(a.amount_usd)||0),0);
-  const apThb=accounts.filter(a=>a.type==='Profit').reduce((s,a)=>s+(parseFloat(a.amount_thb)||0),0);
+  const afund=accounts.filter(a=>a.type==='Funding Challenge').reduce((s,a)=>s+(parseFloat(a.amount_usd)||0),0);
+  const aexp=accounts.filter(a=>a.type==='Expenses').reduce((s,a)=>s+(parseFloat(a.amount_usd)||0),0);
+  const apThb=accounts.filter(a=>a.type==='Profit'||a.type==='Withdrawal').reduce((s,a)=>s+(parseFloat(a.amount_thb)||0),0);
   const adThb=accounts.filter(a=>a.type==='Deposit').reduce((s,a)=>s+(parseFloat(a.amount_thb)||0),0);
+  const afundThb=accounts.filter(a=>a.type==='Funding Challenge').reduce((s,a)=>s+(parseFloat(a.amount_thb)||0),0);
+  const aexpThb=accounts.filter(a=>a.type==='Expenses').reduce((s,a)=>s+(parseFloat(a.amount_thb)||0),0);
   // Result section
   const setAcc = (id, val, cls) => { const el=document.getElementById(id); if(el){el.textContent=val; if(cls) el.className='stat-val '+cls;} };
   setAcc('ov-acc-profit2','+'+ap.toFixed(2)+'$','pos'); 
   const p2=document.getElementById('ov-acc-profit-thb2'); if(p2) p2.textContent='+฿'+apThb.toLocaleString();
   setAcc('ov-acc-deposit2',ad.toFixed(2)+'$','neg');
   const d2=document.getElementById('ov-acc-deposit-thb2'); if(d2) d2.textContent='฿'+adThb.toLocaleString();
-  const an=ap+ad, anThb=apThb+adThb;
+  const an=ap+ad+afund+aexp, anThb=apThb+adThb+afundThb+aexpThb;
   setAcc('ov-acc-net2',(an>=0?'+':'')+an.toFixed(2)+'$',an>=0?'pos':'neg');
   const n2=document.getElementById('ov-acc-net-thb2'); if(n2) n2.textContent=(anThb>=0?'+฿':'฿')+anThb.toLocaleString();
 }
@@ -3072,7 +3116,6 @@ function setGlobalLang(lang) {
   localStorage.setItem('lang', lang);
   applyLang();
   applySettings();
-  populateMonthFilters();
   const active = localStorage.getItem('lastPage') || 'table';
   if (active === 'overview') renderOverview();
   else if (active === 'history') { if (histTab === 'mt5') renderHistory(); else renderTable(); }
