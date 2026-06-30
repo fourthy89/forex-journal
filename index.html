@@ -1407,7 +1407,7 @@ function openMissedModal(id) {
   missedEditId = id || null;
   document.getElementById('missed-modal-title').textContent = id ? T('modal.editmissed') : T('modal.addmissed');
   const msym = document.getElementById('m-sym');
-  msym.innerHTML = settings.pairs.map(p => `<option>${p}</option>`).join('');
+  msym.innerHTML = uniquePairs().map(p => `<option>${p}</option>`).join('');
   const mstr = document.getElementById('m-str');
   mstr.innerHTML = `<option value="">${T('sel.choose')}</option>` + settings.strategies.map(s => `<option>${s}</option>`).join('');
   if (id) {
@@ -1777,8 +1777,8 @@ function tradeToRow(t) {
 
 function applySettings() {
   const sym = document.getElementById('f-sym'), cur = sym.value;
-  sym.innerHTML = settings.pairs.map(p => `<option>${p}</option>`).join('');
-  if (settings.pairs.includes(cur)) sym.value = cur;
+  sym.innerHTML = uniquePairs().map(p => `<option>${p}</option>`).join('');
+  if (uniquePairs().includes(normalizePair(cur))) sym.value = normalizePair(cur);
   const str = document.getElementById('f-str'), scur = str.value;
   str.innerHTML = `<option value="">${T('sel.choose')}</option>` + settings.strategies.map(s => `<option>${s}</option>`).join('');
   if (settings.strategies.includes(scur)) str.value = scur;
@@ -1792,7 +1792,7 @@ function applySettings() {
   }
   // sync hist pair dropdown
   const histPairSel = document.getElementById('hist-fp');
-  if (histPairSel) histPairSel.innerHTML = `<option value="">${T('filter.allpairs')}</option>` + settings.pairs.map(p => `<option>${p}</option>`).join('');
+  if (histPairSel) histPairSel.innerHTML = `<option value="">${T('filter.allpairs')}</option>` + uniquePairs().map(p => `<option>${p}</option>`).join('');
   // sync account dropdowns จาก settings.accounts_list
   const acctOpts = settings.accounts_list.map(a => `<option>${a}</option>`).join('');
   const acctFilter = document.getElementById('acc-filter-acct');
@@ -1898,7 +1898,7 @@ function showPage(n) {
 }
 function openAddTradeModal() {
   const fsym = document.getElementById('f-sym');
-  if (fsym) { fsym.innerHTML = settings.pairs.map(p => `<option>${p}</option>`).join(''); }
+  if (fsym) { fsym.innerHTML = uniquePairs().map(p => `<option>${p}</option>`).join(''); }
   const fstr = document.getElementById('f-str');
   if (fstr) { fstr.innerHTML = `<option value="">${T('sel.choose')}</option>` + settings.strategies.map(s => `<option>${s}</option>`).join(''); }
   document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
@@ -2067,7 +2067,7 @@ function renderHistory() {
     (t.source === 'mt5' || (!t.source && String(t.id).length < 13)) &&
     (!histFrom || (t.date && t.date >= histFrom)) &&
     (!histTo   || (t.date && t.date <= histTo)) &&
-    (!fp   || t.symbol   === fp) &&
+    (!fp   || normalizePair(t.symbol) === fp) &&
     (!fs   || t.side     === fs) &&
     (!fstr || t.strategy === fstr) &&
     (!fses  || t.session  === fses) &&
@@ -2287,8 +2287,8 @@ function openEdit(id) {
   editId = id; editSide = t.side;
   document.getElementById('e-date').value = t.date || '';
   const esym = document.getElementById('e-sym');
-  esym.innerHTML = settings.pairs.map(p => `<option>${p}</option>`).join('');
-  esym.value = t.symbol || settings.pairs[0];
+  esym.innerHTML = uniquePairs().map(p => `<option>${p}</option>`).join('');
+  esym.value = normalizePair(t.symbol) || uniquePairs()[0];
   setEditSide(t.side);
   document.getElementById('e-en').value = t.entry || '';
   document.getElementById('e-ex').value = t.exit || '';
@@ -2582,6 +2582,11 @@ function normalizePair(sym) {
   }
   if (/^[A-Z]{6}/.test(s) && s.length > 6) return s.slice(0, 6);
   return s;
+}
+
+// รวมคู่เงินที่เป็น alias กัน (เช่น XAUUSDm/GOLD/XAUUSD) ให้เหลือชื่อเดียวสำหรับ dropdown — ใช้ normalizePair() เดิม
+function uniquePairs() {
+  return [...new Set(settings.pairs.map(normalizePair))];
 }
 
 function renderOverviewWeekCal() {
