@@ -458,7 +458,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
     <div id="page-account" class="page">
       <div class="page-title" data-i18n="nav.account">บัญชี</div>
-      <div class="metrics" id="acc-metrics" style="grid-template-columns:repeat(3,1fr)">
+      <div class="metrics" id="acc-metrics" style="grid-template-columns:repeat(4,1fr)">
         <div class="metric">
           <div class="metric-label" data-i18n="acc.withdrawal">ถอนกำไรรวม</div>
           <div class="metric-val pos" id="acc-profit">—</div>
@@ -475,16 +475,8 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <div class="metric-label" data-i18n="acc.expenses">ค่าใช้จ่ายรวม</div>
           <div class="metric-val amber" id="acc-expenses">—</div>
         </div>
-        <div class="metric">
-          <div class="metric-label" data-i18n="acc.net">Net</div>
-          <div class="metric-val" id="acc-net">—</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label" data-i18n="acc.count">รายการทั้งหมด</div>
-          <div class="metric-val" id="acc-count">—</div>
-        </div>
       </div>
-      <div class="metrics" style="grid-template-columns:repeat(3,1fr);margin-bottom:16px">
+      <div class="metrics" style="grid-template-columns:repeat(4,1fr)">
         <div class="metric">
           <div class="metric-label" data-i18n="acc.withdrawalthb">ถอนรวม (฿)</div>
           <div class="metric-val pos" id="acc-thb-profit">—</div>
@@ -494,8 +486,26 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <div class="metric-val neg" id="acc-thb-deposit">—</div>
         </div>
         <div class="metric">
+          <div class="metric-label" data-i18n="acc.fundingchallengethb">ค่า Funding Challenge รวม (฿)</div>
+          <div class="metric-val purple" id="acc-thb-funding">—</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label" data-i18n="acc.expensesthb">ค่าใช้จ่ายรวม (฿)</div>
+          <div class="metric-val amber" id="acc-thb-expenses">—</div>
+        </div>
+      </div>
+      <div class="metrics" style="grid-template-columns:repeat(3,1fr);margin-bottom:16px">
+        <div class="metric">
+          <div class="metric-label" data-i18n="acc.net">Net</div>
+          <div class="metric-val" id="acc-net">—</div>
+        </div>
+        <div class="metric">
           <div class="metric-label" data-i18n="acc.netthb">Net (฿)</div>
           <div class="metric-val" id="acc-thb-net">—</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label" data-i18n="acc.count">รายการทั้งหมด</div>
+          <div class="metric-val" id="acc-count">—</div>
         </div>
       </div>
       <div class="filter-row">
@@ -593,7 +603,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div class="settings-block">
         <h3 style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;letter-spacing:.03em">Version</h3>
         <div style="display:flex;align-items:baseline;gap:10px">
-          <span style="font-size:20px;font-weight:500;font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:var(--accent)">v5.9</span>
+          <span style="font-size:20px;font-weight:500;font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:var(--accent)">v5.10</span>
           <span style="font-size:11px;color:var(--text3);font-family:-apple-system,BlinkMacSystemFont,sans-serif">FX Journal</span>
         </div>
       </div>
@@ -655,7 +665,20 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div style="max-width:520px">
         <div style="margin-bottom:20px">
           <div class="stat-label" style="margin-bottom:10px" data-i18n="calc.symbol">Symbol</div>
-          <div id="calc-sym-btns" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+          <select id="calc-sym-select" onchange="calcSetSym(this.value)" style="width:100%;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);padding:9px 12px;font-size:13px;font-family:-apple-system,BlinkMacSystemFont,sans-serif">
+            <option value="XAUUSD">XAUUSD</option>
+            <option value="EURUSD">EURUSD</option>
+            <option value="GBPUSD">GBPUSD</option>
+            <option value="USDJPY">USDJPY</option>
+            <option value="NAS100">NAS100</option>
+            <option value="US30">US30</option>
+            <option value="BTCUSD">BTCUSD</option>
+          </select>
+        </div>
+        <div id="calc-ppv-override-wrap" style="margin-bottom:18px;display:none">
+          <label style="display:block;font-size:11px;color:var(--text2);letter-spacing:.04em;font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin-bottom:6px" id="calc-ppv-label"></label>
+          <input type="number" id="calc-ppv-override" min="0" step="0.01" style="background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);padding:9px 12px;font-size:13px;font-family:-apple-system,BlinkMacSystemFont,sans-serif;width:100%;outline:none;box-sizing:border-box">
+          <span id="calc-ppv-hint" style="display:block;font-size:11px;color:var(--amber);font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin-top:6px"></span>
         </div>
         <div class="fg" style="margin-bottom:18px">
           <label data-i18n="calc.balance">ทุนในบัญชี ($)</label>
@@ -1032,6 +1055,7 @@ const I18N = {
     'acc.count':'รายการทั้งหมด','acc.withdrawalthb':'ถอนรวม (฿)',
     'acc.depositthb':'ฝากรวม (฿)','acc.netthb':'สุทธิ (฿)',
     'acc.fundingchallenge':'ค่า Funding Challenge รวม','acc.expenses':'ค่าใช้จ่ายรวม',
+    'acc.fundingchallengethb':'ค่า Funding Challenge รวม (฿)','acc.expensesthb':'ค่าใช้จ่ายรวม (฿)',
     'ms.withdrawal':'กำไรถอน $','ms.deposit':'ฝาก $','ms.net':'สุทธิ $',
     'ms.withdrawalthb':'กำไรถอน (฿)','ms.depositthb':'ฝาก (฿)','ms.netthb':'สุทธิ (฿)',
     'set.pairs':'คู่เงิน','set.strategies':'กลยุทธ์','set.accounts':'บัญชีเทรด',
@@ -1090,6 +1114,11 @@ const I18N = {
     'nav.calculator':'คำนวณ Lot','calc.symbol':'Symbol','calc.balance':'ทุนในบัญชี ($)',
     'calc.risk':'ความเสี่ยง %','calc.entry':'ราคาเข้า','calc.sl':'Stop Loss',
     'calc.lotsize':'Lot Size','calc.riskamt':'เงินที่เสี่ยง','calc.sldist':'ระยะ SL','calc.perpip':'$/pip/lot',
+    'calc.ppvlabelpip':'$ ต่อ pip ต่อ 1.00 lot (ค่าจริงต่างกันได้ตามโบรก — ปรับให้ตรงก่อนใช้)',
+    'calc.ppvlabelpt':'$ ต่อ point ต่อ 1.00 lot (ค่าจริงต่างกันได้ตามโบรก — ปรับให้ตรงก่อนใช้)',
+    'calc.hintjpy':'ค่านี้ขึ้นกับเรท USDJPY ปัจจุบัน (≈1000 ÷ เรท) เช็คราคาล่าสุดแล้วปรับเลขนี้ก่อนใช้จริง',
+    'calc.hintidx':'ดัชนี (Index) ค่านี้ต่างกันได้มากตามโบรก พบตั้งแต่ $0.1 ถึง $10/point เช็คจาก MT5: คลิกขวา symbol → Specification → ดู Contract Size',
+    'calc.hintbtc':'คริปโต contract size ต่างกันมากตามโบรกและปรับบ่อย เช็คจาก MT5: คลิกขวา symbol → Specification → ดู Contract Size',
   },
   en: {
     'nav.overview':'Overview','nav.history':'Trade History','nav.calendar':'Calendar',
@@ -1137,6 +1166,7 @@ const I18N = {
     'acc.count':'Total Records','acc.withdrawalthb':'Withdrawal (฿)',
     'acc.depositthb':'Deposit (฿)','acc.netthb':'Net (฿)',
     'acc.fundingchallenge':'Total Funding Challenge','acc.expenses':'Total Expenses',
+    'acc.fundingchallengethb':'Funding Challenge (฿)','acc.expensesthb':'Expenses (฿)',
     'ms.withdrawal':'Withdrawal $','ms.deposit':'Deposit $','ms.net':'Net $',
     'ms.withdrawalthb':'Withdrawal (฿)','ms.depositthb':'Deposit (฿)','ms.netthb':'Net (฿)',
     'set.pairs':'Currency Pairs','set.strategies':'Strategies','set.accounts':'Trading Accounts',
@@ -1195,6 +1225,11 @@ const I18N = {
     'nav.calculator':'Lot Calculator','calc.symbol':'Symbol','calc.balance':'Account Balance ($)',
     'calc.risk':'Risk %','calc.entry':'Entry Price','calc.sl':'Stop Loss',
     'calc.lotsize':'Lot Size','calc.riskamt':'Risk Amount','calc.sldist':'SL Distance','calc.perpip':'$/pip/lot',
+    'calc.ppvlabelpip':'$ per pip per 1.00 lot (varies by broker — verify before using)',
+    'calc.ppvlabelpt':'$ per point per 1.00 lot (varies by broker — verify before using)',
+    'calc.hintjpy':'This depends on the current USDJPY rate (≈1000 ÷ rate). Check the latest price and adjust this number before relying on it.',
+    'calc.hintidx':'Index contract value varies a lot by broker — seen anywhere from $0.1 to $10/point. Check in MT5: right-click symbol → Specification → Contract Size',
+    'calc.hintbtc':'Crypto contract size varies widely by broker and changes often. Check in MT5: right-click symbol → Specification → Contract Size',
   }
 };
 
@@ -1624,6 +1659,8 @@ function renderAccount() {
   // ช่องรวมบาทแยก
   document.getElementById('acc-thb-profit').textContent = '+฿' + totalWithdrawalThb.toLocaleString();
   document.getElementById('acc-thb-deposit').textContent = '฿' + totalDepositThb.toLocaleString();
+  document.getElementById('acc-thb-funding').textContent = '฿' + totalFundingThb.toLocaleString();
+  document.getElementById('acc-thb-expenses').textContent = '฿' + totalExpensesThb.toLocaleString();
   const thbNetEl = document.getElementById('acc-thb-net');
   thbNetEl.textContent = (netThb >= 0 ? '+฿' : '฿') + netThb.toLocaleString();
   thbNetEl.className = 'metric-val ' + (netThb >= 0 ? 'pos' : 'neg');
@@ -2473,17 +2510,19 @@ const CALC_SYMS = {
   'XAUUSD':{ pip:1,      ppv:100, unit:'pip', pts:100 },
   'EURUSD':{ pip:0.0001, ppv:10,  unit:'pip', pts:10  },
   'GBPUSD':{ pip:0.0001, ppv:10,  unit:'pip', pts:10  },
-  'NAS100':{ pip:1,      ppv:1,   unit:'pt',  pts:1   },
-  'BTCUSD':{ pip:1,      ppv:1,   unit:'pt',  pts:1   },
+  'USDJPY':{ pip:0.01,   ppv:6.15,unit:'pip', pts:10,  variable:true, hintKey:'calc.hintjpy' },
+  'NAS100':{ pip:1,      ppv:1,   unit:'pt',  pts:1,   variable:true, hintKey:'calc.hintidx' },
+  'US30':  { pip:1,      ppv:1,   unit:'pt',  pts:1,   variable:true, hintKey:'calc.hintidx' },
+  'BTCUSD':{ pip:1,      ppv:1,   unit:'pt',  pts:1,   variable:true, hintKey:'calc.hintbtc' },
 };
+function calcGetPpv(sym) {
+  const spec = CALC_SYMS[sym];
+  if (!spec) return 1;
+  if (!spec.variable) return spec.ppv;
+  const saved = parseFloat(localStorage.getItem('calc_ppv_' + sym));
+  return isNaN(saved) ? spec.ppv : saved;
+}
 function renderCalculator() {
-  const symEl = document.getElementById('calc-sym-btns');
-  if (symEl && !symEl.dataset.init) {
-    symEl.innerHTML = Object.keys(CALC_SYMS).map(s =>
-      '<button onclick="calcSetSym(\''+s+'\')" id="csym-'+s+'" style="padding:7px 16px;border-radius:var(--radius);border:1px solid var(--border2);background:transparent;cursor:pointer;font-size:12px;font-weight:500;color:var(--text2);font-family:-apple-system,BlinkMacSystemFont,sans-serif;transition:all .15s">'+s+'</button>'
-    ).join('');
-    symEl.dataset.init = '1';
-  }
   const balEl = document.getElementById('calc-balance');
   if (balEl && !balEl.dataset.init) {
     balEl.value = localStorage.getItem('calc_balance') || '';
@@ -2514,19 +2553,33 @@ function renderCalculator() {
     });
     slPresetsEl.dataset.init = '1';
   }
+  const ppvInp = document.getElementById('calc-ppv-override');
+  if (ppvInp && !ppvInp.dataset.init) {
+    ppvInp.addEventListener('input', () => {
+      const sym = localStorage.getItem('calc_sym') || 'XAUUSD';
+      localStorage.setItem('calc_ppv_' + sym, ppvInp.value);
+      calcUpdate();
+    });
+    ppvInp.dataset.init = '1';
+  }
   calcSetSym(localStorage.getItem('calc_sym') || 'XAUUSD');
 }
 function calcSetSym(s) {
   if (!CALC_SYMS[s]) return;
   localStorage.setItem('calc_sym', s);
-  Object.keys(CALC_SYMS).forEach(k => {
-    const btn = document.getElementById('csym-' + k);
-    if (!btn) return;
-    const on = k === s;
-    btn.style.background = on ? 'var(--accent)' : 'transparent';
-    btn.style.color = on ? '#fff' : 'var(--text2)';
-    btn.style.borderColor = on ? 'var(--accent)' : 'var(--border2)';
-  });
+  const selEl = document.getElementById('calc-sym-select');
+  if (selEl) selEl.value = s;
+  const spec = CALC_SYMS[s];
+  const wrap = document.getElementById('calc-ppv-override-wrap');
+  if (wrap) wrap.style.display = spec.variable ? '' : 'none';
+  if (spec.variable) {
+    const inp = document.getElementById('calc-ppv-override');
+    if (inp) inp.value = calcGetPpv(s);
+    const lbl = document.getElementById('calc-ppv-label');
+    if (lbl) lbl.textContent = T(spec.unit === 'pip' ? 'calc.ppvlabelpip' : 'calc.ppvlabelpt');
+    const hint = document.getElementById('calc-ppv-hint');
+    if (hint) hint.textContent = T(spec.hintKey);
+  }
   calcUpdateLabel();
   calcUpdate();
 }
@@ -2536,23 +2589,28 @@ function calcUpdateLabel() {
   const unit = localStorage.getItem('calc_unit') || 'pip';
   const spec = CALC_SYMS[sym];
   if (!spec) return;
+  const ppv = calcGetPpv(sym);
   const pipExamples = {
     'XAUUSD':'1 pip = $1 · 10 pips = 1000 points',
     'EURUSD':'0.0001 = 1 pip · 10 points/pip',
     'GBPUSD':'0.0001 = 1 pip · 10 points/pip',
+    'USDJPY':'0.01 = 1 pip · 10 points/pip',
     'NAS100':'1 index point = 1 pt',
+    'US30':'1 index point = 1 pt',
     'BTCUSD':'$1 move = 1 pt',
   };
   const ptExamples = {
     'XAUUSD':'1 point = $0.01 · 100 points/pip',
     'EURUSD':'1 point = 0.00001 (pipette) · 10/pip',
     'GBPUSD':'1 point = 0.00001 (pipette) · 10/pip',
+    'USDJPY':'1 point = 0.001 (pipette) · 10/pip',
     'NAS100':'= pip (indices ไม่แยก)',
+    'US30':'= pip (indices ไม่แยก)',
     'BTCUSD':'= pip (BTC ไม่แยก)',
   };
   const isPoint  = unit === 'pt' && spec.pts > 1;
   const unitLabel = isPoint ? 'point' : spec.unit;
-  const ppvDisp   = isPoint ? (spec.ppv / spec.pts) + '$' : spec.ppv + '$';
+  const ppvDisp   = isPoint ? (ppv / spec.pts) + '$' : ppv + '$';
   const lbl  = document.getElementById('calc-sl-label');
   const info = document.getElementById('calc-pip-info');
   if (lbl)  lbl.textContent  = 'SL Distance (' + unitLabel + ')';
@@ -2575,6 +2633,7 @@ function calcUpdate() {
   const sym = localStorage.getItem('calc_sym') || 'XAUUSD';
   const spec = CALC_SYMS[sym];
   if (!spec) return;
+  const ppv = calcGetPpv(sym);
   const balance  = parseFloat(document.getElementById('calc-balance')?.value) || 0;
   const riskPct  = parseFloat(document.getElementById('calc-risk-input')?.value) || 0;
   const unit    = localStorage.getItem('calc_unit') || 'pip';
@@ -2587,14 +2646,14 @@ function calcUpdate() {
   const lotEl     = document.getElementById('calc-lot');
   if (riskAmtEl) riskAmtEl.textContent = balance > 0 && riskPct > 0 ? riskAmt.toFixed(2) + '$' : '—';
   const unit0   = localStorage.getItem('calc_unit') || 'pip';
-  const ppvDisp = (unit0 === 'pt' && spec.pts > 1) ? (spec.ppv / spec.pts) + '$' : spec.ppv + '$';
+  const ppvDisp = (unit0 === 'pt' && spec.pts > 1) ? (ppv / spec.pts) + '$' : ppv + '$';
   if (pipValEl)  pipValEl.textContent  = ppvDisp;
   if (!balance || !riskPct || !slPips) {
     if (lotEl)    lotEl.textContent = '—';
     if (slDistEl) slDistEl.textContent = '—';
     return;
   }
-  const riskPerLot = slPips * spec.ppv;
+  const riskPerLot = slPips * ppv;
   const lot        = riskAmt / riskPerLot;
   if (lotEl) {
     lotEl.textContent = (lot > 0 && lot < 1000) ? lot.toFixed(2) : '—';
