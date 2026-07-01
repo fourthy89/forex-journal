@@ -603,7 +603,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div class="settings-block">
         <h3 style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;letter-spacing:.03em">Version</h3>
         <div style="display:flex;align-items:baseline;gap:10px">
-          <span style="font-size:20px;font-weight:500;font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:var(--accent)">v5.10</span>
+          <span style="font-size:20px;font-weight:500;font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:var(--accent)">v5.12</span>
           <span style="font-size:11px;color:var(--text3);font-family:-apple-system,BlinkMacSystemFont,sans-serif">FX Journal</span>
         </div>
       </div>
@@ -1753,7 +1753,7 @@ function openAddAccount() {
   ['acc-m-date','acc-m-name','acc-m-usd','acc-m-thb','acc-m-note','acc-m-rate-dep','acc-m-rate-wd'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('acc-m-date').value = new Date().toISOString().split('T')[0];
   document.getElementById('acc-m-type').value = 'Withdrawal';
-  document.getElementById('acc-m-acct').value = 'XM K.MK (82952428)';
+  document.getElementById('acc-m-acct').value = settings.accounts_list[0] || '';
   document.getElementById('acc-modal').classList.add('open');
 }
 
@@ -1897,11 +1897,11 @@ function addAccountSetting() {
   if (!val) { toast(T('js.acctfill')); return; }
   if (settings.accounts_list.includes(val)) { toast(T('js.acctexists')); return; }
   settings.accounts_list.push(val); inp.value = '';
-  applySettings();
+  applySettings(); autoSaveSettings();
 }
 function removeAccountSetting(i) {
   settings.accounts_list.splice(i, 1);
-  applySettings();
+  applySettings(); autoSaveSettings();
 }
 function renderPairTags() {
   document.getElementById('pair-tags').innerHTML = settings.pairs.map(p =>
@@ -1937,7 +1937,7 @@ async function autoSaveSettings() {
 
 async function saveSettings() {
   try {
-    await sbUpsert('settings', { id: 1, pairs: JSON.stringify(settings.pairs), strategies: JSON.stringify(settings.strategies) });
+    await sbUpsert('settings', { id: 1, pairs: JSON.stringify(settings.pairs), strategies: JSON.stringify(settings.strategies), accounts_list: JSON.stringify(settings.accounts_list) });
     toast(T('js.settingssaved'));
   } catch { toast(T('js.savefail2')); }
 }
@@ -2072,7 +2072,7 @@ async function addTrade() {
     pnl: document.getElementById('f-pnl').value || null,
     note: document.getElementById('f-note').value,
     images: pending.map(p => ({ name: p.name, data: p.data })),
-    source: 'mt5',
+    source: 'manual',
     source_account: 'Manual'
   };
   try {
@@ -2336,7 +2336,7 @@ function openDetail(id) {
       <div class="detail-val">${val}</div>
     </div>`).join('') + `
     <div class="detail-item" style="grid-column:1/-1">
-      <div class="detail-label">' + T('lbl.pnl') + '</div>
+      <div class="detail-label">${T('lbl.pnl')}</div>
       <div class="detail-val" style="font-size:20px;color:${pnlColor}">${pnlDisplay}</div>
     </div>`;
   const noteWrap = document.getElementById('detail-note-wrap');
@@ -2441,7 +2441,7 @@ async function delTrade(id) {
     try {
       await sbDelete('trades', id);
       trades = trades.filter(t => t.id !== id);
-      renderTable(); renderStats();
+      renderTable(); renderHistory();
       setS('ok', `connected · ${trades.length} trades`);
       toast(T('js.deleted'));
     } catch { toast(T('js.delfail')); }
@@ -2856,6 +2856,7 @@ loadPool();
 document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
 document.getElementById('new-pair').addEventListener('keydown', e => { if (e.key === 'Enter') addPair(); });
 document.getElementById('new-strategy').addEventListener('keydown', e => { if (e.key === 'Enter') addStrategy(); });
+document.getElementById('new-account').addEventListener('keydown', e => { if (e.key === 'Enter') addAccountSetting(); });
 const validPages = ['overview','history','calendar','missed','account','settings','analysis','calculator'];
 const _lp = localStorage.getItem('lastPage');
 const lastPage = IS_VIEW ? 'overview' : (validPages.includes(_lp) ? _lp : 'table');
